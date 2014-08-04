@@ -1,0 +1,117 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using System.Collections;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class FenubarPanel : UserControl
+	{
+		private bool m_bIsNewFile;
+		private bool m_bHasLoaded;
+		private string m_sFileName;
+		private Hashtable m_htbFenus;
+		private List<Fenu> m_lstOpenedFenu;
+		private FenubarProperties m_fpProperties;
+		private XmlDocument m_xdDocument;
+		private XmlNode m_xnRoot;
+
+		public string FullName
+		{
+			get
+			{
+				return this.m_sFileName;
+			}
+			set
+			{
+				this.m_sFileName = value;
+			}
+		}
+
+		public string FileName
+		{
+			get
+			{
+				if( this.m_sFileName.LastIndexOf( '\\' ) >= 0 ) {
+					return this.m_sFileName.Substring( this.m_sFileName.LastIndexOf( '\\' ) + 1 );
+				}
+				else {
+					return this.m_sFileName;
+				}
+			}
+		}
+
+		public FenubarProperties Properties
+		{
+			get
+			{
+				return this.m_fpProperties;
+			}
+		}
+
+		public Hashtable Fenus
+		{
+			get
+			{
+				return this.m_htbFenus;
+			}
+		}
+
+		public FenubarPanel( string sFileName, bool bIsNewFile )
+		{
+			InitializeComponent();
+			this.m_sFileName = sFileName;
+			this.m_bIsNewFile = bIsNewFile;
+			InitializeMembers();
+
+		}
+
+		private void InitializeMembers()
+		{
+			this.m_bHasLoaded = false;
+			this.m_htbFenus = new Hashtable();
+			this.m_lstOpenedFenu = new List<Fenu>();
+			this.m_fpProperties = new FenubarProperties();
+		}
+
+		private void FenubarPanel_Load( object sender, EventArgs e )
+		{
+			if( !this.m_bIsNewFile && !this.m_bHasLoaded ) {
+				this.m_xdDocument = new XmlDocument();
+				this.m_xdDocument.Load( m_sFileName );
+				this.LoadXml();
+				this.m_bHasLoaded = true;
+			}
+		}
+
+		private void LoadXml()
+		{
+			XmlNode xnRoot = this.m_xdDocument.SelectSingleNode( "root" );
+			foreach( XmlElement xnItem in xnScreen.ChildNodes ) {
+				switch( xnItem.Name ) {
+					case "fenu":
+						LoadFenu( xnItem );
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		private void LoadFenu( XmlNode xnFenuNode )
+		{
+			Fenu fnFenuToAdd = new Fenu( m_xdDocument, xnFenuNode );
+			//fnFenuToAdd.m_sName = xnFenuNode.Attributes[ "name" ].Value;
+			m_htbFenus.Add( fnFenuToAdd.m_sName, fnFenuToAdd );
+
+		}
+
+		
+	}
+}

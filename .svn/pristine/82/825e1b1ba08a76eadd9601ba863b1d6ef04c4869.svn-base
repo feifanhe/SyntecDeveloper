@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
+using System.ComponentModel;
+using System.Reflection;
+
+namespace Syntec_Developer.Controls.PropertyClasses
+{
+	public class FenuButtonBaseProperties
+	{
+		protected XmlDocument m_xdDocument;
+		protected XmlNode m_xnButtonNode;
+		protected FenuButton m_fbButtonToSet;
+
+		protected List<string> m_lstActions;
+		protected bool m_bState;
+		protected string m_sLink;
+		protected bool m_bVisible;
+		protected int m_nUserLevel;
+
+		[CategoryAttribute( "Button" )]
+		public List<string> Actions
+		{
+			get
+			{
+				return this.m_lstActions;
+			}
+			set
+			{
+				this.m_lstActions = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public bool State
+		{
+			get
+			{
+				return this.m_bState;
+			}
+			set
+			{
+				this.m_bState = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public string Link
+		{
+			get
+			{
+				return this.m_sLink;
+			}
+			set
+			{
+				this.m_sLink = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public bool Visible
+		{
+			get
+			{
+				return this.m_bVisible;
+			}
+			set
+			{
+				this.m_bVisible = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public int UserLevel
+		{
+			get
+			{
+				return this.m_nUserLevel;
+			}
+			set
+			{
+				this.m_nUserLevel = value;
+			}
+		}
+
+		public FenuButtonBaseProperties( FenuButton fbButton )
+		{
+			this.m_fbButtonToSet = fbButton;
+			if( this.m_fbButtonToSet.Type == FenuButtonType.escape ) {
+				SetBrowsableAttribute( "UserLevel", false );
+			}
+
+			this.m_xdDocument = this.m_fbButtonToSet.m_xdDocument;
+			this.m_xnButtonNode = this.m_fbButtonToSet.m_xnButton;
+		}
+
+		private void SetBrowsableAttribute( string sPropertyName, bool bIsBrowsable )
+		{
+			Type typAttributeType = typeof(BrowsableAttribute);
+			PropertyDescriptorCollection pdcProperties = TypeDescriptor.GetProperties( this );
+			AttributeCollection atcPropertyAttributes = pdcProperties[ sPropertyName ].Attributes;
+			FieldInfo fBrowsableField = typAttributeType.GetField( "Browsable" );
+			fBrowsableField.SetValue( atcPropertyAttributes[ typAttributeType ], bIsBrowsable );
+		}
+	}
+}

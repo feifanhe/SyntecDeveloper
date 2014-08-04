@@ -1,0 +1,128 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public enum ItemType
+	{
+		Button,
+		CheckBox,
+		CoordBox,
+		Display,
+		FileList,
+		Input,
+		Inputline,
+		Label,
+		Lamp,
+		ListInput,
+		Meter,
+		OCSimu,
+		OCText,
+		Panel,
+		Picture,
+		Radio,
+		Vision
+	}
+
+	public partial class CBrowserItem : UserControl
+	{
+		private ItemType m_itType;
+		private ItemProperties m_ipProperties;
+
+		public ItemProperties Properties
+		{
+			get
+			{
+				return this.m_ipProperties;
+			}
+			set
+			{
+				this.m_ipProperties = value;
+			}
+		}
+
+		public override string Text
+		{
+			get
+			{
+				return this.lblItemName.Text;
+			}
+			set
+			{
+				this.lblItemName.Text = value;
+			}
+		}
+
+		public CBrowserItem( ItemType itType )
+		{
+			InitializeComponent();
+			this.m_itType = itType;
+			this.Location = new Point( 0, 0 );
+			this.Size = new Size( 0, 0 );
+
+			switch( itType ) {
+				case ItemType.Button:
+					m_ipProperties = new ButtonProperties( this );
+					break;
+				case ItemType.CheckBox:
+					m_ipProperties = new CheckBoxProperties( this );
+					break;
+				case ItemType.CoordBox:
+					m_ipProperties = new CoordBoxProperties( this );
+					break;
+				case ItemType.Display:
+					m_ipProperties = new DisplayProperties( this );
+					break;
+				case ItemType.FileList:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Input:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Inputline:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Label:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Lamp:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.ListInput:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Meter:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.OCSimu:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.OCText:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Panel:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Picture:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Radio:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Vision:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				default:
+					m_ipProperties = new ItemProperties( this );
+					break;
+			}
+		}
+
+	}
+}

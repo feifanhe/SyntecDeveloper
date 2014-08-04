@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Xml;
+using Syntec_Developer.Controls;
+using System.ComponentModel;
+
+namespace Syntec_Developer.Forms
+{
+	public enum DocumentType
+	{
+		browser,
+		fenubar
+	};
+
+	public partial class DCDocument : DockContent
+	{
+		public DocumentType m_dtType;
+		public string m_sFullName;
+		public string m_sName;
+		public bool m_bIsNewFile;
+		public CBrowserControl m_bcBrowser;
+		public CFenubarControl m_fcFenubar;
+
+		ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
+
+		public delegate void BrowserClickEventHandler( object sender, EventArgs e );
+		public event BrowserClickEventHandler BrowserClick;
+		public delegate void BrowserItemClickEventHandler( object sender, EventArgs e );
+		public event BrowserItemClickEventHandler BrowserItemClick;
+		public delegate void FenubarClickEventHandler( object sender, EventArgs e );
+		public event FenubarClickEventHandler FenubarClick;
+
+		#region Constructor
+
+		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile )
+		{
+			InitializeComponent( dtType );
+			this.m_dtType = dtType;
+			this.m_sFullName = sFullName;
+			this.m_sName = sFullName.Substring( sFullName.LastIndexOf( '\\' ) + 1 );
+			this.Text = m_sName;
+			switch( dtType ) {
+				case DocumentType.browser:
+					this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Computer" ) ) );
+					this.m_bcBrowser = new CBrowserControl( this.m_sFullName, bIsNewFile );
+					this.m_bcBrowser.Location = new Point( 3, 3 );
+					// Event
+					this.m_bcBrowser.Click += new EventHandler( BrowserOnClick );
+					this.m_bcBrowser.ItemClick +=
+						new CBrowserControl.ItemClickEventHandler( BrowserItemOnClick );
+					this.Controls.Add( this.m_bcBrowser );
+					break;
+				case DocumentType.fenubar:
+					this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Data_Schema" ) ) );
+					this.m_fcFenubar = new CFenubarControl( this.m_sFullName, bIsNewFile );
+					this.m_fcFenubar.Dock = DockStyle.Fill;
+					// Event
+					this.m_fcFenubar.Click += new EventHandler( FenubarOnClick );
+					this.Controls.Add( this.m_fcFenubar );
+					break;
+			}
+		}
+
+		public void BrowserItemOnClick( object sender, EventArgs e )
+		{
+			BrowserItemClick.Invoke(sender, e);
+		}
+
+		public void BrowserOnClick( object sender, EventArgs e )
+		{
+			BrowserClick.Invoke( sender, e );
+		}
+
+		public void FenubarOnClick( object sender, EventArgs e )
+		{
+			FenubarClick.Invoke( sender, e );
+		}
+		#endregion
+
+
+
+
+	}
+}

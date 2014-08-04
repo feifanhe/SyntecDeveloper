@@ -1,0 +1,224 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D64EA5E9-E3AE-4895-AF2C-41EE34940DD6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Syntec_Developer</RootNamespace>
+    <AssemblyName>Syntec Developer</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.9.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\PropertyClasses\BrowserProperties.cs" />
+    <Compile Include="Controls\CBrowserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CBrowserControl.Designer.cs">
+      <DependentUpon>CBrowserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CBrowserItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CBrowserItem.Designer.cs">
+      <DependentUpon>CBrowserItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CFenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CFenu.Designer.cs">
+      <DependentUpon>CFenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CFenubarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CFenubarControl.Designer.cs">
+      <DependentUpon>CFenubarControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyClasses\ButtonProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\CoordBoxProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\CheckBoxProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\DisplayProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\FenubarProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\ItemProperties.cs" />
+    <Compile Include="Forms\DCDocument.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DCDocument.Designer.cs">
+      <DependentUpon>DCDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DCFenuList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DCFenuList.Designer.cs">
+      <DependentUpon>DCFenuList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DCProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DCProperties.Designer.cs">
+      <DependentUpon>DCProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DCToolBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DCToolBox.Designer.cs">
+      <DependentUpon>DCToolBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DCTreeView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DCTreeView.Designer.cs">
+      <DependentUpon>DCTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\CBrowserControl.resx">
+      <DependentUpon>CBrowserControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CBrowserItem.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CBrowserItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CFenubarControl.resx">
+      <DependentUpon>CFenubarControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DCDocument.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCDocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DCFenuList.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCFenuList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMain.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DCProperties.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DCToolBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCToolBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DCTreeView.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewFenubar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewBrowser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PasteHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CopyHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CutHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Data_Schema.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenSelectedItemHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\openfolderHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Edit_RedoHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Edit_UndoHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Computer.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

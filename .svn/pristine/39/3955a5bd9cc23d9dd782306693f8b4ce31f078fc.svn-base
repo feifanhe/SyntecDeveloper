@@ -1,0 +1,253 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Collections;
+using System.Threading;
+using System.Xml;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class CBrowserControl : UserControl
+	{
+		class LoadItemParameter
+		{
+			public XmlNode m_xnItem;
+			public string m_sGroupName;
+			public ManualResetEvent m_mreDoneEvent;
+
+			public LoadItemParameter( XmlNode xnItem, string sGroupName, ManualResetEvent mreDoneEvent )
+			{
+				this.m_xnItem = xnItem;
+				this.m_sGroupName = sGroupName;
+				this.m_mreDoneEvent = mreDoneEvent;
+			}
+		};
+
+		public bool m_bIsNewFile;
+		public string m_sFileName;
+		public List<string> m_lstGroupName;
+		public List<CBrowserItem> m_lstSelectItems;
+		public Hashtable m_htbItems;
+		public XmlDocument m_xdDocument;
+		public BrowserProperties m_bpProperties;
+		public List<ManualResetEvent> m_lstManualResetEvent;
+
+		// Custom Define Event
+		public delegate void ItemClickEventHandler( object sender, EventArgs e );
+		public event ItemClickEventHandler ItemClick;
+		public delegate void ItemLoadHandler( CBrowserItem biItem );
+
+		// Open Browser
+		public CBrowserControl( string sFileName, bool bIsNewFile )
+		{
+			InitializeComponent();
+			this.m_sFileName = sFileName;
+			this.m_bIsNewFile = bIsNewFile;
+			this.m_htbItems = new Hashtable();
+			this.m_lstGroupName = new List<string>();
+			this.m_bpProperties = new BrowserProperties();
+			this.m_lstSelectItems = new List<CBrowserItem>();
+			this.m_lstManualResetEvent = new List<ManualResetEvent>();
+		}
+
+		private void CBrowserControl_Load( object sender, EventArgs e )
+		{
+			// load xml file after CBrowserControl loaded
+			// to avoid that thread of LoadItem terminals while CBrowserControl is still loading
+			if( !this.m_bIsNewFile ) {
+				this.m_xdDocument = new XmlDocument();
+				this.m_xdDocument.Load( m_sFileName );
+				this.LoadXml();
+				
+				WaitHandle.WaitAll( m_lstManualResetEvent.ToArray() );
+				MessageBox.Show( "All calculations are complete." );
+			}
+		}
+
+		private void LoadXml()
+		{
+			XmlNode xnScreen = this.m_xdDocument.SelectSingleNode( "Screen" );
+			foreach( XmlElement xnItem in xnScreen.ChildNodes ) {
+				switch( xnItem.Name ) {
+					case "Name":
+						this.m_bpProperties.Name = xnItem.InnerText;
+						break;
+					case "Group":
+						LoadGroup( xnItem );
+						break;
+					default:
+						// Load item on other thread
+						ManualResetEvent mreDoneEvent = new ManualResetEvent( false );
+						m_lstManualResetEvent.Add( mreDoneEvent );
+						ThreadPool.QueueUserWorkItem(
+							new WaitCallback( LoadItem ), new LoadItemParameter( xnItem, "", mreDoneEvent )
+						);
+						break;
+				}
+			}
+		}
+
+		private void LoadGroup( XmlNode xnGroup )
+		{
+			// Add group name into list
+			string sGroupName = "";
+
+			if( xnGroup.Attributes[ "Name" ] != null ) {
+				sGroupName = xnGroup.Attributes[ "Name" ].Value;
+			}
+
+			this.m_lstGroupName.Add( sGroupName );
+
+			foreach( XmlNode xnItem in xnGroup.ChildNodes ) {
+				// Load item on other thread
+				ManualResetEvent mreDoneEvent = new ManualResetEvent( false );
+				m_lstManualResetEvent.Add( mreDoneEvent );
+				ThreadPool.QueueUserWorkItem(
+					new WaitCallback( LoadItem ), new LoadItemParameter( xnItem, sGroupName, mreDoneEvent )
+				);
+			}
+		}
+
+		private void LoadItem( object objLoadItemParameter )
+		{
+			LoadItemParameter lipParameter = (LoadItemParameter)objLoadItemParameter;
+			CBrowserItem biItem;
+
+			#region Set item type
+			switch( lipParameter.m_xnItem.Name ) {
+				case "Button":
+					biItem = new CBrowserItem( ItemType.Button );
+					break;
+				case "CheckBox":
+					biItem = new CBrowserItem( ItemType.CheckBox );
+					break;
+				case "CoordBox":
+					biItem = new CBrowserItem( ItemType.CoordBox );
+					break;
+				case "Display":
+					biItem = new CBrowserItem( ItemType.Display );
+					break;
+				case "FileList":
+					biItem = new CBrowserItem( ItemType.FileList );
+					break;
+				case "Input":
+					biItem = new CBrowserItem( ItemType.Input );
+					break;
+				case "Inputline":
+					biItem = new CBrowserItem( ItemType.Inputline );
+					break;
+				case "Label":
+					biItem = new CBrowserItem( ItemType.Label );
+					break;
+				case "Lamp":
+					biItem = new CBrowserItem( ItemType.Lamp );
+					break;
+				case "ListInput":
+					biItem = new CBrowserItem( ItemType.ListInput );
+					break;
+				case "Meter":
+					biItem = new CBrowserItem( ItemType.Meter );
+					break;
+				case "OCSimu":
+					biItem = new CBrowserItem( ItemType.OCSimu );
+					break;
+				case "OCText":
+					biItem = new CBrowserItem( ItemType.OCText );
+					break;
+				case "Panel":
+					biItem = new CBrowserItem( ItemType.Panel );
+					break;
+				case "Picture":
+					biItem = new CBrowserItem( ItemType.Picture );
+					break;
+				case "Radio":
+					biItem = new CBrowserItem( ItemType.Radio );
+					break;
+				case "Vision":
+					biItem = new CBrowserItem( ItemType.Vision );
+					break;
+				default:
+					return;
+			}
+			#endregion
+
+			// set properties
+			biItem.Properties.Group = lipParameter.m_sGroupName;
+			biItem.Properties.LoadItemProperties( lipParameter.m_xnItem );
+
+			// Loading complete, invoke ItemLoadHandler to add controls to the item
+			this.Invoke( new ItemLoadHandler( ItemOnLoad ), new object[] { biItem } );
+			// Set ManualResetEvent to implies that the task is complete
+			lipParameter.m_mreDoneEvent.Set();
+		}
+
+		private void ItemOnLoad( CBrowserItem biItem )
+		{
+			// Add controls to the item
+			biItem.Click += new EventHandler( Item_Click );
+			biItem.MouseDown += new MouseEventHandler( Item_MouseDown );
+			biItem.MouseMove += new MouseEventHandler( Item_MouseMove );
+			biItem.MouseUp += new MouseEventHandler( Item_MouseUp );
+			this.Controls.Add( biItem );
+			this.m_htbItems.Add( biItem.Properties.Name, biItem );
+		}
+
+		private void Item_Click( object sender, EventArgs e )
+		{
+			CBrowserItem biItem = (CBrowserItem)sender;
+			this.ItemClick.Invoke( m_lstSelectItems, e );
+		}
+
+		private void Item_MouseDown( object sender, MouseEventArgs e )
+		{
+			CBrowserItem biItem = (CBrowserItem)sender;
+			biItem.m_bMouseDown = true;
+			biItem.m_nMouseDownX = e.X;
+			biItem.m_nMouseDownY = e.Y;
+
+			if( Form.ModifierKeys == Keys.Control ) {
+				// Do Ctrl-Left Click Work
+				m_lstSelectItems.Add( biItem );
+				biItem.BackColor = Color.Blue;
+			}
+			else {
+				foreach( CBrowserItem biTemp in m_lstSelectItems ) {
+					biTemp.BackColor = Color.White;
+				}
+				m_lstSelectItems.Clear();
+				m_lstSelectItems.Add( biItem );
+				biItem.BackColor = Color.Blue;
+			}
+		}
+
+		public void Item_MouseMove( object sender, MouseEventArgs e )
+		{
+			CBrowserItem biItem = (CBrowserItem)sender;
+			// Move Item
+			if( biItem.m_bMouseDown ) {
+				biItem.Left += e.X - biItem.m_nMouseDownX;
+				biItem.Top += e.Y - biItem.m_nMouseDownY;
+			}
+		}
+
+		private void Item_MouseUp( object sender, MouseEventArgs e )
+		{
+			CBrowserItem biItem = (CBrowserItem)sender;
+			biItem.m_bMouseDown = false;
+		}
+
+		private void CBrowserControl_Click( object sender, EventArgs e )
+		{
+			foreach( CBrowserItem biTemp in m_lstSelectItems ) {
+				biTemp.BackColor = Color.White;
+			}
+			m_lstSelectItems.Clear();
+		}
+	}
+}

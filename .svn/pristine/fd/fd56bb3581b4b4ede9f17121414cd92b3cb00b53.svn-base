@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public enum ItemType
+	{
+		Button,
+		CheckBox,
+		CoordBox,
+		Display,
+		FileList,
+		Input,
+		Inputline,
+		Label,
+		Lamp,
+		ListInput,
+		Meter,
+		OCSimu,
+		OCText,
+		Panel,
+		Picture,
+		Radio,
+		Vision
+	}
+
+	public partial class CBrowserItem : UserControl
+	{
+		private ItemProperties m_ipProperties;
+		public ItemType m_itType;
+
+		public ItemProperties Properties
+		{
+			get
+			{
+				return this.m_ipProperties;
+			}
+			set
+			{
+				this.m_ipProperties = value;
+			}
+		}
+
+		public CBrowserItem( ItemType itType )
+		{
+			InitializeComponent();
+			this.m_itType = itType;
+			this.Location = new Point( 0, 0 );
+			this.Size = new Size( 0, 0 );
+
+			switch( itType ) {
+				default:
+					m_ipProperties = new ItemProperties( this );
+					break;
+			}
+
+		}
+	}
+}

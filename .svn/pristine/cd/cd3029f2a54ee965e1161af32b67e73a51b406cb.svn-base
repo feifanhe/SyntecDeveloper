@@ -1,0 +1,153 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public enum ItemType
+	{
+		Button,
+		CheckBox,
+		CoordBox,
+		Display,
+		FileList,
+		Input,
+		Inputline,
+		Label,
+		Lamp,
+		ListInput,
+		Meter,
+		OCSimu,
+		OCText,
+		Panel,
+		Picture,
+		Radio,
+		Vision
+	}
+
+	public partial class CBrowserItem : UserControl
+	{
+		private ItemType m_itType;
+		private ItemProperties m_ipProperties;
+
+		bool bMouseDown;
+		Point pntMouseLocation;
+
+		public ItemProperties Properties
+		{
+			get
+			{
+				return this.m_ipProperties;
+			}
+			set
+			{
+				this.m_ipProperties = value;
+			}
+		}
+
+		public string Text
+		{
+			get
+			{
+				return this.lblItemName.Text;
+			}
+			set
+			{
+				this.lblItemName.Text = value;
+			}
+		}
+
+		public CBrowserItem( ItemType itType )
+		{
+			InitializeComponent();
+			this.m_itType = itType;
+			this.Location = new Point( 0, 0 );
+			this.Size = new Size( 0, 0 );
+			this.bMouseDown = false;
+
+			switch( itType ) {
+				case ItemType.Button:
+					m_ipProperties = new ButtonProperties( this );
+					break;
+				case ItemType.CheckBox:
+					m_ipProperties = new CheckBoxProperties( this );
+					break;
+				case ItemType.CoordBox:
+					m_ipProperties = new CoordBoxProperties( this );
+					break;
+				case ItemType.Display:
+					m_ipProperties = new DisplayProperties( this );
+					break;
+				case ItemType.FileList:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Input:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Inputline:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Label:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Lamp:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.ListInput:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Meter:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.OCSimu:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.OCText:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Panel:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Picture:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Radio:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				case ItemType.Vision:
+					m_ipProperties = new ItemProperties( this );
+					break;
+				default:
+					m_ipProperties = new ItemProperties( this );
+					break;
+			}
+		}
+
+		private void CBrowserItem_MouseDown( object sender, MouseEventArgs e )
+		{
+			this.bMouseDown = true;
+			this.pntMouseLocation = e.Location;
+		}
+
+		private void CBrowserItem_MouseMove( object sender, MouseEventArgs e )
+		{
+			if( this.bMouseDown ) {
+				this.Location = new Point(
+					this.Location.X + e.X - this.pntMouseLocation.X,
+					this.Location.Y + e.Y - this.pntMouseLocation.Y
+				);
+			}
+		}
+
+		private void CBrowserItem_MouseUp( object sender, MouseEventArgs e )
+		{
+			this.bMouseDown = false;
+		}
+
+	}
+}

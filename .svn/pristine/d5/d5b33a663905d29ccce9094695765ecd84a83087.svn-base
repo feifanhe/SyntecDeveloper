@@ -1,0 +1,152 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Collections;
+using System.Threading;
+using System.Xml;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class CBrowserControl : UserControl
+	{
+		public bool m_bIsNewFile;
+		public string m_sFileName;
+		public List<string> m_lstGroupName;
+		public Hashtable m_htbItems;
+		public XmlDocument m_xdDocument;
+
+		// Open Browser
+		public CBrowserControl( string sFileName, bool bIsNewFile )
+		{
+			InitializeComponent();
+			this.m_sFileName = sFileName;
+			this.m_bIsNewFile = bIsNewFile;
+			this.m_htbItems = new Hashtable();
+			this.m_lstGroupName = new List<string>();
+
+			// Start new thread to load xml file
+			if( !m_bIsNewFile ) {
+				this.m_xdDocument = new XmlDocument();
+				this.m_xdDocument.Load( m_sFileName );
+				this.LoadXml();
+			}
+		}
+
+		private void LoadXml()
+		{
+			XmlNode xnScreen = this.m_xdDocument.SelectSingleNode( "Screen" );
+			foreach( XmlElement xnItem in xnScreen.ChildNodes ) {
+				// Handle group
+				if( String.Compare( xnItem.Name, "Group" ) == 0 ) {
+					LoadGroup( xnItem );
+				}
+				else {
+					LoadItem( xnItem );
+				}
+			}
+		}
+
+		private void LoadItem( XmlNode xnItem )
+		{
+			CBrowserItem biItem = new CBrowserItem();
+
+			switch( xnItem.Name ) {
+				case "Button":
+					biItem.Type = ItemType.Button;
+					break;
+				case "CheckBox":
+					biItem.Type = ItemType.CheckBox;
+					break;
+				case "CoordBox":
+					biItem.Type = ItemType.CoordBox;
+					break;
+				case "Display":
+					biItem.Type = ItemType.Display;
+					break;
+				case "FileList":
+					biItem.Type = ItemType.FileList;
+					break;
+				case "Input":
+					biItem.Type = ItemType.Input;
+					break;
+				case "Inputline":
+					biItem.Type = ItemType.Inputline;
+					break;
+				case "Label":
+					biItem.Type = ItemType.Label;
+					break;
+				case "Lamp":
+					biItem.Type = ItemType.Lamp;
+					break;
+				case "ListInput":
+					biItem.Type = ItemType.ListInput;
+					break;
+				case "Meter":
+					biItem.Type = ItemType.Meter;
+					break;
+				case "OCSimu":
+					biItem.Type = ItemType.OCSimu;
+					break;
+				case "OCText":
+					biItem.Type = ItemType.OCText;
+					break;
+				case "Panel":
+					biItem.Type = ItemType.Panel;
+					break;
+				case "Picture":
+					biItem.Type = ItemType.Picture;
+					break;
+				case "Radio":
+					biItem.Type = ItemType.Radio;
+					break;
+				case "Vision":
+					biItem.Type = ItemType.Vision;
+					break;
+				default:
+					return;
+			}
+			// Get properties
+			foreach( XmlNode xnProperty in xnItem ) {
+				switch( xnProperty.Name ) {
+					// Save Properties
+					case "Name":
+						biItem.Properties.Name = xnProperty.InnerText;
+						break;
+					case "Left":
+						biItem.Properties.X = int.Parse( xnProperty.InnerText );
+						break;
+					case "Top":
+						biItem.Properties.Y = int.Parse( xnProperty.InnerText );
+						break;
+					case "Width":
+						biItem.Properties.Width = int.Parse( xnProperty.InnerText );
+						break;
+					case "Height":
+						biItem.Properties.Height = int.Parse( xnProperty.InnerText );
+						break;
+					default:
+						break;
+				}
+			}
+
+			this.m_htbItems.Add( biItem.Name, biItem );
+		}
+
+		private void LoadGroup( XmlNode xnGroup )
+		{
+			// Add group name into list
+			string sGroupName = xnGroup.Attributes[ "Name" ].Value;
+			this.m_lstGroupName.Add( sGroupName );
+
+			// temporarily deal as no group
+			foreach( XmlNode xnItem in xnGroup.ChildNodes ) {
+				LoadItem( xnItem );
+			}
+		}
+	}
+}

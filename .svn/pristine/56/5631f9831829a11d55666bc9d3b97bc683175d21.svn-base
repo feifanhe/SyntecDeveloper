@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Collections;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class DCFenuList : DockContent
+	{
+		Hashtable m_htbFenus;
+
+		public DCFenuList()
+		{
+			InitializeComponent();
+		}
+
+		public void Document_Activated( object sender, EventArgs e )
+		{
+			DCDocument dcdDocument = sender as DCDocument;
+
+			switch( dcdDocument.Type ) {
+				case DocumentType.browser:
+					break;
+				case DocumentType.fenubar:
+					// Get Hashtable of Items
+					this.m_htbFenus = dcdDocument.Fenubar.Fenus;
+					this.chklstFenuList.Items.Clear();
+					ArrayList arlFenuNames = new ArrayList( this.m_htbFenus.Keys );
+					arlFenuNames.Sort();
+					this.chklstFenuList.Items.AddRange( arlFenuNames.ToArray() );
+					//prgItemProperties.SelectedObject = dcdBrowser.m_bpBrowser;
+					break;
+			}
+		}
+	}
+}

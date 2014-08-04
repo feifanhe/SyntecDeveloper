@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Xml;
+
+namespace Syntec_Developer.Forms
+{
+	public enum DCDocumentType
+	{
+		browser,
+		fenubar
+	};
+
+	public partial class DCDocument : DockContent
+	{
+		public DCDocumentType m_dcdtType;
+		public string m_sFullName;
+		public string m_sName;
+		public bool m_bIsNewFile;
+		public Controls.CBrowserControl m_bcBrowser;
+		public Controls.CFenubarControl m_fcFenubar;
+
+		System.ComponentModel.ComponentResourceManager resources
+			= new System.ComponentModel.ComponentResourceManager( typeof( DCDocument ) );
+
+		#region Constructor
+
+		public DCDocument( DCDocumentType dcdtType, string sFullName, bool bIsNewFile )
+		{
+			InitializeComponent( dcdtType );
+			this.m_dcdtType = dcdtType;
+			this.m_sFullName = sFullName;
+			this.m_sName = sFullName.Substring( sFullName.LastIndexOf( '\\' ) + 1 );
+			this.Text = m_sName;
+			switch( dcdtType ) {
+				case DCDocumentType.browser:
+					this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Computer" ) ) );
+					this.m_bcBrowser =
+						new Syntec_Developer.Controls.CBrowserControl( this.m_sFullName, bIsNewFile );
+					this.m_bcBrowser.Location = new Point( 3, 3 );
+					this.Controls.Add( this.m_bcBrowser );
+					break;
+				case DCDocumentType.fenubar:
+					this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Data_Schema" ) ) );
+					this.m_fcFenubar =
+						new Syntec_Developer.Controls.CFenubarControl( this.m_sFullName, bIsNewFile );
+					this.m_fcFenubar.Dock = DockStyle.Fill;
+					this.Controls.Add( this.m_fcFenubar );
+					break;
+			}
+		}
+
+		#endregion
+
+
+	}
+}

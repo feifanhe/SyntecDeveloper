@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.IO;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class DCTreeView : DockContent
+	{
+		const int ROOT_IMAGE_INDEX = 0;
+		const int FOLDER_IMAGE_INDEX = 1;
+		const int FOLDER_OPEN_IMAGE_INDEX = 2;
+		const int XML_FILE_IMAGE_INDEX = 3;
+		const int FILE_IMAGE_INDEX = 4;
+
+		public DCTreeView()
+		{
+			InitializeComponent();
+		}
+
+		public void LoadDirectory( string sDirectory )
+		{
+			tvwMain.Nodes.Clear();
+			try {
+				// 取得目錄下所有子目錄與檔案
+				DirectoryInfo difParent = new DirectoryInfo( sDirectory );
+				DirectoryInfo[] difChildren = difParent.GetDirectories();
+				FileInfo[] fifFiles = difParent.GetFiles();
+				// 產生樹
+				TreeNode tnRoot = new TreeNode( difParent.FullName,
+					ROOT_IMAGE_INDEX,
+					ROOT_IMAGE_INDEX,
+					GetTreeNodes( difChildren, fifFiles )
+				);
+				tnRoot.Expand();
+				tvwMain.Nodes.Add( tnRoot );
+			}
+			catch( IOException ioe ) {
+			}
+		}
+
+		// 取得資料夾與檔案節點
+		private TreeNode[] GetTreeNodes( DirectoryInfo[] difaDirectories, FileInfo[] fifaFiles )
+		{
+			TreeNode[] tnaDirNodes = null;
+			TreeNode[] tnaFileNodes = null;
+			TreeNode[] tnaResult = null;
+			// 建立資料夾節點
+			tnaDirNodes = new TreeNode[ difaDirectories.Length ];
+			for( int i = 0; i < difaDirectories.Length; i++ ) {
+				tnaDirNodes[ i ] = new TreeNode(
+					difaDirectories[ i ].Name,
+					FOLDER_IMAGE_INDEX,
+					FOLDER_IMAGE_INDEX,
+					GetTreeNodes( difaDirectories[ i ].GetDirectories(), difaDirectories[ i ].GetFiles() )
+				);
+			}
+			// 建立檔案節點
+			tnaFileNodes = new TreeNode[ fifaFiles.Length ];
+			for( int i = 0; i < fifaFiles.Length; i++ ) {
+				if( fifaFiles[ i ].Extension.ToLower() == ".xml" )
+					tnaFileNodes[ i ] = new TreeNode( fifaFiles[ i ].Name,
+						XML_FILE_IMAGE_INDEX,
+						XML_FILE_IMAGE_INDEX
+					);
+				else
+					tnaFileNodes[ i ] = new TreeNode( fifaFiles[ i ].Name,
+						FILE_IMAGE_INDEX,
+						FILE_IMAGE_INDEX
+					);
+			}
+			// 合併節點
+			tnaResult = new TreeNode[ tnaDirNodes.Length + tnaFileNodes.Length ];
+			tnaDirNodes.CopyTo( tnaResult, 0 );
+			tnaFileNodes.CopyTo( tnaResult, tnaDirNodes.Length );
+
+			return tnaResult;
+
+		}
+
+		private void tvwMain_AfterExpand( object sender, TreeViewEventArgs e )
+		{
+			if( e.Node.Level != 0 )
+				e.Node.ImageIndex = FOLDER_OPEN_IMAGE_INDEX;
+		}
+	}
+}

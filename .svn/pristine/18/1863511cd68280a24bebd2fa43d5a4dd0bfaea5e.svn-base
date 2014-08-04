@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using System.Collections;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class CFenubarControl : UserControl
+	{
+		public bool m_bIsNewFile;
+		public string m_sFileName;
+		public Hashtable m_htbFenus;
+		public XmlDocument m_xdDocument;
+		public PropertyClasses.FenubarProperties m_fpProperties;
+
+		public CFenubarControl( string sFileName, bool bIsNewFile )
+		{
+			InitializeComponent();
+			this.m_sFileName = sFileName;
+			this.m_bIsNewFile = bIsNewFile;
+			this.m_htbFenus = new Hashtable();
+			this.m_fpProperties = new PropertyClasses.FenubarProperties();
+
+			// Start new thread to load xml file
+			if( !m_bIsNewFile ) {
+				this.m_xdDocument = new XmlDocument();
+				this.m_xdDocument.Load( m_sFileName );
+				this.LoadXml();
+			}
+		}
+
+		private void LoadXml()
+		{
+			XmlNode xnScreen = this.m_xdDocument.SelectSingleNode( "root" );
+			foreach( XmlElement xnItem in xnScreen.ChildNodes ) {
+				switch( xnItem.Name ) {
+					case "fenu":
+						LoadFenu( xnItem );
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		private void LoadFenu( XmlNode xnFenu )
+		{
+			CFenu fnFenu = new CFenu();
+			fnFenu.m_sName = xnFenu.Attributes["name"].Value;
+			m_htbFenus.Add( fnFenu.m_sName, fnFenu );
+		}
+	}
+}

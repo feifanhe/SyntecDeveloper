@@ -1,0 +1,126 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Xml;
+
+namespace Syntec_Developer.Controls.PropertyClasses
+{
+	[DefaultPropertyAttribute( "Name" )]
+	public class ItemProperties
+	{
+		private BrowserItem m_biItem;
+		private string m_sGroup;
+
+		public ItemProperties( BrowserItem biItem )
+		{
+			this.m_biItem = biItem;
+		}
+
+		[CategoryAttribute( "Common" )]
+		public string Name
+		{
+			get
+			{
+				return this.m_biItem.Name;
+			}
+			set
+			{
+				this.m_biItem.Name = value;
+				this.m_biItem.Text = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public string Group
+		{
+			get
+			{
+				return this.m_sGroup;
+			}
+			set
+			{
+				this.m_sGroup = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int X
+		{
+			get
+			{
+				return this.m_biItem.Location.X;
+			}
+			set
+			{
+				this.m_biItem.Location = new System.Drawing.Point( value, this.Y );
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int Y
+		{
+			get
+			{
+				return this.m_biItem.Location.Y;
+			}
+			set
+			{
+				this.m_biItem.Location = new System.Drawing.Point( this.X, value );
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int Width
+		{
+			get
+			{
+				return this.m_biItem.Size.Width;
+			}
+			set
+			{
+				this.m_biItem.Size = new System.Drawing.Size( value, this.Height );
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int Height
+		{
+			get
+			{
+				return this.m_biItem.Size.Height;
+			}
+			set
+			{
+				this.m_biItem.Size = new System.Drawing.Size( this.Width, value );
+			}
+		}
+
+		public void LoadItemProperties( XmlNode xnItem )
+		{
+			foreach( XmlNode xnProperty in xnItem.ChildNodes ) {
+				switch( xnProperty.Name ) {
+					// Save Properties
+					case "Name":
+						this.Name = xnProperty.InnerText;
+						break;
+					case "Left":
+						this.X = int.Parse( xnProperty.InnerText );
+						break;
+					case "Top":
+						this.Y = int.Parse( xnProperty.InnerText );
+						break;
+					case "Width":
+						this.Width = int.Parse( xnProperty.InnerText );
+						break;
+					case "Height":
+						this.Height = int.Parse( xnProperty.InnerText );
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}
+}

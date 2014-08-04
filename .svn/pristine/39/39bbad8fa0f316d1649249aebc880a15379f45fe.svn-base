@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Collections;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class DCProperties : DockContent
+	{
+		Hashtable m_htbItems;
+		DCDocumentType m_dcdtRecentType;
+
+		public DCProperties()
+		{
+			InitializeComponent();
+		}
+
+		public void OnBrowserEnter( object sender, EventArgs e )
+		{
+			DCDocument dcdDocument = (DCDocument)sender;
+			this.m_dcdtRecentType = dcdDocument.m_dcdtType;
+			this.cboItems.Items.Clear();
+
+			switch( this.m_dcdtRecentType ) {
+				case DCDocumentType.browser:
+					// Get Hashtable of Items
+					this.m_htbItems = dcdDocument.m_bcBrowser.m_htbItems;
+					ArrayList arlItemNames = new ArrayList( this.m_htbItems.Keys );
+					arlItemNames.Sort();
+					this.cboItems.Items.AddRange( arlItemNames.ToArray() );
+					prgItemProperties.SelectedObject = dcdDocument.m_bcBrowser.m_bpProperties;
+					break;
+				case DCDocumentType.fenubar:
+					break;
+			}
+
+
+		}
+
+		private void cboItems_SelectedIndexChanged( object sender, EventArgs e )
+		{
+			string sItemName = this.cboItems.SelectedItem.ToString();
+
+			switch( this.m_dcdtRecentType ) {
+				case DCDocumentType.browser:
+					prgItemProperties.SelectedObject = ( (Controls.CBrowserItem)m_htbItems[ sItemName ] ).Properties;
+					break;
+				case DCDocumentType.fenubar:
+					break;
+			}
+		}
+	}
+}

@@ -1,0 +1,303 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using WeifenLuo.WinFormsUI.Docking;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class FormMain : Form
+	{
+		// 工具視窗
+		DCTreeView m_dctvTreeView;
+		DCToolBox m_dctbToolBox;
+		DCProperties m_dcpProperties;
+		DCFenuList m_dcflFenuList;
+		// 開啟檔案列表
+		List<DCDocument> m_lstdcdDocuments;
+		string sWorkDirectory;
+
+		#region Constructor
+
+		public FormMain()
+		{
+			InitializeComponent();
+
+			sWorkDirectory = @"C:\OpenCNC Shared";
+			this.m_lstdcdDocuments = new List<DCDocument>();
+			// 顯示樹狀圖視窗
+			this.m_dctvTreeView = new DCTreeView();
+			this.m_dctvTreeView.Show( this.dplMain, DockState.DockLeft );
+			this.m_dctvTreeView.FormClosing += new FormClosingEventHandler( m_dctvTreeView_FormClosing );
+			this.m_dctvTreeView.LoadDirectory( sWorkDirectory );
+			this.m_dctvTreeView.tvwMain.DoubleClick += new EventHandler( tvwMain_DoubleClick );
+			this.tsmiTreeView.Checked = true;
+			// 顯示屬性視窗
+			this.m_dcpProperties = new DCProperties();
+			this.m_dcpProperties.Show( this.dplMain, DockState.DockRight );
+			this.m_dcpProperties.FormClosing += new FormClosingEventHandler( m_dcpProperties_FormClosing );
+			this.tsmiProperties.Checked = true;
+			// 顯示工具箱視窗
+			this.m_dctbToolBox = new DCToolBox();
+			this.m_dctbToolBox.Show( this.m_dcpProperties.Pane, DockAlignment.Top, 0.5 );
+			this.m_dctbToolBox.FormClosing += new FormClosingEventHandler( m_dctbToolBox_FormClosing );
+			this.tsmiToolBox.Checked = true;
+			// 功能鍵列表，設定顯示位置再隱藏
+			this.m_dcflFenuList = new DCFenuList();
+			this.m_dcflFenuList.Show( this.m_dcpProperties.Pane, DockAlignment.Top, 0.5 );
+			this.m_dcflFenuList.Hide();
+			this.m_dcflFenuList.FormClosing += new FormClosingEventHandler( m_dcflFenuList_FormClosing );
+			
+		}
+
+		#endregion
+
+		#region File Control Event
+
+		private void NewBrowser_Click( object sender, EventArgs e )
+		{
+			AddDocument( DCDocumentType.browser, GetNewName( "NewBrowser" ), "" );
+		}
+
+		private void NewFenubar_Click( object sender, EventArgs e )
+		{
+			AddDocument( DCDocumentType.fenubar, GetNewName( "NewFenubar" ), "" );
+		}
+
+		private void OpenFile_Click( object sender, EventArgs e )
+		{
+			if( this.ofdlgOpenFile.ShowDialog() == DialogResult.OK ) {
+				OpenFiles( ofdlgOpenFile.FileNames );
+			}
+		}
+
+		private void OpenWorkDirectory_Click( object sender, EventArgs e )
+		{
+			if( fbdlgWorkDirectory.ShowDialog() == DialogResult.OK ) {
+				this.sWorkDirectory = fbdlgWorkDirectory.SelectedPath;
+				this.m_dctvTreeView.LoadDirectory( sWorkDirectory );
+			}
+		}
+
+		private void tsmiExit_Click( object sender, EventArgs e )
+		{
+			this.Close();
+		}
+
+		#endregion
+
+		#region Open file
+
+		private void OpenFiles( string[] saFileNames )
+		{
+			for( int i = 0; i < saFileNames.Length; i++ ) {
+				OpenFile( saFileNames[ i ] );
+			}
+		}
+
+		private void OpenFile( string sFileName )
+		{
+			XmlDocument xdDocument = new XmlDocument();
+			// 載入 XML 檔案
+			try {
+				xdDocument.Load( sFileName );
+			}
+			catch( XmlException xe ) {
+				MessageBox.Show( "XML 檔案內容錯誤!" );
+				return;
+			}
+			// 判斷是否為 Browser
+			if( xdDocument.SelectSingleNode( "Screen" ) != null ) {
+				AddDocument(
+					DCDocumentType.browser,
+					sFileName.Substring( sFileName.LastIndexOf( '\\' ) + 1 ),
+					sFileName
+				);
+			}
+			// 判斷是否為 Fenubar
+			else if( xdDocument.SelectSingleNode( "root" ) != null ) {
+				AddDocument(
+					DCDocumentType.fenubar,
+					sFileName.Substring( sFileName.LastIndexOf( '\\' ) + 1 ),
+					sFileName
+				);
+			}
+			else {
+				MessageBox.Show( "非畫面檔或功能鍵!" );
+				return;
+			}
+		}
+
+		// Open file from tree view
+		private void tvwMain_DoubleClick( object sender, EventArgs e )
+		{
+			string sFileName = this.m_dctvTreeView.tvwMain.SelectedNode.FullPath;
+			if( sFileName.Substring( sFileName.LastIndexOf( '.' ) + 1 ).ToLower() == "xml" ) {
+				OpenFile( sFileName );
+			}
+		}
+
+		#endregion
+
+		#region Tool Windows Control Event
+
+		private void m_dctvTreeView_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiTreeView.Checked = false;
+			this.m_dctvTreeView.Hide();
+		}
+
+		private void m_dcpProperties_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiProperties.Checked = false;
+			this.m_dcpProperties.Hide();
+		}
+
+		private void m_dctbToolBox_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiToolBox.Checked = false;
+			this.m_dctbToolBox.Hide();
+		}
+
+		private void m_dcflFenuList_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiFenuList.Checked = false;
+			this.m_dcflFenuList.Hide();
+		}
+
+		private void tsmiTreeView_Click( object sender, EventArgs e )
+		{
+			this.tsmiTreeView.Checked = !this.tsmiTreeView.Checked;
+			if( this.tsmiTreeView.Checked ) {
+				this.m_dctvTreeView.Show( this.dplMain );
+			}
+			else {
+				this.m_dctvTreeView.Hide();
+			}
+		}
+
+		private void tsmiToolBox_Click( object sender, EventArgs e )
+		{
+			this.tsmiToolBox.Checked = !this.tsmiToolBox.Checked;
+			if( this.tsmiToolBox.Checked ) {
+				this.m_dctbToolBox.Show( this.dplMain );
+			}
+			else {
+				this.m_dctbToolBox.Hide();
+			}
+		}
+
+		private void tsmiProperties_Click( object sender, EventArgs e )
+		{
+			this.tsmiProperties.Checked = !this.tsmiProperties.Checked;
+			if( this.tsmiProperties.Checked ) {
+				this.m_dcpProperties.Show( this.dplMain );
+			}
+			else {
+				this.m_dcpProperties.Hide();
+			}
+		}
+
+		private void tsmiFenuList_Click( object sender, EventArgs e )
+		{
+			this.tsmiFenuList.Checked = !this.tsmiFenuList.Checked;
+			if( this.tsmiFenuList.Checked ) {
+				this.m_dcflFenuList.Show( this.dplMain );
+			}
+			else {
+				this.m_dcflFenuList.Hide();
+			}
+		}
+
+		#endregion
+
+		#region Custom Functions
+
+		// 產生新檔名
+		private string GetNewName( string sDefaultName )
+		{
+			int nIndex = 1;
+			bool bExist;
+			string sResultName;
+			// 搜尋是否已有預設名稱，若無則跳出迴圈
+			do {
+				sResultName = string.Concat( sDefaultName, nIndex.ToString() );
+				bExist = false;
+				// 對 m_lstdcdDocuments 逐項檢查
+				foreach( DCDocument dcdTemp in m_lstdcdDocuments ) {
+					// 若名稱重複則 nIndex 加一，重新搜尋
+					if( dcdTemp.m_sFileName == sResultName ) {
+						bExist = true;
+						nIndex++;
+						break;
+					}
+				}
+			} while( bExist );
+			return sResultName;
+		}
+
+		// 顯示開啟檔案
+		private void AddDocument( DCDocumentType dcdtType, string sFileName, string sPath )
+		{
+			DCDocument dcdTemp = new DCDocument( dcdtType, sFileName, sPath );
+			this.m_lstdcdDocuments.Add( dcdTemp );
+			dcdTemp.Enter += new EventHandler( OnDocumentFocusChanged );
+			dcdTemp.Show( this.dplMain, DockState.Document );
+		}
+
+		// 取得目前使用的檔案
+		private DCDocument GetRecentFocusDocumentControl()
+		{
+			foreach( DCDocument dcdTemp in m_lstdcdDocuments ) {
+				if( dcdTemp.Focused )
+					return dcdTemp;
+			}
+			return null;
+		}
+
+		// 控制切換畫面檔與功能鍵
+		private void OnDocumentFocusChanged( object sender, EventArgs e )
+		{
+			DCDocument dcdFocused = GetRecentFocusDocumentControl();
+			if( dcdFocused != null ) {
+				// 是畫面檔則顯示ToolBox，隱藏FenuList
+				if( dcdFocused.m_dcdtType == DCDocumentType.browser ) {
+					if( !tsmiToolBox.Checked ) {
+						m_dctbToolBox.Show();
+						tsmiToolBox.Checked = true;
+						tsmiToolBox.Enabled = true;
+					}
+					if( tsmiFenuList.Checked ) {
+						m_dcflFenuList.Hide();
+						tsmiFenuList.Checked = false;
+						tsmiFenuList.Enabled = false;
+					}
+				}
+				// 是功能鍵則顯示FenuList，隱藏ToolBox
+				else if( dcdFocused.m_dcdtType == DCDocumentType.fenubar ) {
+					if( tsmiToolBox.Checked ) {
+						m_dctbToolBox.Hide();
+						tsmiToolBox.Checked = false;
+						tsmiToolBox.Enabled = false;
+					}
+					if( !tsmiFenuList.Checked ) {
+						m_dcflFenuList.Show();
+						tsmiFenuList.Checked = true;
+						tsmiFenuList.Enabled = true;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+	}
+}

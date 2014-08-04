@@ -1,0 +1,170 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using System.Collections;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class Fenu : UserControl
+	{
+		private FenuProperties m_fpProperties;
+		private Hashtable m_htbFenuButtons;
+		private ResmapTable m_rtResmapTable;
+		private int m_nNumberOfButtons = 8;
+
+		internal XmlDocument m_xdDocument;
+		internal XmlNode m_xnFenuNode;
+
+		public delegate void FenuCloseHandler( object sender, EventArgs e );
+		public event FenuCloseHandler FenuClose;
+		public delegate void FenuButtonClickHandler( object sender, EventArgs e );
+		public event FenuButtonClickHandler FenuButtonClick;
+		public delegate void FenuButtonKeyLinkHandler( object sender, KeyEventArgs e );
+		public event FenuButtonKeyLinkHandler FenuButtonKeyLink;
+
+		public FenuProperties Properties
+		{
+			get
+			{
+				return this.m_fpProperties;
+			}
+		}
+
+		public Hashtable Buttons
+		{
+			get
+			{
+				return m_htbFenuButtons;
+			}
+		}
+
+		public Fenu( XmlDocument xdDocument, XmlNode xnFenuNode, ResmapTable rtResmapTable )
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_xnFenuNode = xnFenuNode;
+			this.m_rtResmapTable = rtResmapTable;
+			this.m_htbFenuButtons = new Hashtable();
+			this.m_fpProperties = new FenuProperties();
+			LoadXML();
+			ShowFenu();
+		}
+
+		private void LoadXML()
+		{
+			this.m_fpProperties.Name = this.m_xnFenuNode.Attributes[ "name" ].Value;
+			foreach( XmlNode xnButtonNode in this.m_xnFenuNode ) {
+				FenuButton fbButton = new FenuButton( m_xdDocument, xnButtonNode, this.m_rtResmapTable );
+				fbButton.Click += new EventHandler(FenuButton_Click);
+				fbButton.KeyDown += new KeyEventHandler( FenuButton_KeyDown );
+				switch( fbButton.Type ) {
+					case FenuButtonType.escape:
+						this.m_htbFenuButtons.Add( "escape", fbButton );
+						break;
+					case FenuButtonType.button:
+						this.m_htbFenuButtons.Add( fbButton.Properties.Position, fbButton );
+						break;
+					case FenuButtonType.next:
+						this.m_htbFenuButtons.Add( "next", fbButton );
+						break;
+				}
+			}
+		}
+
+		private void ShowFenu()
+		{
+			this.lblFenuName.Text = this.m_fpProperties.Name;
+			SetEscapeButton();
+			SetButton();
+			SetNextButton();
+		}
+
+		private void SetEscapeButton()
+		{
+			FenuButton fbEscapeButton = this.m_htbFenuButtons[ "escape" ] as FenuButton;
+			if( fbEscapeButton != null ) {
+				this.pnlFenu.Controls.Add( fbEscapeButton );
+				fbEscapeButton.BringToFront();
+			}
+			else {
+				FenuButton fbNewEscapeButton = 
+					new FenuButton( m_xdDocument, this.m_rtResmapTable, FenuButtonType.escape );
+				this.m_htbFenuButtons.Add( "escape", fbNewEscapeButton );
+				this.pnlFenu.Controls.Add( fbNewEscapeButton );
+				fbNewEscapeButton.BringToFront();
+			}
+		}
+
+
+		private void SetNextButton()
+		{
+			FenuButton fbNextButton = this.m_htbFenuButtons[ "next" ] as FenuButton;
+			if( fbNextButton != null ) {
+				this.pnlFenu.Controls.Add( fbNextButton );
+				fbNextButton.BringToFront();
+			}
+			else {
+				FenuButton fbNewNextButton = 
+					new FenuButton( m_xdDocument, this.m_rtResmapTable, FenuButtonType.next );
+				this.m_htbFenuButtons.Add( "next", fbNewNextButton );
+				this.pnlFenu.Controls.Add( fbNewNextButton );
+				fbNewNextButton.BringToFront();
+			}
+		}
+
+		private void SetButton()
+		{
+			for( int nPosition = 1; nPosition <= m_nNumberOfButtons; nPosition++ ) {
+				FenuButton fbButton = this.m_htbFenuButtons[ nPosition ] as FenuButton;
+				if( fbButton != null ) {
+					this.pnlFenu.Controls.Add( fbButton );
+					fbButton.BringToFront();
+				}
+				else {
+					FenuButton fbNewButton = new FenuButton( m_xdDocument, this.m_rtResmapTable, nPosition );
+					this.m_htbFenuButtons.Add( nPosition, fbNewButton );
+					this.pnlFenu.Controls.Add( fbNewButton );
+					fbNewButton.BringToFront();
+				}
+			}
+		}
+
+		private void lblClose_Click( object sender, EventArgs e )
+		{
+			this.FenuClose.Invoke( this, e );
+		}
+
+		private void FenuButton_Click( object sender, EventArgs e )
+		{
+			this.FenuButtonClick.Invoke( sender, e );
+		}
+
+		private void FenuButton_KeyDown( object sender, KeyEventArgs e )
+		{
+			if( e.KeyData == Keys.Space){
+				this.FenuButtonKeyLink.Invoke( sender, e );
+			}
+		}
+
+		private void Fenu_Enter( object sender, EventArgs e )
+		{
+			this.pnlHeader.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+		}
+
+		private void Fenu_Leave( object sender, EventArgs e )
+		{
+			this.pnlHeader.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+		}
+
+		private void Control_Click( object sender, EventArgs e )
+		{
+			this.Focus();
+		}
+	}
+}

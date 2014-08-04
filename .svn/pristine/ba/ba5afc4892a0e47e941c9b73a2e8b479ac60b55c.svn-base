@@ -1,0 +1,98 @@
+namespace Syntec_Developer.Forms
+{
+	partial class DCToolBox
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose( bool disposing )
+		{
+			if( disposing && ( components != null ) ) {
+				components.Dispose();
+			}
+			base.Dispose( disposing );
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			this.fpnlMain = new System.Windows.Forms.FlowLayoutPanel();
+			this.btnCursor = new System.Windows.Forms.Button();
+			this.btnButton = new System.Windows.Forms.Button();
+			this.fpnlMain.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// fpnlMain
+			// 
+			this.fpnlMain.BackColor = System.Drawing.SystemColors.Window;
+			this.fpnlMain.Controls.Add( this.btnCursor );
+			this.fpnlMain.Controls.Add( this.btnButton );
+			this.fpnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.fpnlMain.Location = new System.Drawing.Point( 0, 0 );
+			this.fpnlMain.Name = "fpnlMain";
+			this.fpnlMain.Size = new System.Drawing.Size( 184, 262 );
+			this.fpnlMain.TabIndex = 0;
+			// 
+			// btnCursor
+			// 
+			this.btnCursor.AutoSize = true;
+			this.btnCursor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnCursor.Location = new System.Drawing.Point( 3, 3 );
+			this.btnCursor.Name = "btnCursor";
+			this.btnCursor.Size = new System.Drawing.Size( 75, 24 );
+			this.btnCursor.TabIndex = 0;
+			this.btnCursor.Text = "Cursor";
+			this.btnCursor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnCursor.UseVisualStyleBackColor = true;
+			// 
+			// btnButton
+			// 
+			this.btnButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnButton.Location = new System.Drawing.Point( 84, 3 );
+			this.btnButton.Name = "btnButton";
+			this.btnButton.Size = new System.Drawing.Size( 75, 23 );
+			this.btnButton.TabIndex = 1;
+			this.btnButton.Text = "Button";
+			this.btnButton.UseVisualStyleBackColor = true;
+			// 
+			// DCToolBox
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 12F );
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScroll = true;
+			this.ClientSize = new System.Drawing.Size( 184, 262 );
+			this.Controls.Add( this.fpnlMain );
+			this.Font = new System.Drawing.Font( "PMingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ( (byte)( 136 ) ) );
+			this.Name = "DCToolBox";
+			this.Text = "¤u¨ã½c";
+			this.fpnlMain.ResumeLayout( false );
+			this.fpnlMain.PerformLayout();
+			this.ResumeLayout( false );
+
+		}
+
+		#endregion
+
+		private System.Windows.Forms.FlowLayoutPanel fpnlMain;
+		private System.Windows.Forms.Button btnCursor;
+		private System.Windows.Forms.Button btnButton;
+
+
+
+
+
+
+
+	}
+}

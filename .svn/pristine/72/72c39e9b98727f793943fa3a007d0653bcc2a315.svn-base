@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public enum FenuButtonType
+	{
+		escape,
+		next,
+		button
+	}
+
+	public partial class FenuButton : UserControl
+	{
+		private FenuButtonType m_fbtType;
+		private FenuButtonProperties m_fbpProperties;
+		internal XmlDocument m_xdDocument;
+		internal XmlNode m_xnButton;
+
+		public FenuButtonProperties Properties
+		{
+			get
+			{
+				return this.m_fbpProperties;
+			}
+		}
+
+		public FenuButtonType Type
+		{
+			get
+			{
+				return this.m_fbtType;
+			}
+			set
+			{
+				this.m_fbtType = value;
+			}
+		}
+
+		public FenuButton( XmlDocument xdDocument, XmlNode xnButton )
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_xnButton = xnButton;
+			InitializeButtonType( this.m_xnButton.Name );
+			this.m_fbpProperties = new FenuButtonProperties( this );
+		}
+
+		private void InitializeButtonType( string sButtonType )
+		{
+			switch( sButtonType ) {
+				case "escape":
+					this.m_fbtType = FenuButtonType.escape;
+					break;
+				case "next":
+					this.m_fbtType = FenuButtonType.next;
+					break;
+				case "button":
+					this.m_fbtType = FenuButtonType.button;
+					break;
+			}
+		}
+	}
+}

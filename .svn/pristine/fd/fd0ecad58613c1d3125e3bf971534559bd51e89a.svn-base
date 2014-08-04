@@ -1,0 +1,61 @@
+namespace Syntec_Developer.Forms
+{
+	partial class DCFenuList
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose( bool disposing )
+		{
+			if( disposing && ( components != null ) ) {
+				components.Dispose();
+			}
+			base.Dispose( disposing );
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			this.chklstFenuList = new System.Windows.Forms.CheckedListBox();
+			this.SuspendLayout();
+			// 
+			// chklstFenuList
+			// 
+			this.chklstFenuList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.chklstFenuList.CheckOnClick = true;
+			this.chklstFenuList.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chklstFenuList.FormattingEnabled = true;
+			this.chklstFenuList.Location = new System.Drawing.Point( 0, 0 );
+			this.chklstFenuList.Name = "chklstFenuList";
+			this.chklstFenuList.Size = new System.Drawing.Size( 284, 257 );
+			this.chklstFenuList.TabIndex = 0;
+			// 
+			// DCFenuList
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 12F );
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size( 284, 262 );
+			this.Controls.Add( this.chklstFenuList );
+			this.Font = new System.Drawing.Font( "PMingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ( (byte)( 136 ) ) );
+			this.Name = "DCFenuList";
+			this.Text = "¥\¯àÁä¦Cªí";
+			this.ResumeLayout( false );
+
+		}
+
+		#endregion
+
+		private System.Windows.Forms.CheckedListBox chklstFenuList;
+	}
+}

@@ -1,0 +1,342 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using WeifenLuo.WinFormsUI.Docking;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class FormMain : Form
+	{
+		// Tool Windows
+		DCTreeView m_dctvTreeView;
+		DCToolBox m_dctbToolBox;
+		DCProperties m_dcpProperties;
+		DCFenuList m_dcflFenuList;
+		// Opened Documents List
+		List<DCDocument> m_lstdcdDocuments;
+		// Work Directory
+		string sWorkDirectory;
+
+		#region Constructor
+
+		public FormMain()
+		{
+			InitializeComponent();
+
+			sWorkDirectory = @"C:\OpenCNC Shared";
+			this.m_lstdcdDocuments = new List<DCDocument>();
+			// Show TreeView Tool Window
+			this.m_dctvTreeView = new DCTreeView();
+			this.m_dctvTreeView.Show( this.dplMain, DockState.DockLeft );
+			this.m_dctvTreeView.FormClosing += new FormClosingEventHandler( m_dctvTreeView_FormClosing );
+			this.m_dctvTreeView.LoadDirectory( sWorkDirectory );
+			this.m_dctvTreeView.TreeViewDoubleClick += 
+				new DCTreeView.TreeViewDoubleClickHandler( tvwMain_DoubleClick );
+			this.tsmiTreeView.Checked = true;
+			// Show Properties Tool Window
+			this.m_dcpProperties = new DCProperties();
+			this.m_dcpProperties.Show( this.dplMain, DockState.DockRight );
+			this.m_dcpProperties.FormClosing += new FormClosingEventHandler( m_dcpProperties_FormClosing );
+			this.tsmiProperties.Checked = true;
+			// Show ToolBox Tool Window
+			this.m_dctbToolBox = new DCToolBox();
+			this.m_dctbToolBox.Show( this.m_dcpProperties.Pane, DockAlignment.Top, 0.5 );
+			this.m_dctbToolBox.FormClosing += new FormClosingEventHandler( m_dctbToolBox_FormClosing );
+			this.tsmiToolBox.Checked = true;
+			// Set FenuList Tool Window
+			this.m_dcflFenuList = new DCFenuList();
+			this.m_dcflFenuList.Show( this.m_dcpProperties.Pane, DockAlignment.Top, 0.5 );
+			this.m_dcflFenuList.Hide();
+			this.m_dcflFenuList.FormClosing += new FormClosingEventHandler( m_dcflFenuList_FormClosing );
+
+		}
+
+		#endregion
+
+		#region File Control Event
+
+		private void NewBrowser_Click( object sender, EventArgs e )
+		{
+			AddDocument( DocumentType.browser, GetNewName( "NewBrowser" ), true );
+		}
+
+		private void NewFenubar_Click( object sender, EventArgs e )
+		{
+			AddDocument( DocumentType.fenubar, GetNewName( "NewFenubar" ), true );
+		}
+
+		private void OpenFile_Click( object sender, EventArgs e )
+		{
+			if( this.ofdlgOpenFile.ShowDialog() == DialogResult.OK ) {
+				OpenFiles( ofdlgOpenFile.FileNames );
+			}
+		}
+
+		private void OpenWorkDirectory_Click( object sender, EventArgs e )
+		{
+			if( fbdlgWorkDirectory.ShowDialog() == DialogResult.OK ) {
+				this.sWorkDirectory = fbdlgWorkDirectory.SelectedPath;
+				this.m_dctvTreeView.LoadDirectory( sWorkDirectory );
+			}
+		}
+
+		private void tsmiExit_Click( object sender, EventArgs e )
+		{
+			this.Close();
+		}
+
+		#endregion
+
+		#region View Control Event
+
+		private void tsmiTreeView_Click( object sender, EventArgs e )
+		{
+			this.tsmiTreeView.Checked = !this.tsmiTreeView.Checked;
+			if( this.tsmiTreeView.Checked ) {
+				this.m_dctvTreeView.Show( this.dplMain );
+			}
+			else {
+				this.m_dctvTreeView.Hide();
+			}
+		}
+
+		private void tsmiToolBox_Click( object sender, EventArgs e )
+		{
+			this.tsmiToolBox.Checked = !this.tsmiToolBox.Checked;
+			if( this.tsmiToolBox.Checked ) {
+				this.m_dctbToolBox.Show( this.dplMain );
+			}
+			else {
+				this.m_dctbToolBox.Hide();
+			}
+		}
+
+		private void tsmiProperties_Click( object sender, EventArgs e )
+		{
+			this.tsmiProperties.Checked = !this.tsmiProperties.Checked;
+			if( this.tsmiProperties.Checked ) {
+				this.m_dcpProperties.Show( this.dplMain );
+			}
+			else {
+				this.m_dcpProperties.Hide();
+			}
+		}
+
+		private void tsmiFenuList_Click( object sender, EventArgs e )
+		{
+			this.tsmiFenuList.Checked = !this.tsmiFenuList.Checked;
+			if( this.tsmiFenuList.Checked ) {
+				this.m_dcflFenuList.Show( this.dplMain );
+			}
+			else {
+				this.m_dcflFenuList.Hide();
+			}
+		}
+
+		#endregion
+
+		#region Tool Windows Control Event
+
+		private void m_dctvTreeView_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiTreeView.Checked = false;
+			this.m_dctvTreeView.Hide();
+		}
+
+		private void m_dcpProperties_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiProperties.Checked = false;
+			this.m_dcpProperties.Hide();
+		}
+
+		private void m_dctbToolBox_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiToolBox.Checked = false;
+			this.m_dctbToolBox.Hide();
+		}
+
+		private void m_dcflFenuList_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			e.Cancel = true;
+			this.tsmiFenuList.Checked = false;
+			this.m_dcflFenuList.Hide();
+		}
+
+		#endregion
+
+		#region Open file
+
+		private void OpenFiles( string[] saFileNames )
+		{
+			for( int i = 0; i < saFileNames.Length; i++ ) {
+				OpenFile( saFileNames[ i ] );
+			}
+		}
+
+		private void OpenFile( string sFileName )
+		{
+			XmlDocument xdDocument = new XmlDocument();
+			// Load XML files
+			try {
+				xdDocument.Load( sFileName );
+			}
+			catch( XmlException ) {
+				MessageBox.Show( "illegal XML file!" );
+				return;
+			}
+			// check if it is Browser file
+			if( xdDocument.SelectSingleNode( "Screen" ) != null ) {
+				AddDocument(
+					DocumentType.browser,
+					sFileName,
+					false
+				);
+			}
+			// check if it is Fenubar file
+			else if( xdDocument.SelectSingleNode( "root" ) != null ) {
+				AddDocument(
+					DocumentType.fenubar,
+					sFileName,
+					false
+				);
+			}
+			else {
+				MessageBox.Show( "Not Browser File or Fenubar File!" );
+				return;
+			}
+		}
+
+		// Open file from tree view
+		private void tvwMain_DoubleClick( object sender, EventArgs e )
+		{
+			TreeView tvwTreeView = (TreeView)sender;
+			if( tvwTreeView.SelectedNode != null ) {
+				string sFileName = tvwTreeView.SelectedNode.FullPath;
+				if( String.Compare( GetExtension( sFileName ).ToLower(), ".xml" ) == 0 ) {
+					OpenFile( sFileName );
+				}
+			}
+		}
+
+		#endregion
+
+		#region Custom Functions
+
+		// Generate new file name
+		private string GetNewName( string sDefaultName )
+		{
+			int nIndex = 1;
+			bool bExist;
+			string sResultName;
+			// Generate new names until there isn't the same filename 
+			do {
+				sResultName = string.Concat( sDefaultName, nIndex.ToString() );
+				bExist = false;
+				// 對 m_lstdcdDocuments 逐項檢查
+				foreach( DCDocument dcdTemp in m_lstdcdDocuments ) {
+					// 若名稱重複則 nIndex 加一，重新搜尋
+					if( String.Compare( dcdTemp.m_sFullName, sResultName ) == 0 ) {
+						bExist = true;
+						nIndex++;
+						break;
+					}
+				}
+			} while( bExist );
+			return sResultName;
+		}
+
+		// Show opened document
+		private void AddDocument( DocumentType dtType, string sFileName, bool bIsNewFile )
+		{
+			DCDocument dcdTemp = new DCDocument( dtType, sFileName, bIsNewFile );
+			this.m_lstdcdDocuments.Add( dcdTemp );
+
+			// Add event handler to handle switching between Browser and Fenubar
+			dcdTemp.Activated += new EventHandler( Document_Activated );
+			dcdTemp.Activated += new EventHandler( m_dcpProperties.Document_Activated );
+			dcdTemp.Activated += new EventHandler( m_dcflFenuList.Document_Activated );
+			dcdTemp.BrowserClick +=
+				new DCDocument.BrowserClickEventHandler( m_dcpProperties.Browser_Click );
+			dcdTemp.FenubarClick +=
+				new DCDocument.FenubarClickEventHandler( m_dcpProperties.Fenubar_Click );
+			dcdTemp.BrowserItemClick +=
+				new DCDocument.BrowserItemClickEventHandler( m_dcpProperties.BrowserItem_Click );
+			dcdTemp.BrowserXmlLoadCompleted +=
+				new DCDocument.BrowserXmlLoadCompletedHandler( m_dcpProperties.Browser_XmlLoadCompleted );
+
+			// Show form
+			dcdTemp.Show( this.dplMain, DockState.Document );
+		}
+
+		void bgwLoadXml_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+		{
+			throw new Exception( "The method or operation is not implemented." );
+		}
+
+		// Get recent fucus document
+		private DCDocument GetRecentFocusDocumentControl()
+		{
+			foreach( DCDocument dcdTemp in m_lstdcdDocuments ) {
+				if( dcdTemp.Focused )
+					return dcdTemp;
+			}
+			return null;
+		}
+
+		// Handle switching between Browser and Fenubar
+		private void Document_Activated( object sender, EventArgs e )
+		{
+			DCDocument dcdActivated = GetRecentFocusDocumentControl();
+			if( dcdActivated != null ) {
+				// If Browser, Show ToolBox, Hide FenuList
+				if( dcdActivated.m_dtType == DocumentType.browser ) {
+					if( !tsmiToolBox.Checked ) {
+						m_dctbToolBox.Show();
+						tsmiToolBox.Checked = true;
+						tsmiToolBox.Enabled = true;
+					}
+					if( tsmiFenuList.Checked ) {
+						m_dcflFenuList.Hide();
+						tsmiFenuList.Checked = false;
+						tsmiFenuList.Enabled = false;
+					}
+				}
+				// If FenuList, Hide ToolBox, Show FenuList
+				else if( dcdActivated.m_dtType == DocumentType.fenubar ) {
+					if( tsmiToolBox.Checked ) {
+						m_dctbToolBox.Hide();
+						tsmiToolBox.Checked = false;
+						tsmiToolBox.Enabled = false;
+					}
+					if( !tsmiFenuList.Checked ) {
+						m_dcflFenuList.Show();
+						tsmiFenuList.Checked = true;
+						tsmiFenuList.Enabled = true;
+					}
+				}
+			}
+		}
+
+		private string GetExtension( string sFullName )
+		{
+			int nDotIndex = sFullName.LastIndexOf( '.' );
+			if( nDotIndex < 0 ) {
+				return "";
+			}
+			else {
+				return sFullName.Substring( nDotIndex );
+			}
+		}
+
+		#endregion
+
+	}
+}

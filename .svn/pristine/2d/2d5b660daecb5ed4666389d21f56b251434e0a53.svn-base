@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.IO;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class DCTreeView : DockContent
+	{
+		enum ImageIndex
+		{
+			ROOT_IMAGE_INDEX,
+			FOLDER_IMAGE_INDEX,
+			FOLDER_OPEN_IMAGE_INDEX,
+			XML_FILE_IMAGE_INDEX,
+			FILE_IMAGE_INDEX
+		};
+
+		public DCTreeView()
+		{
+			InitializeComponent();
+		}
+
+		public void LoadDirectory( string sDirectory )
+		{
+			this.tvwMain.Nodes.Clear();
+			try {
+				// Get all direcrtories and files
+				DirectoryInfo difParent = new DirectoryInfo( sDirectory );
+				DirectoryInfo[] difChildren = difParent.GetDirectories();
+				FileInfo[] fifFiles = difParent.GetFiles();
+				
+				// Generate tree
+				TreeNode tnRoot = new TreeNode(
+					difParent.FullName,
+					(int)ImageIndex.ROOT_IMAGE_INDEX,
+					(int)ImageIndex.ROOT_IMAGE_INDEX,
+					GetTreeNodes( difChildren, fifFiles )
+				);
+				tnRoot.Expand();
+				this.tvwMain.Nodes.Add( tnRoot );
+			}
+			catch( IOException ioe ) {
+			}
+		}
+
+		// Returns TreeNode array which is converted from directories and files
+		private TreeNode[] GetTreeNodes( DirectoryInfo[] difaDirectories, FileInfo[] fifaFiles )
+		{
+			TreeNode[] tnaDirNodes = null;
+			TreeNode[] tnaFileNodes = null;
+			TreeNode[] tnaResult = null;
+
+			// Set directory nodes
+			tnaDirNodes = new TreeNode[ difaDirectories.Length ];
+			for( int i = 0; i < difaDirectories.Length; i++ ) {
+				tnaDirNodes[ i ] = new TreeNode(
+					difaDirectories[ i ].Name,
+					(int)ImageIndex.FOLDER_IMAGE_INDEX,
+					(int)ImageIndex.FOLDER_IMAGE_INDEX,
+					GetTreeNodes( difaDirectories[ i ].GetDirectories(), difaDirectories[ i ].GetFiles() )
+				);
+			}
+
+			// Set file nodes
+			tnaFileNodes = new TreeNode[ fifaFiles.Length ];
+			for( int i = 0; i < fifaFiles.Length; i++ ) {
+				if( String.Compare( fifaFiles[ i ].Extension.ToLower(), ".xml" ) == 0 ) {
+					tnaFileNodes[ i ] = new TreeNode(
+						fifaFiles[ i ].Name,
+						(int)ImageIndex.XML_FILE_IMAGE_INDEX,
+						(int)ImageIndex.XML_FILE_IMAGE_INDEX
+					);
+				}
+				else {
+					tnaFileNodes[ i ] = new TreeNode(
+						fifaFiles[ i ].Name,
+						(int)ImageIndex.FILE_IMAGE_INDEX,
+						(int)ImageIndex.FILE_IMAGE_INDEX
+					);
+				}
+			}
+			// Combine directory nodes and file nodes
+			tnaResult = new TreeNode[ tnaDirNodes.Length + tnaFileNodes.Length ];
+			tnaDirNodes.CopyTo( tnaResult, 0 );
+			tnaFileNodes.CopyTo( tnaResult, tnaDirNodes.Length );
+
+			return tnaResult;
+
+		}
+
+		private void tvwMain_AfterExpand( object sender, TreeViewEventArgs e )
+		{
+			if( e.Node.Level != 0 )
+				e.Node.ImageIndex = (int)ImageIndex.FOLDER_OPEN_IMAGE_INDEX;
+		}
+
+		private void tvwMain_AfterCollapse( object sender, TreeViewEventArgs e )
+		{
+			if( e.Node.Level != 0 )
+				e.Node.ImageIndex = (int)ImageIndex.FOLDER_IMAGE_INDEX;
+		}
+
+
+	}
+}

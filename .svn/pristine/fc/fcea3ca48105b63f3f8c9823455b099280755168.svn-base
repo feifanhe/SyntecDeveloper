@@ -1,0 +1,114 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.ComponentModel;
+using System.Drawing;
+
+namespace Syntec_Developer.Controls.PropertyClasses
+{
+	public class FenuButtonProperties : FenuButtonBaseProperties
+	{
+		private string m_sTitle;
+		private int m_nPosition;
+		private string m_sPicture;
+		private Color m_clrForeColor;
+		private Color m_clrBackColor;
+		private bool m_bHoldMode;
+		private Color m_clrLightOnColor;
+
+		[CategoryAttribute( "Button" )]
+		public string Title
+		{
+			get
+			{
+				return this.m_sTitle;
+			}
+			set
+			{
+				this.m_sTitle = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public int Position
+		{
+			get
+			{
+				return this.m_nPosition;
+			}
+			set
+			{
+				this.m_nPosition = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public string Picture
+		{
+			get
+			{
+				return this.m_sPicture;
+			}
+			set
+			{
+				this.m_sPicture = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public Color ForeColor
+		{
+			get
+			{
+				return this.m_clrForeColor;
+			}
+			set
+			{
+				this.m_clrForeColor = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public Color BackColor
+		{
+			get
+			{
+				return this.m_clrBackColor;
+			}
+			set
+			{
+				this.m_clrBackColor = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public bool HoldMode
+		{
+			get
+			{
+				return this.m_bHoldMode;
+			}
+			set
+			{
+				this.m_bHoldMode = value;
+			}
+		}
+
+		[CategoryAttribute( "Button" )]
+		public Color LightOnColor
+		{
+			get
+			{
+				return this.m_clrLightOnColor;
+			}
+			set
+			{
+				this.m_clrLightOnColor = value;
+			}
+		}
+
+		public FenuButtonProperties( FenuButton fbButton ) : base( fbButton )
+		{
+		}
+	}
+}

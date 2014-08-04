@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class Fenu : UserControl
+	{
+		private FenubarProperties m_fpProperties;
+		private XmlDocument m_xdDocument;
+		private XmlNode m_xnFenuNode;
+
+
+
+		public FenubarProperties Properties
+		{
+			get
+			{
+				return this.m_fpProperties;
+			}
+		}
+
+		public Fenu( XmlDocument xdDocument, XmlNode xnFenuNode)
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_xnFenuNode = xnFenuNode;
+			LoadXML();
+		}
+
+		private void LoadXML()
+		{
+			foreach( XmlNode xnButtonNode in m_xnFenuNode ) {
+				switch( xnButtonNode.Name ) {
+					case "escape":
+						LoadEscapeButton( xnButtonNode );
+						break;
+					case "next":
+						LoadNextButton( xnButtonNode );
+						break;
+					case "button":
+						LoadButton( xnButtonNode );
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		private void LoadEscapeButton( XmlNode xnEscapeButton )
+		{
+		}
+
+		private void LoadNextButton(XmlNode xnNextButton)
+		{
+		}
+
+		private void LoadButton( XmlNode xnButton )
+		{
+		}
+
+	}
+}

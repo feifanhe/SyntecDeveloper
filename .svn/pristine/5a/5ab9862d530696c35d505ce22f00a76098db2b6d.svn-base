@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Syntec_Developer.Controls;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class SearchFenubar : Form
+	{
+		DCDocument m_dcFenubarDocument;
+		DCFenuList m_dcFenuList;
+
+		public SearchFenubar()
+		{
+			InitializeComponent();
+		}
+
+		public static void Show( DCDocument dcFenubarDocument, DCFenuList dcFenuList )
+		{
+			SearchFenubar searchFenuBar = new SearchFenubar();
+			searchFenuBar.m_dcFenubarDocument = dcFenubarDocument;
+			searchFenuBar.m_dcFenuList = dcFenuList;
+			searchFenuBar.Show();
+		}
+
+		private void btnSearch_Click( object sender, EventArgs e )
+		{
+			foreach( Fenu fnFenu in this.m_dcFenubarDocument.Fenubar.Fenus.Values ) {
+				foreach( FenuButton fbButton in fnFenu.Buttons.Values ) {
+					if( fbButton.Properties.Title.Contains(this.txtFenuButtonName.Text) ) {
+						this.m_dcFenuList.FindFenu( fbButton.Properties.Link );
+					}
+				}
+			}
+		}
+
+		private void txtFenuButtonName_KeyDown( object sender, KeyEventArgs e )
+		{
+			if( e.KeyData == Keys.Enter ) {
+				this.Invoke( new EventHandler( btnSearch_Click ), new object[] { sender, new EventArgs() } );
+			}
+		}
+	}
+}

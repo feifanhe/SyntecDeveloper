@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Collections;
+using Syntec_Developer.Controls;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class DCProperties : DockContent
+	{
+		Hashtable m_htbItems;
+		DocumentType m_dtRecentType;
+
+		public DCProperties()
+		{
+			InitializeComponent();
+		}
+
+		public void OnDocumentEnter( object sender, EventArgs e )
+		{
+			DCDocument dcdDocument = (DCDocument)sender;
+			this.m_dtRecentType = dcdDocument.m_dtType;
+			this.cboItems.Items.Clear();
+			switch( this.m_dtRecentType ) {
+				case DocumentType.browser:
+					// Load items in Hashtable into combobox
+					this.m_htbItems = dcdDocument.m_bcBrowser.m_htbItems;
+					ArrayList arlItemNames = new ArrayList( this.m_htbItems.Keys );
+					arlItemNames.Sort();
+					this.cboItems.Items.AddRange( arlItemNames.ToArray() );
+					// PropertyGrid shows properties of browser
+					prgItemProperties.SelectedObject = dcdDocument.m_bcBrowser.m_bpProperties;
+					break;
+				case DocumentType.fenubar:
+					// PropertyGrid shows properties of fenubar
+					prgItemProperties.SelectedObject = dcdDocument.m_fcFenubar.m_fpProperties;
+					break;
+			}
+
+
+		}
+
+		private void cboItems_SelectedIndexChanged( object sender, EventArgs e )
+		{
+			if( this.cboItems.SelectedItem != null ) {
+				string sItemName = this.cboItems.SelectedItem.ToString();
+
+				switch( this.m_dtRecentType ) {
+					case DocumentType.browser:
+						prgItemProperties.SelectedObject = ( (Controls.CBrowserItem)m_htbItems[ sItemName ] ).Properties;
+						break;
+					case DocumentType.fenubar:
+						break;
+				}
+			}
+		}
+
+		public void SelectBrowser( object sender, EventArgs e )
+		{
+			prgItemProperties.SelectedObject = ( (CBrowserControl)sender ).m_bpProperties;
+			cboItems.SelectedItem = null;
+		}
+
+		public void SelectFenubar( object sender, EventArgs e )
+		{
+			prgItemProperties.SelectedObject = ( (CFenubarControl)sender ).m_fpProperties;
+			cboItems.SelectedItem = null;
+		}
+
+		public void SelectBrowserItem( object sender, EventArgs e )
+		{
+			CBrowserItem biSelectedItem = (CBrowserItem)sender;
+			prgItemProperties.SelectedObject = biSelectedItem.Properties;
+			cboItems.SelectedItem = biSelectedItem.Name;
+		}
+	}
+}

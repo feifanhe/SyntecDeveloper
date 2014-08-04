@@ -1,0 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.ComponentModel;
+
+namespace Syntec_Developer.Controls.PropertyClasses
+{
+	public class FenubarProperties
+	{
+		private int m_nAlignment;
+
+		[CategoryAttribute( "Fenubar" )]
+		public int Alignment
+		{
+			get
+			{
+				return this.m_nAlignment;
+			}
+			set
+			{
+				this.m_nAlignment = value;
+			}
+		}
+	}
+}

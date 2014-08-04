@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Collections;
+using Syntec_Developer.Controls;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class SearchFenubar : Form
+	{
+		DCDocument m_dcFenubarDocument;
+		DCFenuList m_dcFenuList;
+		int m_nFenuIndex;
+		int m_nFenuButtonIndex;
+		string m_sLastSearchString;
+
+		public SearchFenubar()
+		{
+			InitializeComponent();
+		}
+
+		public static void Show( DCDocument dcFenubarDocument, DCFenuList dcFenuList )
+		{
+			SearchFenubar searchFenuBar = new SearchFenubar();
+			searchFenuBar.m_dcFenubarDocument = dcFenubarDocument;
+			searchFenuBar.m_dcFenuList = dcFenuList;
+			searchFenuBar.m_nFenuButtonIndex = 0;
+			searchFenuBar.m_nFenuIndex = 0;
+			searchFenuBar.m_sLastSearchString = string.Empty;
+			searchFenuBar.Show();
+		}
+
+		List<string> lstIDs;
+
+		private void btnSearch_Click( object sender, EventArgs e )
+		{
+			if( string.Compare( this.txtFenuButtonName.Text, string.Empty ) == 0 ) {
+				return;
+			}
+
+			if( this.m_sLastSearchString != this.txtFenuButtonName.Text ) {
+				this.m_sLastSearchString = this.txtFenuButtonName.Text;
+				this.m_nFenuIndex = 0;
+				this.m_nFenuButtonIndex = 0;
+
+				this.lstIDs =
+				this.m_dcFenubarDocument.m_rtResmapTable.GetIDsByKeyWord( "CHT", this.txtFenuButtonName.Text );
+				foreach( string s in this.lstIDs ) {
+					Console.WriteLine( s );
+				}
+			}
+
+			
+			ArrayList arlFenus = new ArrayList( this.m_dcFenubarDocument.Fenubar.Fenus.Values );
+			for( int i = this.m_nFenuIndex; i < arlFenus.Count; i++ ) {
+				Console.WriteLine( "Fenu No. " + i.ToString() );
+				ArrayList arlButtons = new ArrayList( ( (Fenu)arlFenus[ i ] ).Buttons.Values );
+				if( this.m_nFenuButtonIndex >= arlButtons.Count ) {
+					this.m_nFenuButtonIndex = 0;
+					continue;
+				}
+				for( int j = this.m_nFenuButtonIndex; j < arlButtons.Count; j++ ) {
+					string sButtonTitleID = ( (FenuButton)arlButtons[ j ] ).Properties.Title.ID;
+					Console.WriteLine( "\tID: " + sButtonTitleID );
+					if( sButtonTitleID != null && sButtonTitleID.ToUpper().Contains( "STR::" ) ) {
+						Console.WriteLine( "\tResmap ID: " + sButtonTitleID );
+						if( lstIDs.Contains( sButtonTitleID.Substring( 5 ) ) ) {
+							this.m_nFenuIndex = i;
+							this.m_nFenuButtonIndex = j + 1;
+
+							Console.WriteLine( "\tFenu: " + ( (Fenu)arlFenus[ i ] ).Properties.Name + " " + i.ToString() + " " + j.ToString() );
+							this.m_dcFenuList.FindFenu( ( (Fenu)arlFenus[ i ] ).Properties.Name );
+							return;
+						}
+					}
+					
+
+				}
+			}
+			MessageBox.Show( "查無資料!" );
+			this.m_sLastSearchString = string.Empty;
+			this.m_nFenuIndex = 0;
+			this.m_nFenuButtonIndex = 0;
+		}
+
+		private void txtFenuButtonName_KeyDown( object sender, KeyEventArgs e )
+		{
+			switch( e.KeyData ){
+				case Keys.Enter:
+					this.Invoke( new EventHandler( btnSearch_Click ), new object[] { sender, new EventArgs() } );
+					break;
+				case Keys.Escape:
+					this.Close();
+					break;
+			}
+		}
+	}
+}

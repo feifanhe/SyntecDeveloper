@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+
+namespace Syntec_Developer.Forms
+{
+	public enum DCDocumentType
+	{
+		browser,
+		fenubar
+	};
+
+	public partial class DCDocument : DockContent
+	{
+		public DCDocumentType m_dcdtType;
+		public string m_sFileName;
+		public string m_sPath;
+
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( DCDocument ) );
+
+		#region Constructor
+
+		public DCDocument( DCDocumentType dcdtType, string sFileName, string sPath )
+		{
+			InitializeComponent( dcdtType );
+			this.m_dcdtType = dcdtType;
+			this.m_sFileName = sFileName;
+			this.m_sPath = sPath;
+			this.Text = m_sFileName;
+
+			switch( dcdtType ) {
+				case DCDocumentType.browser:
+					this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Computer" ) ) );
+					break;
+				case DCDocumentType.fenubar:
+					this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Data_Schema" ) ) );
+					break;
+			}
+		}
+
+		#endregion
+	}
+}

@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Syntec_Developer.Controls.PropertyClasses
+{
+	[DefaultPropertyAttribute( "Name" )]
+	public class ItemProperties
+	{
+		private string m_sName;
+		private string m_sGroup;
+
+		private int m_nX;
+		private int m_nY;
+		private int m_nWidth;
+		private int m_nHeight;
+
+		[CategoryAttribute( "Common" )]
+		public string Name
+		{
+			get
+			{
+				return this.m_sName;
+			}
+			set
+			{
+				this.m_sName = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public string Group
+		{
+			get
+			{
+				return this.m_sGroup;
+			}
+			set
+			{
+				this.m_sGroup = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int X
+		{
+			get
+			{
+				return this.m_nX;
+			}
+			set
+			{
+				this.m_nX = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int Y
+		{
+			get
+			{
+				return this.m_nY;
+			}
+			set
+			{
+				this.m_nY = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int Width
+		{
+			get
+			{
+				return this.m_nWidth;
+			}
+			set
+			{
+				this.m_nWidth = value;
+			}
+		}
+
+		[CategoryAttribute( "Common" )]
+		public int Height
+		{
+			get
+			{
+				return this.m_nHeight;
+			}
+			set
+			{
+				this.m_nHeight = value;
+			}
+		}
+	}
+}

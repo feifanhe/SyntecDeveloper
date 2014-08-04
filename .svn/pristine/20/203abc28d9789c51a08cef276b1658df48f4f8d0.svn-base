@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class Fenu : UserControl
+	{
+		private FenuProperties m_fpProperties;
+		private List<FenuButton> m_lstFenuButtons;
+		internal XmlDocument m_xdDocument;
+		internal XmlNode m_xnFenuNode;
+
+
+		public FenuProperties Properties
+		{
+			get
+			{
+				return this.m_fpProperties;
+			}
+		}
+
+		public List<FenuButton> Buttons
+		{
+			get
+			{
+				return m_lstFenuButtons;
+			}
+		}
+
+		public Fenu( XmlDocument xdDocument, XmlNode xnFenuNode)
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_xnFenuNode = xnFenuNode;
+			this.m_lstFenuButtons = new List<FenuButton>();
+			this.m_fpProperties = new FenuProperties();
+			LoadXML();
+		}
+
+		private void LoadXML()
+		{
+			this.m_fpProperties.Name = this.m_xnFenuNode.Attributes[ "name" ].Value;
+			foreach( XmlNode xnButtonNode in this.m_xnFenuNode ) {
+				FenuButton fbButton = new FenuButton( m_xdDocument, xnButtonNode );
+				this.m_lstFenuButtons.Add( fbButton );
+			}
+		}
+	}
+}

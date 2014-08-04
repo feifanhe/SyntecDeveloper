@@ -1,0 +1,79 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Syntec_Developer.Controls
+{
+	public enum ItemType
+	{
+		Button,
+		CheckBox,
+		CoordBox,
+		Display,
+		FileList,
+		Input,
+		Inputline,
+		Label,
+		Lamp,
+		ListInput,
+		Meter,
+		OCSimu,
+		OCText,
+		Panel,
+		Picture,
+		Radio,
+		Vision
+	}
+
+	public partial class CBrowserItem : UserControl
+	{
+		private ItemProperties m_pptItemProperties;
+		private ItemType m_itItemType;
+
+		public ItemProperties Properties
+		{
+			get
+			{
+				return this.m_pptItemProperties;
+			}
+			set
+			{
+				this.m_pptItemProperties = value;
+			}
+		}
+
+		public ItemType Type
+		{
+			get
+			{
+				return this.m_itItemType;
+			}
+			set
+			{
+				this.m_itItemType = value;
+			}
+		}
+
+		public string Name
+		{
+			get
+			{
+				return this.m_pptItemProperties.Name;
+			}
+			set
+			{
+				this.m_pptItemProperties.Name = value;
+			}
+		}
+
+		public CBrowserItem()
+		{
+			InitializeComponent();
+			m_pptItemProperties = new ItemProperties();
+		}
+	}
+}

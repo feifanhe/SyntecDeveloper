@@ -1,0 +1,86 @@
+namespace Syntec_Developer.Forms
+{
+	partial class SearchFenubar
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose( bool disposing )
+		{
+			if( disposing && ( components != null ) ) {
+				components.Dispose();
+			}
+			base.Dispose( disposing );
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			this.lblFenuButtonName = new System.Windows.Forms.Label();
+			this.txtFenuButtonName = new System.Windows.Forms.TextBox();
+			this.btnSearch = new System.Windows.Forms.Button();
+			this.SuspendLayout();
+			// 
+			// lblFenuButtonName
+			// 
+			this.lblFenuButtonName.AutoSize = true;
+			this.lblFenuButtonName.Location = new System.Drawing.Point( 12, 15 );
+			this.lblFenuButtonName.Name = "lblFenuButtonName";
+			this.lblFenuButtonName.Size = new System.Drawing.Size( 56, 12 );
+			this.lblFenuButtonName.TabIndex = 0;
+			this.lblFenuButtonName.Text = "´ˆ¡‰¶W∫Ÿ:";
+			// 
+			// txtFenuButtonName
+			// 
+			this.txtFenuButtonName.Location = new System.Drawing.Point( 74, 12 );
+			this.txtFenuButtonName.Name = "txtFenuButtonName";
+			this.txtFenuButtonName.Size = new System.Drawing.Size( 100, 22 );
+			this.txtFenuButtonName.TabIndex = 1;
+			this.txtFenuButtonName.KeyDown += new System.Windows.Forms.KeyEventHandler( this.txtFenuButtonName_KeyDown );
+			// 
+			// btnSearch
+			// 
+			this.btnSearch.Location = new System.Drawing.Point( 180, 10 );
+			this.btnSearch.Name = "btnSearch";
+			this.btnSearch.Size = new System.Drawing.Size( 75, 23 );
+			this.btnSearch.TabIndex = 2;
+			this.btnSearch.Text = "∑j¥M";
+			this.btnSearch.UseVisualStyleBackColor = true;
+			this.btnSearch.Click += new System.EventHandler( this.btnSearch_Click );
+			// 
+			// SearchFenubar
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 12F );
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size( 267, 45 );
+			this.Controls.Add( this.btnSearch );
+			this.Controls.Add( this.txtFenuButtonName );
+			this.Controls.Add( this.lblFenuButtonName );
+			this.MaximizeBox = false;
+			this.Name = "SearchFenubar";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "∑j¥M•\Ø‡¡‰";
+			this.TopMost = true;
+			this.ResumeLayout( false );
+			this.PerformLayout();
+
+		}
+
+		#endregion
+
+		private System.Windows.Forms.Label lblFenuButtonName;
+		private System.Windows.Forms.TextBox txtFenuButtonName;
+		private System.Windows.Forms.Button btnSearch;
+	}
+}

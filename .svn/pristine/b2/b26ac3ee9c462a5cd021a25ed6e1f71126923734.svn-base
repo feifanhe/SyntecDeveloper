@@ -1,0 +1,135 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public enum FenuButtonType
+	{
+		escape,
+		next,
+		button
+	}
+
+	public partial class FenuButton : Button
+	{
+		private FenuButtonType m_fbtType;
+		private FenuButtonProperties m_fbpProperties;
+
+		internal ResmapTable m_rtResmapTable;
+		internal XmlDocument m_xdDocument;
+		internal XmlNode m_xnButton;
+
+		public FenuButtonProperties Properties
+		{
+			get
+			{
+				return this.m_fbpProperties;
+			}
+		}
+
+		public FenuButtonType Type
+		{
+			get
+			{
+				return this.m_fbtType;
+			}
+			set
+			{
+				this.m_fbtType = value;
+			}
+		}
+
+		public FenuButton( XmlDocument xdDocument, XmlNode xnButton, ResmapTable rtResmapTable )
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_xnButton = xnButton;
+			this.m_rtResmapTable = rtResmapTable;
+			InitializeButtonType( this.m_xnButton.Name );
+			this.m_fbpProperties = new FenuButtonProperties( this );
+			SetText();
+		}
+
+		public FenuButton( XmlDocument xdDocument, ResmapTable rtResmapTable, FenuButtonType fbtType )
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_rtResmapTable = rtResmapTable;
+			this.m_fbtType = fbtType;
+
+			XmlNode xnButtonNode = this.m_xdDocument.CreateElement( fbtType.ToString() );
+			this.m_xnButton = xnButtonNode;
+
+			this.m_fbpProperties = new FenuButtonProperties( this );
+
+			SetText();
+		}
+
+		public FenuButton( XmlDocument xdDocument, ResmapTable rtResmapTable, int nPosition )
+		{
+			InitializeComponent();
+			this.m_xdDocument = xdDocument;
+			this.m_rtResmapTable = rtResmapTable;
+			this.m_fbtType = FenuButtonType.button;
+
+			XmlNode xnButtonNode = this.m_xdDocument.CreateElement( "button" );
+			this.m_xnButton = xnButtonNode;
+
+			this.m_fbpProperties = new FenuButtonProperties( this );
+
+			this.m_fbpProperties.Position = nPosition;
+
+			SetText();
+		}
+
+		private void InitializeButtonType( string sButtonType )
+		{
+			switch( sButtonType ) {
+				case "escape":
+					this.m_fbtType = FenuButtonType.escape;
+					break;
+				case "next":
+					this.m_fbtType = FenuButtonType.next;
+					break;
+				case "button":
+					this.m_fbtType = FenuButtonType.button;
+					break;
+			}
+		}
+
+		private void SetText()
+		{
+			switch( this.m_fbtType ) {
+				case FenuButtonType.escape:
+					this.Text = "<<";
+					this.Width = 20;
+					break;
+				case FenuButtonType.button:
+					string sContent;
+					if( this.m_fbpProperties.Title.Values.ContainsKey( "CHT" ) ) {
+						sContent = this.m_fbpProperties.Title.Values[ "CHT" ];
+					}
+					else {
+						sContent = this.m_fbpProperties.Title.ID;
+					}
+					this.Text =
+						String.Concat(
+							"F", this.m_fbpProperties.Position.ToString(),
+							" ", sContent
+						);
+					break;
+				case FenuButtonType.next:
+					this.Text = ">>";
+					this.Width = 20;
+					break;
+			}
+		}
+	}
+}

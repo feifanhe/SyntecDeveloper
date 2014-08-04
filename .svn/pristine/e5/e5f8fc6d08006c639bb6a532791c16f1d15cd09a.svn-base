@@ -1,0 +1,145 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Xml;
+using Syntec_Developer.Controls;
+
+namespace Syntec_Developer.Forms
+{
+	public enum DocumentType
+	{
+		browser,
+		fenubar
+	};
+
+	public partial class DCDocument : DockContent
+	{
+		private string m_sFullName;
+		private string m_sName;
+		private bool m_bIsNewFile;
+		private DocumentType m_dtType;
+		private BrowserPanel m_bpBrowser;
+		private FenubarPanel m_fpFenubar;
+		private ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
+
+		public DocumentType Type
+		{
+			get
+			{
+				return this.m_dtType;
+			}
+		}
+
+		public string FullName
+		{
+			get
+			{
+				return this.m_sFullName;
+			}
+		}
+
+		public BrowserPanel Browser
+		{
+			get
+			{
+				return this.m_bpBrowser;
+			}
+		}
+
+		public FenubarPanel Fenubar
+		{
+			get
+			{
+				return this.m_fpFenubar;
+			}
+		}
+
+		public delegate void BrowserItemMouseDownHandler( object sender, EventArgs e );
+		public event BrowserItemMouseDownHandler BrowserItemMouseDown;
+		public delegate void BrowserItemPropertiesChangedHandler( object sender, EventArgs e );
+		public event BrowserItemPropertiesChangedHandler BrowserItemPropertiesChanged;
+		public delegate void BorwserMouseUpHandler( object sender, MouseEventArgs e );
+		public event BorwserMouseUpHandler BrowserMouseUp;
+		public delegate void FenubarClickHandler( object sender, EventArgs e );
+		public event FenubarClickHandler FenubarClick;
+		public delegate void BrowserXmlLoadCompletedHandler( object sender, RunWorkerCompletedEventArgs e );
+		public event BrowserXmlLoadCompletedHandler BrowserXmlLoadCompleted;
+
+		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile )
+		{
+			InitializeComponent( dtType );
+			this.m_dtType = dtType;
+			this.m_sFullName = sFullName;
+			this.m_bIsNewFile = bIsNewFile;
+			this.m_sName = sFullName.Substring( sFullName.LastIndexOf( '\\' ) + 1 );
+			this.Text = m_sName;
+			switch( dtType ) {
+				case DocumentType.browser:
+					InitializeBrowser();
+					break;
+				case DocumentType.fenubar:
+					InitializeFenubar();
+					break;
+			}
+		}
+
+		private void InitializeBrowser()
+		{
+			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Computer" ) ) );
+			this.m_bpBrowser = new BrowserPanel( this.m_sFullName, this.m_bIsNewFile );
+			this.m_bpBrowser.Location = new Point( 3, 3 );
+
+			this.m_bpBrowser.MouseUp += new MouseEventHandler( Browser_MouseUp );
+			this.m_bpBrowser.XmlLoadCompleted +=
+				new BrowserPanel.XmlLoadCompletedHandler( Browser_XmlLoadCompleted );
+			this.m_bpBrowser.ItemMouseDown +=
+				new BrowserPanel.ItemMouseDownHandler( BrowserItem_MouseDown );
+			this.m_bpBrowser.ItemPropertiesChanged += 
+				new BrowserPanel.ItemPropertiesChangedHandler(BrowserItem_PropertiesChanged);
+
+			this.Controls.Add( this.m_bpBrowser );
+		}
+
+		private void InitializeFenubar()
+		{
+			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Data_Schema" ) ) );
+			this.m_fpFenubar = new FenubarPanel( this.m_sFullName, m_bIsNewFile );
+			this.m_fpFenubar.Dock = DockStyle.Fill;
+
+			this.m_fpFenubar.Click += new EventHandler( Fenubar_Click );
+
+			this.Controls.Add( this.m_fpFenubar );
+		}
+
+		public void BrowserItem_MouseDown( object sender, EventArgs e )
+		{
+			BrowserItemMouseDown.Invoke( sender, e );
+		}
+
+		public void BrowserItem_PropertiesChanged( object sender, EventArgs e )
+		{
+			BrowserItemPropertiesChanged.Invoke( sender, e );
+		}
+
+		public void Fenubar_Click( object sender, EventArgs e )
+		{
+			FenubarClick.Invoke( sender, e );
+		}
+
+		private void Browser_MouseUp( object sender, MouseEventArgs e )
+		{
+			BrowserMouseUp.Invoke( sender, e );
+		}
+
+		private void Browser_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
+		{
+			BrowserXmlLoadCompleted.Invoke( sender, e );
+		}
+
+	}
+}

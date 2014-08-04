@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public enum ItemType
+	{
+		Button,
+		CheckBox,
+		CoordBox,
+		Display,
+		FileList,
+		Input,
+		Inputline,
+		Label,
+		Lamp,
+		ListInput,
+		Meter,
+		OCSimu,
+		OCText,
+		Panel,
+		Picture,
+		Radio,
+		Vision
+	}
+
+	public partial class CBrowserItem : UserControl
+	{
+		private ItemType m_itType;
+		private ItemProperties m_ipProperties;
+
+		bool bMouseDown;
+		Point pntMouseLocation;
+
+		public ItemProperties Properties
+		{
+			get
+			{
+				return this.m_ipProperties;
+			}
+			set
+			{
+				this.m_ipProperties = value;
+			}
+		}
+
+		public CBrowserItem( ItemType itType )
+		{
+			InitializeComponent();
+			this.m_itType = itType;
+			this.Location = new Point( 0, 0 );
+			this.Size = new Size( 0, 0 );
+
+			this.bMouseDown = false;
+
+			switch( itType ) {
+				default:
+					m_ipProperties = new ItemProperties( this );
+					break;
+			}
+		}
+
+		private void CBrowserItem_MouseDown( object sender, MouseEventArgs e )
+		{
+			this.bMouseDown = true;
+			this.pntMouseLocation = e.Location;
+		}
+
+		private void CBrowserItem_MouseMove( object sender, MouseEventArgs e )
+		{
+			if( this.bMouseDown ) {
+				this.Location = new Point(
+					this.Location.X + e.X - this.pntMouseLocation.X,
+					this.Location.Y + e.Y - this.pntMouseLocation.Y
+				);
+			}
+		}
+
+		private void CBrowserItem_MouseUp( object sender, MouseEventArgs e )
+		{
+			this.bMouseDown = false;
+		}
+	}
+}

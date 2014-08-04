@@ -1,0 +1,219 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using System.Collections;
+using Syntec_Developer.Controls;
+using System.Threading;
+
+namespace Syntec_Developer.Forms
+{
+	public partial class DCFenuList : DockContent
+	{
+		private Hashtable m_htbFenusOfFocusedDocument;
+		private DCDocument m_dcdRecentFocusedDocument;
+
+		private const string CUSTOMFENU = "CUSTOMFENU_";
+
+		public DCFenuList()
+		{
+			InitializeComponent();
+		}
+
+		public void Document_Activated( object sender, EventArgs e )
+		{
+			this.m_dcdRecentFocusedDocument = sender as DCDocument;
+			switch( this.m_dcdRecentFocusedDocument.Type ) {
+				case DocumentType.browser:
+					break;
+				case DocumentType.fenubar:
+					this.m_htbFenusOfFocusedDocument = this.m_dcdRecentFocusedDocument.Fenubar.Fenus;
+					ConstructFenuList();
+					ConstructFenuLinkTree();
+					break;
+			}
+		}
+
+		public void Fenubar_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
+		{
+			FenubarPanel fpLoadedFenubar = sender as FenubarPanel;
+			this.m_htbFenusOfFocusedDocument = fpLoadedFenubar.Fenus;
+			ConstructFenuList();
+			ConstructFenuLinkTree();
+		}
+
+		public void Fenu_Close( object sender, EventArgs e )
+		{
+			Fenu fnFenuToClose = sender as Fenu;
+			int nIndexOfFenuToClose = this.chklstFenuList.Items.IndexOf( fnFenuToClose.Properties.Name );
+			this.chklstFenuList.SetItemCheckState( nIndexOfFenuToClose, CheckState.Unchecked );
+			foreach( TreeNode tnFenu in this.tvwFenuLinkTree.Nodes.Find( fnFenuToClose.Properties.Name, true ) ){
+				tnFenu.Checked = false;
+			}
+		}
+
+		public void FindFenu( string sFenuName )
+		{
+			this.m_dcdRecentFocusedDocument.Fenubar.ShowFenu( sFenuName );
+			if( this.tbcSelectDisplayMode.SelectedTab == tbpFenuList ) {
+				SetFenuListCheckState();
+			}
+			else {
+				SetFenuLinkTreeCheckState();
+			}
+		}
+
+		private void ConstructFenuList()
+		{
+			this.chklstFenuList.Items.Clear();
+			ArrayList arlFenuNames = new ArrayList( this.m_htbFenusOfFocusedDocument.Keys );
+			arlFenuNames.Sort();
+			this.chklstFenuList.Items.AddRange( arlFenuNames.ToArray() );
+			SetFenuListCheckState();
+		}
+
+		private void SetFenuListCheckState()
+		{
+			foreach( Fenu fnFenu in this.m_dcdRecentFocusedDocument.Fenubar.OpenedFenus.ToArray() ) {
+				int nIndex = this.chklstFenuList.Items.IndexOf( fnFenu.Properties.Name );
+				if( nIndex != -1 ) {
+					this.chklstFenuList.SetItemCheckState( nIndex, CheckState.Checked );
+				}
+			}
+		}
+
+		private void ConstructFenuLinkTree()
+		{
+			this.tvwFenuLinkTree.Nodes.Clear();
+			if( this.m_htbFenusOfFocusedDocument.ContainsKey( "main" ) ) {
+				this.tvwFenuLinkTree.Nodes.Add( "main", "main" );
+				TreeNode tnRootNode = this.tvwFenuLinkTree.Nodes[ "main" ];
+				AddChildNodes( tnRootNode );
+				tnRootNode.ExpandAll();
+			}
+			SetFenuLinkTreeCheckState();
+		}
+
+		private void SetFenuLinkTreeCheckState()
+		{
+			foreach( Fenu fnFenu in this.m_dcdRecentFocusedDocument.Fenubar.OpenedFenus.ToArray() ) {
+				foreach( TreeNode tnOpenedFenu in this.tvwFenuLinkTree.Nodes.Find( fnFenu.Properties.Name, true ) ) {
+					tnOpenedFenu.Checked = true;
+				}
+			}
+		}
+
+		
+
+		private void AddChildNodes( TreeNode tnParentNode )
+		{
+			Fenu fnParentFenu = this.m_htbFenusOfFocusedDocument[ tnParentNode.Text ] as Fenu;
+			if( fnParentFenu == null ) {
+				return;
+			}
+			List<string> lstFenuLinks = GetLinkedFenuNames( fnParentFenu );
+			foreach( FenuButton fbButton in fnParentFenu.Buttons.Values ) {
+				AddChildNodesFromLink( tnParentNode, fbButton.Properties.Link );
+				AddChildNodesFromActions( tnParentNode, fbButton.Properties.Actions );
+				AddChildNodesFromActions( tnParentNode,
+					fbButton.Properties.ActionsWithPassword.CorrectActions );
+				AddChildNodesFromActions( tnParentNode,
+					fbButton.Properties.ActionsWithPassword.IncorrectActions );
+			}
+		}
+
+		private void AddChildNodesFromLink( TreeNode tnParentNode, string sLinkTarget )
+		{
+			if( String.Compare( sLinkTarget, "" ) != 0 && NoLinkLoop( tnParentNode, sLinkTarget ) ) {
+				tnParentNode.Nodes.Add( sLinkTarget, sLinkTarget );
+				TreeNode tnChildNode = tnParentNode.Nodes[ sLinkTarget ];
+				AddChildNodes( tnChildNode );
+			}
+		}
+
+		private void AddChildNodesFromActions( TreeNode tnParentNode, List<string> lstActions )
+		{
+			foreach( string sActions in lstActions ) {
+				if( sActions.IndexOf( CUSTOMFENU ) == 0 ) {
+					string sTargetFenuName = sActions.Substring( CUSTOMFENU.Length );
+					if( NoLinkLoop( tnParentNode, sTargetFenuName ) ) {
+						tnParentNode.Nodes.Add( sTargetFenuName, sTargetFenuName );
+						TreeNode tnChildNode = tnParentNode.Nodes[ sTargetFenuName ];
+						AddChildNodes( tnChildNode );
+					}
+				}
+			}
+		}
+
+		private bool NoLinkLoop( TreeNode tnParentNode, string sFenuName )
+		{
+			if( tnParentNode == null ) {
+				return true;
+			}
+			else {
+				if( String.Compare( tnParentNode.Text, sFenuName ) == 0 ) {
+					return false;
+				}
+				else {
+					return NoLinkLoop( tnParentNode.Parent, sFenuName );
+				}
+			}
+		}
+
+		private List<string> GetLinkedFenuNames( Fenu fnParentfenu )
+		{
+			List<string> lstFenuLinks = new List<string>();
+			foreach( FenuButton fbButton in fnParentfenu.Buttons.Values ) {
+				if( String.Compare( fbButton.Properties.Link, "" ) != 0 ) {
+					lstFenuLinks.Add( fbButton.Properties.Link );
+				}
+			}
+			return lstFenuLinks;
+		}
+
+		private void chklstFenuList_ItemCheck( object sender, ItemCheckEventArgs e )
+		{
+			if( this.m_dcdRecentFocusedDocument != null ) {
+				string sFenuName = this.chklstFenuList.Items[ e.Index ].ToString();
+				if( e.NewValue == CheckState.Checked ) {
+					this.m_dcdRecentFocusedDocument.Fenubar.ShowFenu( sFenuName );
+				}
+				else if( e.NewValue == CheckState.Unchecked ) {
+					this.m_dcdRecentFocusedDocument.Fenubar.HideFenu( sFenuName );
+				}
+			}
+		}
+
+		private void tbcSelectDisplayMode_Selected( object sender, TabControlEventArgs e )
+		{
+			if( e.TabPageIndex == 0 ) {
+				SetFenuListCheckState();
+			}
+			else {
+				SetFenuLinkTreeCheckState();
+			}
+		}
+
+		private void tvwFenuLinkTree_AfterCheck( object sender, TreeViewEventArgs e )
+		{
+			if( e.Node.Checked ) {
+				this.m_dcdRecentFocusedDocument.Fenubar.ShowFenu( e.Node.Text );
+			}
+			else {
+				this.m_dcdRecentFocusedDocument.Fenubar.HideFenu( e.Node.Text );
+			}
+		}
+
+		private void tvwFenuLinkTree_BeforeCheck( object sender, TreeViewCancelEventArgs e )
+		{
+			if( !this.m_dcdRecentFocusedDocument.Fenubar.Fenus.ContainsKey( e.Node.Text ) ) {
+				e.Cancel = true;
+			}
+		}
+
+	}
+}
