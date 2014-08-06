@@ -14,14 +14,14 @@ namespace Syntec_Developer.Controls
 		bool isLoading;
 		string RootPath;
 		string ProcessingLanguage;
-		Hashtable Languages;
+		private Dictionary<string, Dictionary<string, string>> Contents = 
+			new Dictionary<string, Dictionary<string, string>>();
 		BackgroundWorker ResmapLoader;
 
 		public ResmapTable()
 		{
 			this.isLoading = false;
 			this.RootPath = string.Empty;
-			this.Languages = new Hashtable();
 			this.ResmapLoader = new BackgroundWorker();
 			this.ResmapLoader.DoWork += new DoWorkEventHandler( ResmapLoader_DoWork );
 			this.ResmapLoader.RunWorkerCompleted +=
@@ -38,18 +38,18 @@ namespace Syntec_Developer.Controls
 
 		public void Clear()
 		{
-			foreach( Hashtable Messages in this.Languages.Values ) {
-				Messages.Clear();
-			}
-			this.Languages.Clear();
+			//foreach( Dictionary<string, string> Messages in this.Contents.Values ) {
+			//    Messages.Clear();
+			//}
+			this.Contents.Clear();
 		}
 
 		public string GetContent( string Language, string ID )
 		{
-			if( Languages.ContainsKey( Language ) ) {
-				Hashtable Messages = Languages[ Language ] as Hashtable;
-				if( Messages.ContainsKey( ID ) ) {
-					return Messages[ ID ] as string;
+			if( Contents.ContainsKey( Language ) ) {
+				if( Contents[ Language ].ContainsKey( ID ) )
+				{
+					return Contents[ Language ][ ID ];
 				}
 			}
 			return string.Empty;
@@ -57,16 +57,16 @@ namespace Syntec_Developer.Controls
 
 		public ICollection GetLanguages()
 		{
-			return this.Languages.Keys;
+			return this.Contents.Keys;
 		}
 
 		public List<string> GetIDsByKeyWord( string Language, string KeyWord )
 		{
 			List<string> IDs = new List<string>();
-			Hashtable Messages = this.Languages[ Language ] as Hashtable;
-			foreach( string Key in Messages.Keys ) {
-				string Message = Messages[ Key ] as string;
-				if( Message.Contains( KeyWord ) ) {
+			foreach( string Key in this.Contents[ Language ].Keys )
+			{
+				if( Key.Contains( KeyWord ) )
+				{
 					IDs.Add( Key );
 				}
 			}
@@ -102,8 +102,8 @@ namespace Syntec_Developer.Controls
 
 		private void CreateLangeageItem( string Language )
 		{
-			if( !this.Languages.ContainsKey( Language ) ) {
-				this.Languages.Add( Language, new Hashtable() );
+			if( !this.Contents.ContainsKey( Language ) ) {
+				this.Contents.Add( Language, new Dictionary<string, string>() );
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace Syntec_Developer.Controls
 
 		private void LoadMessages( XmlNode ResmapNode, string FilePath )
 		{
-			Hashtable Messages = this.Languages[ ProcessingLanguage ] as Hashtable;
+			Dictionary<string, string> Messages = this.Contents[ ProcessingLanguage ];
 			XmlNodeList MessageNodes = ResmapNode.ChildNodes;
 			XmlElement MessageElement;
 			string ID, Content;
