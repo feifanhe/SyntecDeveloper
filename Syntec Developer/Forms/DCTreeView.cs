@@ -66,7 +66,7 @@ namespace Syntec_Developer.Forms
 			// Set file nodes
 			tnaFileNodes = new TreeNode[ fifaFiles.Length ];
 			for( int i = 0; i < fifaFiles.Length; i++ ) {
-				if( String.Compare( fifaFiles[ i ].Extension.ToLower(), ".xml" ) == 0 ) {
+				if( string.Compare( fifaFiles[ i ].Extension.ToLower(), ".xml" ) == 0 ) {
 					tnaFileNodes[ i ] = new TreeNode(
 						fifaFiles[ i ].Name,
 						(int)ImageIndex.XML_FILE,

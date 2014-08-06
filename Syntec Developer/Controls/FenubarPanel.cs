@@ -23,17 +23,13 @@ namespace Syntec_Developer.Controls
 		private List<Fenu> m_lstOpenedFenu;
 		private FenubarProperties m_fpProperties;
 		private ResmapTable m_rtResmapTable;
-		private Queue<Modification> m_queModifyHistory;
 
 		internal XmlDocument m_xdDocument;
 		internal XmlNode m_xnRoot;
 
-		public delegate void XmlLoadCompletedHandler( object sender, RunWorkerCompletedEventArgs e );
-		public event XmlLoadCompletedHandler XmlLoadCompleted;
-		public delegate void FenuCloseHandler( object sender, EventArgs e );
-		public event FenuCloseHandler FenuClose;
-		public delegate void FenuButtonClickHandler( object sender, EventArgs e );
-		public event FenuButtonClickHandler FenuButtonClick;
+		public event RunWorkerCompletedEventHandler XmlLoadCompleted;
+		public event EventHandler FenuClose;
+		public event EventHandler FenuButtonClick;
 		public event EventHandler FenubarPropertiesChanged;
 
 
@@ -106,6 +102,7 @@ namespace Syntec_Developer.Controls
 			this.m_htbFenus = new Hashtable();
 			this.m_lstOpenedFenu = new List<Fenu>();
 			this.m_fpProperties = new FenubarProperties();
+
 			this.m_fpProperties.PropertiesChanged += new EventHandler( Fenubar_PropertiesChanged );
 		}
 		
@@ -272,7 +269,6 @@ namespace Syntec_Developer.Controls
 
 		public void SaveFile()
 		{
-			MessageBox.Show( "!!" );
 			SaveFenubarProperties();
 			foreach( Fenu fnFenu in this.m_htbFenus.Values ) {
 				fnFenu.SaveFenu();
@@ -282,56 +278,23 @@ namespace Syntec_Developer.Controls
 		
 		private void SaveFenubarProperties()
 		{
-			XmlNode xnNodeToWrite;
-			// Alignment
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "Alignment" );
+			SaveValueIntoXmlNode( "Alignment", this.Properties.Alignment.ToString() );
+			SaveValueIntoXmlNode( "Button3D", this.Properties.Button3D.ToString() );
+			SaveValueIntoXmlNode( "Level3D", this.Properties.Level3D.ToString() );
+			SaveValueIntoXmlNode( "NoFunc", this.Properties.NoFunc.ToString() );
+			SaveValueIntoXmlNode( "NoLR", this.Properties.NoLR.ToString() );
+			SaveValueIntoXmlNode( "BigLR", this.Properties.BigLR.ToString() );
+			SaveValueIntoXmlNode( "TextOverPic", this.Properties.TextOverPic.ToString() );
+		}
+
+		private void SaveValueIntoXmlNode( string sNodeName, string sValue )
+		{
+			XmlNode xnNodeToWrite = this.m_xnRoot.SelectSingleNode( sNodeName );
 			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "Alignment" ) as XmlNode;
+				xnNodeToWrite = this.m_xdDocument.CreateElement( sNodeName ) as XmlNode;
 				this.m_xnRoot.AppendChild( xnNodeToWrite );
 			}
-			xnNodeToWrite.InnerText = this.Properties.Alignment.ToString();
-			// Button3D
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "Button3D" );
-			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "Button3D" ) as XmlNode;
-				this.m_xnRoot.AppendChild( xnNodeToWrite );
-			}
-			xnNodeToWrite.InnerText = this.Properties.Button3D.ToString();
-			// Level3D
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "Level3D" );
-			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "Level3D" ) as XmlNode;
-				this.m_xnRoot.AppendChild( xnNodeToWrite );
-			}
-			xnNodeToWrite.InnerText = this.Properties.Level3D.ToString();
-			// NoFunc
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "NoFunc" );
-			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "NoFunc" ) as XmlNode;
-				this.m_xnRoot.AppendChild( xnNodeToWrite );
-			}
-			xnNodeToWrite.InnerText = this.Properties.NoFunc.ToString();
-			// NoLR
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "NoLR" );
-			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "NoLR" ) as XmlNode;
-				this.m_xnRoot.AppendChild( xnNodeToWrite );
-			}
-			xnNodeToWrite.InnerText = this.Properties.NoLR.ToString();
-			// BigLR
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "BigLR" );
-			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "BigLR" ) as XmlNode;
-				this.m_xnRoot.AppendChild( xnNodeToWrite );
-			}
-			xnNodeToWrite.InnerText = this.Properties.BigLR.ToString();
-			// TextOverPic
-			xnNodeToWrite = this.m_xnRoot.SelectSingleNode( "TextOverPic" );
-			if( xnNodeToWrite == null ) {
-				xnNodeToWrite = this.m_xdDocument.CreateElement( "TextOverPic" ) as XmlNode;
-				this.m_xnRoot.AppendChild( xnNodeToWrite );
-			}
-			xnNodeToWrite.InnerText = this.Properties.TextOverPic.ToString();
+			xnNodeToWrite.InnerText = sValue;
 		}
 
 		private void SaveXML()

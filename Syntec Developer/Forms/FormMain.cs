@@ -57,7 +57,7 @@ namespace Syntec_Developer.Forms
 		private void CheckRDUser()
 		{
 			if( Environment.GetEnvironmentVariable( "OCSDK" ) != null ) {
-				this.Text = String.Concat( this.Text, " - R&D Mode" );
+				this.Text = string.Concat( this.Text, " - R&D Mode" );
 			}
 		}
 
@@ -292,7 +292,7 @@ namespace Syntec_Developer.Forms
 		private void OpenFile( string sFileName )
 		{
 			foreach( DCDocument dcDocument in this.m_lstOpenedDocuments ) {
-				if( String.Compare( dcDocument.FullName, sFileName ) == 0 ) {
+				if( string.Compare( dcDocument.FullName, sFileName ) == 0 ) {
 					dcDocument.Focus();
 					return;
 				}
@@ -375,7 +375,7 @@ namespace Syntec_Developer.Forms
 				bExist = false;
 
 				foreach( DCDocument dcdOpenedDocument in m_lstOpenedDocuments ) {
-					if( String.Compare( dcdOpenedDocument.FullName, sResultName ) == 0 ) {
+					if( string.Compare( dcdOpenedDocument.FullName, sResultName ) == 0 ) {
 						bExist = true;
 						nIndex++;
 						break;
@@ -387,7 +387,7 @@ namespace Syntec_Developer.Forms
 
 		private bool IsXmlFile( string sFileName )
 		{
-			return ( String.Compare( GetFileExtension( sFileName ).ToLower(), ".xml" ) == 0 );
+			return ( string.Compare( GetFileExtension( sFileName ).ToLower(), ".xml" ) == 0 );
 		}
 
 		private bool IsBrowserXmlDocument( XmlDocument xdDocument )
@@ -433,6 +433,7 @@ namespace Syntec_Developer.Forms
 				this.m_dcdLastFocusedDocument = null;
 			}
 			this.m_lstOpenedDocuments.Remove( dcDocumentToClose );
+			this.Controls.Remove( dcDocumentToClose );
 		}
 
 		private void ShowBrowserUI()

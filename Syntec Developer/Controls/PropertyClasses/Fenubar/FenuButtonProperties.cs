@@ -335,7 +335,17 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private Color ParseColorFromRGB(string sColor)
+		private string ConvertBoolToState( bool bState )
+		{
+			if( bState ) {
+				return "enable";
+			}
+			else {
+				return "disable";
+			}
+		}
+
+		private Color ParseColorFromRGB( string sColor )
 		{
 			string[] asRGB = sColor.Split( ',' );
 			return Color.FromArgb( int.Parse( asRGB[ 0 ] ), int.Parse( asRGB[ 1 ] ), int.Parse( asRGB[ 2 ] ) );
@@ -344,7 +354,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		private void LoadActions( List<string> lstActions, XmlNode xnActionsNode )
 		{
 			foreach( XmlNode xnActionNode in xnActionsNode.ChildNodes ) {
-				if( String.Compare( xnActionNode.Name, "Action" ) == 0 ) {
+				if( string.Compare( xnActionNode.Name, "Action" ) == 0 ) {
 					lstActions.Add( xnActionNode.InnerText );
 				}
 			}
@@ -370,6 +380,71 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			AttributeCollection atcPropertyAttributes = pdcProperties[ sPropertyName ].Attributes;
 			FieldInfo fBrowsableField = typAttributeType.GetField( "browsable", BindingFlags.IgnoreCase | BindingFlags.NonPublic | BindingFlags.Instance );
 			fBrowsableField.SetValue( atcPropertyAttributes[ typAttributeType ], bIsBrowsable );
+		}
+
+		public void SaveFenuButtonProperties()
+		{
+			SaveActions( this.m_xnButtonNode, this.Actions );
+			SaveActionsWithPassword();
+			//SaveSatate();
+			if( this.Link != string.Empty ) {
+			}
+		}
+
+		private void SaveActions( XmlNode xnParentNode, List<string> lstActions )
+		{
+			if( lstActions.Count == 0 ) {
+				if( xnParentNode[ "action" ] != null ) {
+					xnParentNode.RemoveChild( xnParentNode[ "action" ] );
+				}
+				if( xnParentNode[ "actions" ] != null ) {
+					xnParentNode.RemoveChild( xnParentNode[ "actions" ] );
+				}
+			}
+			else {
+				if( lstActions.Count == 1 ) {
+					if( xnParentNode[ "actions" ] != null ) {
+						xnParentNode.RemoveChild( xnParentNode[ "actions" ] );
+					}
+					if( xnParentNode[ "action" ] == null ) {
+						XmlNode xnActionNode = this.m_xdDocument.CreateElement( "action" ) as XmlNode;
+						xnParentNode.AppendChild( xnActionNode );
+					}
+					xnParentNode[ "action" ].InnerText = lstActions[ 0 ];
+				}
+				else {
+					if( xnParentNode[ "action" ] != null ) {
+						xnParentNode.RemoveChild( xnParentNode[ "action" ] );
+					}
+					if( xnParentNode[ "actions" ] == null ) {
+						XmlNode xnActionsNode = this.m_xdDocument.CreateElement( "actions" ) as XmlNode;
+						xnParentNode.AppendChild( xnActionsNode );
+					}
+					xnParentNode[ "actions" ].RemoveAll();
+					foreach( string sAction in lstActions ) {
+						XmlNode xnActionNode = this.m_xdDocument.CreateElement( "action" ) as XmlNode;
+						xnActionNode.InnerText = sAction;
+						xnParentNode[ "actions" ].AppendChild( xnActionNode );
+					}
+				}
+			}
+		}
+
+		private void SaveActionsWithPassword()
+		{
+			XmlNode xnPwdNode = this.m_xnButtonNode[ "pwd" ];
+			if( this.ActionsWithPassword.Password == string.Empty ) {
+				if( xnPwdNode != null ) {
+					this.m_xnButtonNode.RemoveChild( xnPwdNode );
+				}
+			}
+			else {
+				if( xnPwdNode == null ) {
+					XmlNode xnValueNode = this.m_xdDocument.CreateElement( "value" );
+					xnPwdNode.AppendChild( xnPwdNode );
+				}
+				xnPwdNode[ "value" ].InnerText = this.ActionsWithPassword.Password;
+			}
 		}
 	}
 }

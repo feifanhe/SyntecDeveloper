@@ -130,12 +130,9 @@ namespace Syntec_Developer.Forms
 			this.m_fpFenubar.Dock = DockStyle.Fill;
 
 			this.m_fpFenubar.Click += new EventHandler( Fenubar_Click );
-			this.m_fpFenubar.XmlLoadCompleted +=
-				new FenubarPanel.XmlLoadCompletedHandler( Fenubar_XmlLoadCompleted );
-			this.m_fpFenubar.FenuClose +=
-				new FenubarPanel.FenuCloseHandler( Fenu_Close );
-			this.m_fpFenubar.FenuButtonClick +=
-				new FenubarPanel.FenuButtonClickHandler( FenuButton_Click );
+			this.m_fpFenubar.XmlLoadCompleted += new RunWorkerCompletedEventHandler( Fenubar_XmlLoadCompleted );
+			this.m_fpFenubar.FenuClose += new EventHandler( Fenu_Close );
+			this.m_fpFenubar.FenuButtonClick += new EventHandler( FenuButton_Click );
 			this.m_fpFenubar.FenubarPropertiesChanged += new EventHandler(Fenubar_PropertiesChanged);
 
 			this.Text = this.m_fpFenubar.FileName;
@@ -168,7 +165,7 @@ namespace Syntec_Developer.Forms
 		{
 			if( !this.m_bIsModified ) {
 				this.m_bIsModified = true;
-				this.Text = String.Concat( this.Text, "*" );
+				this.Text = string.Concat( this.Text, "*" );
 			}
 		}
 
@@ -295,7 +292,7 @@ namespace Syntec_Developer.Forms
 
 		private void BrowseInExplorer()
 		{
-			Process.Start( "EXPLORER.EXE", String.Concat("/select, ", this.FullName) );
+			Process.Start( "EXPLORER.EXE", string.Concat("/select, ", this.FullName) );
 		}
 
 		private void tsmiClose_Click( object sender, EventArgs e )

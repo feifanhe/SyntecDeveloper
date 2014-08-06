@@ -60,36 +60,17 @@ namespace Syntec_Developer.Controls
 			SetText();
 		}
 
-		public FenuButton( XmlDocument xdDocument, ResmapTable rtResmapTable, FenuButtonType fbtType )
+		public FenuButton( XmlDocument xdDocument, XmlNode xnButton, ResmapTable rtResmapTable, int nPosition )
 		{
 			InitializeComponent();
 			this.m_xdDocument = xdDocument;
+			this.m_xnButton = xnButton;
 			this.m_rtResmapTable = rtResmapTable;
-			this.m_fbtType = fbtType;
-
-			XmlNode xnButtonNode = this.m_xdDocument.CreateElement( fbtType.ToString() );
-			this.m_xnButton = xnButtonNode;
-
+			InitializeButtonType( this.m_xnButton.Name );
 			this.m_fbpProperties = new FenuButtonProperties( this );
-
-			SetText();
-		}
-
-		public FenuButton( XmlDocument xdDocument, ResmapTable rtResmapTable, int nPosition )
-		{
-			InitializeComponent();
-			this.m_xdDocument = xdDocument;
-			this.m_rtResmapTable = rtResmapTable;
-			this.m_fbtType = FenuButtonType.button;
-
-			XmlNode xnButtonNode = this.m_xdDocument.CreateElement( "button" );
-			this.m_xnButton = xnButtonNode;
-
-			this.m_fbpProperties = new FenuButtonProperties( this );
-
 			this.m_fbpProperties.Position = nPosition;
-
 			SetText();
+			
 		}
 
 		private void InitializeButtonType( string sButtonType )
@@ -122,7 +103,7 @@ namespace Syntec_Developer.Controls
 						sContent = this.m_fbpProperties.Title.ID;
 					}
 					this.Text =
-						String.Concat(
+						string.Concat(
 							"F", this.m_fbpProperties.Position.ToString(),
 							" ", sContent
 						);
@@ -135,13 +116,30 @@ namespace Syntec_Developer.Controls
 
 		private void FenuButton_KeyDown( object sender, KeyEventArgs e )
 		{
-			switch( e.KeyData ) {
-				case Keys.Space:
-					if( this.KeyLink != null ) {
-						this.KeyLink.Invoke( this, e );
-					}
-					break;
+			if( e.Control ) {
+				switch( e.KeyData ) {
+					case Keys.X:
+					case Keys.C:
+					case Keys.V:
+						break;
+				}
 			}
+			else {
+				switch( e.KeyData ) {
+					case Keys.Space:
+						if( this.KeyLink != null ) {
+							this.KeyLink.Invoke( this, e );
+						}
+						break;
+					case Keys.Delete:
+						break;
+				}
+			}
+		}
+
+		public void SaveFenuButton()
+		{
+			this.m_fbpProperties.SaveFenuButtonProperties();
 		}
 	}
 }

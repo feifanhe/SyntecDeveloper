@@ -46,9 +46,9 @@ namespace Syntec_Developer.Forms
 
 			ArrayList arlFenus = new ArrayList( this.m_dcFenubarDocument.Fenubar.Fenus.Values );
 			for( int i = 0; i < arlFenus.Count; i++ ) {
-				ArrayList arlButtons = new ArrayList( ( (Fenu)arlFenus[ i ] ).Buttons.Values );
-				for( int j = 0; j < arlButtons.Count; j++ ) {
-					string sButtonTitleID = ( (FenuButton)arlButtons[ j ] ).Properties.Title.ID;
+				FenuButton[] afbButtons = ( (Fenu)arlFenus[ i ] ).Buttons;
+				for( int j = 0; j < afbButtons.Length; j++ ) {
+					string sButtonTitleID = afbButtons[ j ].Properties.Title.ID;
 					if( sButtonTitleID != null && sButtonTitleID.ToUpper().Contains( "STR::" ) ) {
 						if( lstIDs.Contains( sButtonTitleID.Substring( 5 ) ) ) {
 							this.m_dcFenuList.FindFenu( ( (Fenu)arlFenus[ i ] ).Properties.Name );

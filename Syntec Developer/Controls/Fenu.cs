@@ -13,10 +13,11 @@ namespace Syntec_Developer.Controls
 {
 	public partial class Fenu : UserControl
 	{
+		const int ESCAPE_INDEX = 0;
+		const int NEXT_INDEX = 9;
 		private FenuProperties m_fpProperties;
-		private Hashtable m_htbFenuButtons;
+		private FenuButton[] m_afbFenuButtons;
 		private ResmapTable m_rtResmapTable;
-		private int m_nNumberOfButtons = 8;
 
 		internal XmlDocument m_xdDocument;
 		internal XmlNode m_xnFenuNode;
@@ -24,7 +25,7 @@ namespace Syntec_Developer.Controls
 		public event EventHandler FenuClose;
 		public event EventHandler FenuButtonClick;
 		public event KeyEventHandler FenuButtonKeyLink;
-		public new event EventHandler  Click;
+		public new event EventHandler Click;
 
 		public FenuProperties Properties
 		{
@@ -34,11 +35,11 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
-		public Hashtable Buttons
+		public FenuButton[] Buttons
 		{
 			get
 			{
-				return m_htbFenuButtons;
+				return m_afbFenuButtons;
 			}
 		}
 
@@ -62,9 +63,11 @@ namespace Syntec_Developer.Controls
 			this.m_xdDocument = xdDocument;
 			this.m_xnFenuNode = xnFenuNode;
 			this.m_rtResmapTable = rtResmapTable;
-			this.m_htbFenuButtons = new Hashtable();
 			this.m_fpProperties = new FenuProperties();
+			this.m_afbFenuButtons =
+				new FenuButton[ 10 ];
 			LoadXML();
+			CheckUndefinedFenuButton();
 			ShowFenu();
 		}
 
@@ -75,38 +78,85 @@ namespace Syntec_Developer.Controls
 		private void LoadXML()
 		{
 			this.m_fpProperties.Name = this.m_xnFenuNode.Attributes[ "name" ].Value;
-			foreach( XmlNode xnButtonNode in this.m_xnFenuNode ) {
+			foreach( XmlNode xnButtonNode in this.m_xnFenuNode.ChildNodes ) {
 				FenuButton fbButton = new FenuButton( m_xdDocument, xnButtonNode, this.m_rtResmapTable );
 				fbButton.Click += new EventHandler( FenuButton_Click );
 				fbButton.KeyLink += new FenuButton.KeyLinkHandler( FenuButton_KeyLink );
-				switch( fbButton.Type ) {
-					case FenuButtonType.escape:
-						if( this.m_htbFenuButtons.ContainsKey( "escape" ) ) {
-							MessageBox.Show( "Escape button has been defined." );
-						}
-						else {
-							this.m_htbFenuButtons.Add( "escape", fbButton );
-						}
+				AddButtonIntoTable( fbButton );
+			}
+		}
+
+		private void AddButtonIntoTable( FenuButton fbButton )
+		{
+			switch( fbButton.Type ) {
+				case FenuButtonType.escape:
+					if( this.m_afbFenuButtons[ ESCAPE_INDEX ] != null ) {
+						MessageBox.Show( "Escape button has been defined." );
+					}
+					else {
+						this.m_afbFenuButtons[ ESCAPE_INDEX ] = fbButton;
+					}
+					break;
+				case FenuButtonType.button:
+					if( fbButton.Properties.Position == 0 ) {
 						break;
-					case FenuButtonType.button:
-						if( this.m_htbFenuButtons.ContainsKey( fbButton.Properties.Position ) ) {
-							MessageBox.Show( 
-								String.Format( "Button F{0} has been defined.", fbButton.Properties.Position ) 
-							);
-						}
-						else {
-							this.m_htbFenuButtons.Add( fbButton.Properties.Position, fbButton );
-						}
-						break;
-					case FenuButtonType.next:
-						if( this.m_htbFenuButtons.ContainsKey( "next" ) ) {
-							MessageBox.Show( "Next button has been defined." );
-						}
-						else {
-							this.m_htbFenuButtons.Add( "next", fbButton );
-						}
-						break;
+					}
+					if( this.m_afbFenuButtons[ fbButton.Properties.Position ] != null ) {
+						MessageBox.Show(
+							string.Format( "Button F{0} has been defined.", fbButton.Properties.Position )
+						);
+					}
+					else {
+						this.m_afbFenuButtons[ fbButton.Properties.Position ] = fbButton;
+					}
+					break;
+				case FenuButtonType.next:
+					if( this.m_afbFenuButtons[ NEXT_INDEX ] != null ) {
+						MessageBox.Show( "Next button has been defined." );
+					}
+					else {
+						this.m_afbFenuButtons[ NEXT_INDEX ] = fbButton;
+					}
+					break;
+			}
+		}
+
+		private void CheckUndefinedFenuButton()
+		{
+			CheckEscapeButton();
+			CheckButton();
+			CheckNextButton();
+		}
+
+		private void CheckEscapeButton()
+		{
+			if( this.m_afbFenuButtons[ ESCAPE_INDEX ] == null ) {
+				XmlNode xnEscapeButton = this.m_xdDocument.CreateElement( "escape" );
+				this.m_xnFenuNode.AppendChild( xnEscapeButton );
+				this.m_afbFenuButtons[ ESCAPE_INDEX ] =
+					new FenuButton( this.m_xdDocument, xnEscapeButton, this.m_rtResmapTable );
+			}
+		}
+
+		private void CheckButton()
+		{
+			for( int i = 1; i <= 8; i++ ) {
+				if( this.m_afbFenuButtons[ i ] == null ) {
+					XmlNode xnButton = this.m_xdDocument.CreateElement( "button" );
+					this.m_xnFenuNode.AppendChild( xnButton );
+					this.m_afbFenuButtons[ i ] =
+						new FenuButton( this.m_xdDocument, xnButton, this.m_rtResmapTable, i );
 				}
+			}
+		}
+
+		private void CheckNextButton()
+		{
+			if( this.m_afbFenuButtons[ NEXT_INDEX ] == null ) {
+				XmlNode xnNextButton = this.m_xdDocument.CreateElement( "next" );
+				this.m_xnFenuNode.AppendChild( xnNextButton );
+				this.m_afbFenuButtons[ NEXT_INDEX ] =
+					new FenuButton( this.m_xdDocument, xnNextButton, this.m_rtResmapTable );
 			}
 		}
 
@@ -117,63 +167,13 @@ namespace Syntec_Developer.Controls
 		private void ShowFenu()
 		{
 			this.lblFenuName.Text = this.m_fpProperties.Name;
-			ShowEscapeButton();
-			ShowButton();
-			ShowNextButton();
-		}
-
-		private void ShowEscapeButton()
-		{
-			FenuButton fbEscapeButton = this.m_htbFenuButtons[ "escape" ] as FenuButton;
-			if( fbEscapeButton != null ) {
-				this.pnlFenu.Controls.Add( fbEscapeButton );
-				fbEscapeButton.BringToFront();
-			}
-			else {
-				FenuButton fbNewEscapeButton =
-					new FenuButton( m_xdDocument, this.m_rtResmapTable, FenuButtonType.escape );
-				this.m_htbFenuButtons.Add( "escape", fbNewEscapeButton );
-				this.pnlFenu.Controls.Add( fbNewEscapeButton );
-				fbNewEscapeButton.BringToFront();
-			}
-		}
-
-		private void ShowNextButton()
-		{
-			FenuButton fbNextButton = this.m_htbFenuButtons[ "next" ] as FenuButton;
-			if( fbNextButton != null ) {
-				this.pnlFenu.Controls.Add( fbNextButton );
-				fbNextButton.BringToFront();
-			}
-			else {
-				FenuButton fbNewNextButton =
-					new FenuButton( m_xdDocument, this.m_rtResmapTable, FenuButtonType.next );
-				this.m_htbFenuButtons.Add( "next", fbNewNextButton );
-				this.pnlFenu.Controls.Add( fbNewNextButton );
-				fbNewNextButton.BringToFront();
-			}
-		}
-
-		private void ShowButton()
-		{
-			for( int nPosition = 1; nPosition <= m_nNumberOfButtons; nPosition++ ) {
-				FenuButton fbButton = this.m_htbFenuButtons[ nPosition ] as FenuButton;
-				if( fbButton != null ) {
-					this.pnlFenu.Controls.Add( fbButton );
-					fbButton.BringToFront();
-				}
-				else {
-					FenuButton fbNewButton = new FenuButton( m_xdDocument, this.m_rtResmapTable, nPosition );
-					this.m_htbFenuButtons.Add( nPosition, fbNewButton );
-					this.pnlFenu.Controls.Add( fbNewButton );
-					fbNewButton.BringToFront();
-					fbNewButton.Enabled = false;
-				}
+			for( int i = 0; i <= 9; i++ ) {
+				this.pnlFenu.Controls.Add( this.m_afbFenuButtons[ i ] );
+				this.m_afbFenuButtons[ i ].BringToFront();
 			}
 		}
 
 		#endregion
-
 
 		private void Fenu_Enter( object sender, EventArgs e )
 		{
@@ -216,6 +216,15 @@ namespace Syntec_Developer.Controls
 
 		public void SaveFenu()
 		{
+			SaveFenuName();
+			foreach( FenuButton fbButton in this.m_afbFenuButtons ) {
+				fbButton.SaveFenuButton();
+			}
+		}
+
+		private void SaveFenuName()
+		{
+			this.m_xnFenuNode.Attributes[ "name" ].Value = this.m_fpProperties.Name;
 		}
 	}
 }

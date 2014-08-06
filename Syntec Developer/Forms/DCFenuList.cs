@@ -131,7 +131,7 @@ namespace Syntec_Developer.Forms
 			if( fnParentFenu == null ) {
 				return;
 			}
-			foreach( FenuButton fbButton in fnParentFenu.Buttons.Values ) {
+			foreach( FenuButton fbButton in fnParentFenu.Buttons ) {
 				AddChildNodesFromLink( tnParentNode, fbButton.Properties.Link );
 				foreach( List<string> lstActions
 					in new List<string>[] { 
@@ -145,7 +145,7 @@ namespace Syntec_Developer.Forms
 
 		private void AddChildNodesFromLink( TreeNode tnParentNode, string sLinkTarget )
 		{
-			if( String.Compare( sLinkTarget, string.Empty ) != 0 && NoLinkLoop( tnParentNode, sLinkTarget ) ) {
+			if( string.Compare( sLinkTarget, string.Empty ) != 0 && NoLinkLoop( tnParentNode, sLinkTarget ) ) {
 				tnParentNode.Nodes.Add( sLinkTarget, sLinkTarget );
 				TreeNode tnChildNode = tnParentNode.Nodes[ sLinkTarget ];
 				AddChildNodes( tnChildNode );
@@ -172,7 +172,7 @@ namespace Syntec_Developer.Forms
 				return true;
 			}
 			else {
-				if( String.Compare( tnParentNode.Text, sFenuName ) == 0 ) {
+				if( string.Compare( tnParentNode.Text, sFenuName ) == 0 ) {
 					return false;
 				}
 				else {

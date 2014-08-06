@@ -350,7 +350,7 @@ namespace Syntec_Developer.Controls
 			SaveBrowserName();
 
 			// TODO: Save Other Properties
-			//if( String.Compare( this.Properties.NextPage, string.Empty ) != 0 ) {
+			//if( string.Compare( this.Properties.NextPage, string.Empty ) != 0 ) {
 			//    XmlNodeList xnlstLinkNodes = this.m_xnScreenNode.SelectNodes( "Link" );
 			//    foreach
 			//}
@@ -360,7 +360,7 @@ namespace Syntec_Developer.Controls
 		{
 			XmlNode xnBrowserSizeCommentNode = GetBrowserSizeCommentNode();
 			xnBrowserSizeCommentNode.InnerText =
-				String.Concat( "BROWSER SIZE|H:", this.Height.ToString(), "|W:", this.Width.ToString() );
+				string.Concat( "BROWSER SIZE|H:", this.Height.ToString(), "|W:", this.Width.ToString() );
 		}
 
 		private void SaveBrowserName()
@@ -633,7 +633,7 @@ namespace Syntec_Developer.Controls
 				bExist = false;
 
 				foreach( string sExistingItemName in this.m_htbItems.Keys ) {
-					if( String.Compare( sExistingItemName, sResultName ) == 0 ) {
+					if( string.Compare( sExistingItemName, sResultName ) == 0 ) {
 						bExist = true;
 						nIndex++;
 						break;

@@ -92,7 +92,7 @@ namespace Syntec_Developer.Controls
 		{
 			DirectoryInfo difDirectoryToLoad = new DirectoryInfo( sPath );
 			foreach( DirectoryInfo difChildDirectory in difDirectoryToLoad.GetDirectories() ) {
-				if( String.Compare( difChildDirectory.Name.ToUpper(), "STRING" ) == 0 ) {
+				if( string.Compare( difChildDirectory.Name.ToUpper(), "STRING" ) == 0 ) {
 					ProcessingLanguage = difDirectoryToLoad.Name.ToUpper();
 					CreateLangeageItem( ProcessingLanguage );
 					LoadFiles( difChildDirectory.GetFiles() );
@@ -111,7 +111,7 @@ namespace Syntec_Developer.Controls
 		private void LoadFiles( FileInfo[] fifaFilesToLoad )
 		{
 			foreach( FileInfo fifFileToLoad in fifaFilesToLoad ) {
-				if( String.Compare( fifFileToLoad.Extension.ToUpper(), ".XML" ) == 0 ) {
+				if( string.Compare( fifFileToLoad.Extension.ToUpper(), ".XML" ) == 0 ) {
 					LoadResmap( fifFileToLoad );
 				}
 			}
