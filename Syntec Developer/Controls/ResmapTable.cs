@@ -41,6 +41,22 @@ namespace Syntec_Developer.Controls
 			Contents.Clear();
 		}
 
+		public void SaveResmap( ) {
+			XmlDocument InMemory = new XmlDocument();
+
+			foreach( Messages DummyMsg in Contents.Values )
+			{
+				foreach( XmlElement DummyElm in DummyMsg.Values.Values )
+				{
+					Console.WriteLine( DummyElm.GetAttribute("Content") );
+					InMemory = DummyElm.OwnerDocument;
+					break;
+				}
+			}
+
+			InMemory.Save( "C:\\TEST2.XML" );
+		}
+
 		public string GetContent( string Language, string ID )
 		{
 			if( Contents.ContainsKey( Language ) ) {
@@ -74,6 +90,8 @@ namespace Syntec_Developer.Controls
 		{
 			this.isLoading = true;
 			LoadDirectory( this.RootPath );
+
+			//SaveResmap();
 		}
 
 		private void ResmapLoader_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )

@@ -29,6 +29,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			{
 				return this.m_dicValues;
 			}
+			set {
+				this.m_dicValues = value;
+			}
 		}
 
 		public LanguagePack()
