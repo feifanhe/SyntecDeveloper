@@ -118,7 +118,12 @@ namespace Syntec_Developer.Controls
 					if( this.m_fbpProperties.Title.Values.ContainsKey( "CHT" ) ) {
 						sContent = this.m_fbpProperties.Title.Values[ "CHT" ];
 					}
-					else {
+					else if( this.m_fbpProperties.Title.Values.ContainsKey( "ENG" ) )
+					{
+						sContent = this.m_fbpProperties.Title.Values[ "ENG" ];
+					}
+					else
+					{
 						sContent = this.m_fbpProperties.Title.ID;
 					}
 					this.Text =
