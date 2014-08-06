@@ -131,6 +131,8 @@
     <Compile Include="Forms\SearchFenubar.Designer.cs">
       <DependentUpon>SearchFenubar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Loader\ResourceLoader.cs" />
+    <Compile Include="Loader\XMLLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\BrowserPanel.resx">
@@ -200,6 +202,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Type\Type.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\NewFenubar.bmp" />

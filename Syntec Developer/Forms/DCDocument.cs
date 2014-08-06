@@ -12,11 +12,11 @@ using System.Diagnostics;
 
 namespace Syntec_Developer.Forms
 {
-	public enum DocumentType
-	{
-		browser,
-		fenubar
-	};
+	//public enum DocumentType
+	//{
+	//    browser,
+	//    fenubar
+	//};
 
 	public partial class DCDocument : DockContent
 	{

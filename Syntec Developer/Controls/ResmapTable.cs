@@ -6,6 +6,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.IO;
 using System.Xml;
+using System.Data;
 
 namespace Syntec_Developer.Controls
 {
@@ -14,8 +15,7 @@ namespace Syntec_Developer.Controls
 		bool isLoading;
 		string RootPath;
 		string ProcessingLanguage;
-		private Dictionary<string, Dictionary<string, string>> Contents = 
-			new Dictionary<string, Dictionary<string, string>>();
+		private Dictionary<string, Messages> Contents = new Dictionary<string, Messages>();
 		BackgroundWorker ResmapLoader;
 
 		public ResmapTable()
@@ -38,16 +38,13 @@ namespace Syntec_Developer.Controls
 
 		public void Clear()
 		{
-			//foreach( Dictionary<string, string> Messages in this.Contents.Values ) {
-			//    Messages.Clear();
-			//}
-			this.Contents.Clear();
+			Contents.Clear();
 		}
 
 		public string GetContent( string Language, string ID )
 		{
 			if( Contents.ContainsKey( Language ) ) {
-				if( Contents[ Language ].ContainsKey( ID ) )
+				if( Contents[ Language ].Values.ContainsKey( ID ) )
 				{
 					return Contents[ Language ][ ID ];
 				}
@@ -63,7 +60,7 @@ namespace Syntec_Developer.Controls
 		public List<string> GetIDsByKeyWord( string Language, string KeyWord )
 		{
 			List<string> IDs = new List<string>();
-			foreach( string Key in this.Contents[ Language ].Keys )
+			foreach( string Key in this.Contents[ Language ].Values.Keys )
 			{
 				if( Key.Contains( KeyWord ) )
 				{
@@ -103,7 +100,7 @@ namespace Syntec_Developer.Controls
 		private void CreateLangeageItem( string Language )
 		{
 			if( !this.Contents.ContainsKey( Language ) ) {
-				this.Contents.Add( Language, new Dictionary<string, string>() );
+				this.Contents.Add( Language, new Messages() );
 			}
 		}
 
@@ -136,7 +133,7 @@ namespace Syntec_Developer.Controls
 
 		private void LoadMessages( XmlNode ResmapNode, string FilePath )
 		{
-			Dictionary<string, string> Messages = this.Contents[ ProcessingLanguage ];
+			//Dictionary<string, string> Messages = this.Contents[ ProcessingLanguage ];
 			XmlNodeList MessageNodes = ResmapNode.ChildNodes;
 			XmlElement MessageElement;
 			string ID, Content;
@@ -145,12 +142,55 @@ namespace Syntec_Developer.Controls
 					MessageElement = MessageNode as XmlElement;
 					ID = MessageElement.GetAttribute( "ID" );
 					Content = MessageElement.GetAttribute( "Content" );
-					if( !Messages.ContainsKey( ID ) ) {
-						Messages.Add( ID, Content );
+					if( !Contents[ProcessingLanguage].Values.ContainsKey( ID ) ) {
+						Contents[ ProcessingLanguage ].ImportNode( MessageElement );
 					}
 				}
 			}
 		}
 
+		internal class Messages
+		{
+			private static Dictionary<string, XmlElement> _Values =
+				new Dictionary<string, XmlElement>();
+
+			public Messages() {
+			}
+
+			public Dictionary<string, XmlElement> Values {
+				get {
+					return _Values;
+				}
+				set {
+					_Values = value;
+				}
+			}
+
+			public string this[ string ID ] {
+				get {
+					if( _Values.ContainsKey( ID ) )
+						return _Values[ ID ].GetAttribute( "Content" );
+					return string.Empty;
+				}
+				//set {
+				//    if( value == string.Empty )
+				//        return;
+				//    if( _Values.ContainsKey( ID ) )
+				//        //_Values[ ID ].SetAttribute( "Content", value );
+				//    else
+				//    {
+				//        ParentNode.crea
+				//        element.ParentNode = this.ParentNode;
+				//        element.SetAttribute( "ID", ID );
+				//        element.SetAttribute( "Content", value );
+				//        _Values.Add( ID, element );
+				//    }
+				//}
+			}
+
+			public void ImportNode(XmlElement Node) {
+				_Values.Add( Node.GetAttribute( "ID" ), Node );
+			}
+		}
 	}
 }
