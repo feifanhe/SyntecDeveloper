@@ -46,9 +46,6 @@ namespace Syntec_Developer.Controls
 
 		public string GetContent( string Language, string ID )
 		{
-			while( isLoading ) {
-				Thread.Sleep( 100 );
-			}
 			if( Languages.ContainsKey( Language ) ) {
 				Hashtable Messages = Languages[ Language ] as Hashtable;
 				if( Messages.ContainsKey( ID ) ) {
