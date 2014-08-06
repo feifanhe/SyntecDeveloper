@@ -94,6 +94,8 @@ namespace Syntec_Developer.Controls
 			foreach( DirectoryInfo difChildDirectory in difDirectoryToLoad.GetDirectories() ) {
 				if( String.Compare( difChildDirectory.Name.ToUpper(), "STRING" ) == 0 ) {
 					ProcessingLanguage = difDirectoryToLoad.Name.ToUpper();
+					if( ProcessingLanguage == "COMMON" )
+						ProcessingLanguage = "ENG";
 					CreateLangeageItem( ProcessingLanguage );
 					LoadFiles( difChildDirectory.GetFiles() );
 				}
