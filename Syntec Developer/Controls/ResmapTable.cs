@@ -6,6 +6,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.IO;
 using System.Xml;
+using System.Data;
 
 namespace Syntec_Developer.Controls
 {
@@ -14,14 +15,13 @@ namespace Syntec_Developer.Controls
 		bool isLoading;
 		string RootPath;
 		string ProcessingLanguage;
-		Hashtable Languages;
+		private Dictionary<string, Messages> Contents = new Dictionary<string, Messages>();
 		BackgroundWorker ResmapLoader;
 
 		public ResmapTable()
 		{
 			this.isLoading = false;
 			this.RootPath = string.Empty;
-			this.Languages = new Hashtable();
 			this.ResmapLoader = new BackgroundWorker();
 			this.ResmapLoader.DoWork += new DoWorkEventHandler( ResmapLoader_DoWork );
 			this.ResmapLoader.RunWorkerCompleted +=
@@ -38,21 +38,31 @@ namespace Syntec_Developer.Controls
 
 		public void Clear()
 		{
-			foreach( Hashtable Messages in this.Languages.Values ) {
-				Messages.Clear();
+			Contents.Clear();
+		}
+
+		public void SaveResmap( ) {
+			XmlDocument InMemory = new XmlDocument();
+
+			foreach( Messages DummyMsg in Contents.Values )
+			{
+				foreach( XmlElement DummyElm in DummyMsg.Values.Values )
+				{
+					Console.WriteLine( DummyElm.GetAttribute("Content") );
+					InMemory = DummyElm.OwnerDocument;
+					break;
+				}
 			}
-			this.Languages.Clear();
+
+			InMemory.Save( "C:\\TEST2.XML" );
 		}
 
 		public string GetContent( string Language, string ID )
 		{
-			while( isLoading ) {
-				Thread.Sleep( 100 );
-			}
-			if( Languages.ContainsKey( Language ) ) {
-				Hashtable Messages = Languages[ Language ] as Hashtable;
-				if( Messages.ContainsKey( ID ) ) {
-					return Messages[ ID ] as string;
+			if( Contents.ContainsKey( Language ) ) {
+				if( Contents[ Language ].Values.ContainsKey( ID ) )
+				{
+					return Contents[ Language ][ ID ];
 				}
 			}
 			return string.Empty;
@@ -60,16 +70,16 @@ namespace Syntec_Developer.Controls
 
 		public ICollection GetLanguages()
 		{
-			return this.Languages.Keys;
+			return this.Contents.Keys;
 		}
 
 		public List<string> GetIDsByKeyWord( string Language, string KeyWord )
 		{
 			List<string> IDs = new List<string>();
-			Hashtable Messages = this.Languages[ Language ] as Hashtable;
-			foreach( string Key in Messages.Keys ) {
-				string Message = Messages[ Key ] as string;
-				if( Message.Contains( KeyWord ) ) {
+			foreach( string Key in this.Contents[ Language ].Values.Keys )
+			{
+				if( Key.Contains( KeyWord ) )
+				{
 					IDs.Add( Key );
 				}
 			}
@@ -80,6 +90,8 @@ namespace Syntec_Developer.Controls
 		{
 			this.isLoading = true;
 			LoadDirectory( this.RootPath );
+
+			//SaveResmap();
 		}
 
 		private void ResmapLoader_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
@@ -105,8 +117,8 @@ namespace Syntec_Developer.Controls
 
 		private void CreateLangeageItem( string Language )
 		{
-			if( !this.Languages.ContainsKey( Language ) ) {
-				this.Languages.Add( Language, new Hashtable() );
+			if( !this.Contents.ContainsKey( Language ) ) {
+				this.Contents.Add( Language, new Messages() );
 			}
 		}
 
@@ -139,7 +151,7 @@ namespace Syntec_Developer.Controls
 
 		private void LoadMessages( XmlNode ResmapNode, string FilePath )
 		{
-			Hashtable Messages = this.Languages[ ProcessingLanguage ] as Hashtable;
+			//Dictionary<string, string> Messages = this.Contents[ ProcessingLanguage ];
 			XmlNodeList MessageNodes = ResmapNode.ChildNodes;
 			XmlElement MessageElement;
 			string ID, Content;
@@ -148,12 +160,55 @@ namespace Syntec_Developer.Controls
 					MessageElement = MessageNode as XmlElement;
 					ID = MessageElement.GetAttribute( "ID" );
 					Content = MessageElement.GetAttribute( "Content" );
-					if( !Messages.ContainsKey( ID ) ) {
-						Messages.Add( ID, Content );
+					if( !Contents[ProcessingLanguage].Values.ContainsKey( ID ) ) {
+						Contents[ ProcessingLanguage ].ImportNode( MessageElement );
 					}
 				}
 			}
 		}
 
+		internal class Messages
+		{
+			private static Dictionary<string, XmlElement> _Values =
+				new Dictionary<string, XmlElement>();
+
+			public Messages() {
+			}
+
+			public Dictionary<string, XmlElement> Values {
+				get {
+					return _Values;
+				}
+				set {
+					_Values = value;
+				}
+			}
+
+			public string this[ string ID ] {
+				get {
+					if( _Values.ContainsKey( ID ) )
+						return _Values[ ID ].GetAttribute( "Content" );
+					return string.Empty;
+				}
+				//set {
+				//    if( value == string.Empty )
+				//        return;
+				//    if( _Values.ContainsKey( ID ) )
+				//        //_Values[ ID ].SetAttribute( "Content", value );
+				//    else
+				//    {
+				//        ParentNode.crea
+				//        element.ParentNode = this.ParentNode;
+				//        element.SetAttribute( "ID", ID );
+				//        element.SetAttribute( "Content", value );
+				//        _Values.Add( ID, element );
+				//    }
+				//}
+			}
+
+			public void ImportNode(XmlElement Node) {
+				_Values.Add( Node.GetAttribute( "ID" ), Node );
+			}
+		}
 	}
 }

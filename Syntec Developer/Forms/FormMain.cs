@@ -153,6 +153,8 @@ namespace Syntec_Developer.Forms
 			else {
 				MessageBox.Show( "Fail to save the document." );
 			}
+
+			m_rtResmapTable.SaveResmap();
 		}
 
 		private void SaveAll_Click( object sender, EventArgs e )
