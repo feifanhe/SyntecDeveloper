@@ -1,0 +1,232 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Collections;
+using Syntec_Developer.Controls.PropertyClasses;
+
+namespace Syntec_Developer.Controls
+{
+	public partial class Fenu : UserControl
+	{
+		const int ESCAPE_INDEX = 0;
+		const int NEXT_INDEX = 9;
+		private FenuProperties m_fpProperties;
+		private FenuButton[] m_afbFenuButtons;
+		private ResmapTable m_rtResmapTable;
+
+		private XElement m_xeFenu;
+
+		public event EventHandler FenuClose;
+		public event EventHandler FenuButtonClick;
+		public event KeyEventHandler FenuButtonKeyLink;
+		public new event EventHandler Click;
+
+		public FenuProperties Properties
+		{
+			get
+			{
+				return this.m_fpProperties;
+			}
+		}
+
+		public FenuButton[] Buttons
+		{
+			get
+			{
+				return m_afbFenuButtons;
+			}
+		}
+
+		public override string Text
+		{
+			get
+			{
+				return this.lblFenuName.Text;
+			}
+			set
+			{
+				this.lblFenuName.Text = value;
+			}
+		}
+
+		#region Constructor & Initialize
+
+		public Fenu( XElement xeFenu, ResmapTable rtResmapTable )
+		{
+			InitializeComponent();
+			this.m_xeFenu = xeFenu;
+			this.m_rtResmapTable = rtResmapTable;
+			this.m_fpProperties = new FenuProperties();
+			this.m_afbFenuButtons =
+				new FenuButton[ 10 ];
+			LoadXML();
+			CheckUndefinedFenuButton();
+			ShowFenu();
+		}
+
+		#endregion
+
+		#region Load
+
+		private void LoadXML()
+		{
+			this.m_fpProperties.Name = this.m_xeFenu.Attribute( "name" ).Value;
+			foreach( XElement xeButton in this.m_xeFenu.Elements() ) {
+				FenuButton fbButton = new FenuButton( xeButton, this.m_rtResmapTable, true );
+				fbButton.Click += new EventHandler( FenuButton_Click );
+				fbButton.KeyLink += new KeyEventHandler( FenuButton_KeyLink );
+				AddButtonIntoList( fbButton );
+			}
+		}
+
+		private void AddButtonIntoList( FenuButton fbButton )
+		{
+			switch( fbButton.Type ) {
+				case FenuButtonType.escape:
+					if( this.m_afbFenuButtons[ ESCAPE_INDEX ] != null ) {
+						MessageBox.Show( "Escape button has been defined." );
+					}
+					else {
+						this.m_afbFenuButtons[ ESCAPE_INDEX ] = fbButton;
+					}
+					break;
+				case FenuButtonType.button:
+					if( fbButton.Properties.Position == 0 ) {
+						break;
+					}
+					if( this.m_afbFenuButtons[ fbButton.Properties.Position ] != null ) {
+						MessageBox.Show(
+							string.Format( "Button F{0} has been defined.", fbButton.Properties.Position )
+						);
+					}
+					else {
+						this.m_afbFenuButtons[ fbButton.Properties.Position ] = fbButton;
+					}
+					break;
+				case FenuButtonType.next:
+					if( this.m_afbFenuButtons[ NEXT_INDEX ] != null ) {
+						MessageBox.Show( "Next button has been defined." );
+					}
+					else {
+						this.m_afbFenuButtons[ NEXT_INDEX ] = fbButton;
+					}
+					break;
+			}
+		}
+
+		private void CheckUndefinedFenuButton()
+		{
+			CheckEscapeButton();
+			CheckButton();
+			CheckNextButton();
+		}
+
+		private void CheckEscapeButton()
+		{
+			if( this.m_afbFenuButtons[ ESCAPE_INDEX ] == null ) {
+				this.m_afbFenuButtons[ ESCAPE_INDEX ] =
+					new FenuButton( new XElement( "escape" ), this.m_rtResmapTable, false );
+			}
+		}
+
+		private void CheckButton()
+		{
+			for( int i = 1; i <= 8; i++ ) {
+				if( this.m_afbFenuButtons[ i ] == null ) {
+					this.m_afbFenuButtons[ i ] =
+						new FenuButton( new XElement( "button" ), this.m_rtResmapTable, i );
+				}
+			}
+		}
+
+		private void CheckNextButton()
+		{
+			if( this.m_afbFenuButtons[ NEXT_INDEX ] == null ) {
+				this.m_afbFenuButtons[ NEXT_INDEX ] =
+					new FenuButton( new XElement( "next" ), this.m_rtResmapTable, false );
+			}
+		}
+
+		#endregion
+
+		#region Show
+
+		private void ShowFenu()
+		{
+			this.lblFenuName.Text = this.m_fpProperties.Name;
+			for( int i = 0; i <= 9; i++ ) {
+				this.pnlFenu.Controls.Add( this.m_afbFenuButtons[ i ] );
+				this.m_afbFenuButtons[ i ].BringToFront();
+			}
+		}
+
+		#endregion
+
+		#region Events
+
+		private void Fenu_Enter( object sender, EventArgs e )
+		{
+			this.pnlHeader.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+		}
+
+		private void Fenu_Leave( object sender, EventArgs e )
+		{
+			this.pnlHeader.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+		}
+
+		private void lblClose_Click( object sender, EventArgs e )
+		{
+			if( this.FenuClose != null ) {
+				this.FenuClose.Invoke( this, e );
+			}
+		}
+
+		private void FenuButton_Click( object sender, EventArgs e )
+		{
+			if( this.FenuButtonClick != null ) {
+				this.FenuButtonClick.Invoke( sender, e );
+			}
+		}
+
+		private void FenuButton_KeyLink( object sender, KeyEventArgs e )
+		{
+			if( this.FenuButtonKeyLink != null ) {
+				this.FenuButtonKeyLink.Invoke( sender, e );
+			}
+		}
+
+		private void Control_Click( object sender, EventArgs e )
+		{
+			this.Focus();
+			if( this.Click != null ) {
+				this.Click.Invoke( this, e );
+			}
+		}
+
+		#endregion
+
+		#region Save
+
+		public void SaveFenu()
+		{
+			SaveFenuName();
+			foreach( FenuButton fbButton in this.m_afbFenuButtons ) {
+				if( fbButton.Valid ) {
+					fbButton.SaveFenuButton();
+				}
+			}
+		}
+
+		private void SaveFenuName()
+		{
+			this.m_xeFenu.SetAttributeValue( "name", this.m_fpProperties.Name );
+		}
+
+		#endregion
+	}
+}

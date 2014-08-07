@@ -211,7 +211,7 @@ namespace Syntec_Developer.Forms
 
 		public void SaveFile()
 		{
-			//if( this.m_bIsModified ) {
+			if( this.m_bIsModified ) {
 				switch( this.m_dtType ) {
 					case DocumentType.browser:
 						this.m_bpBrowser.SaveFile();
@@ -225,7 +225,7 @@ namespace Syntec_Developer.Forms
 						break;
 				}
 				this.m_bIsModified = false;
-			//}
+			}
 		}
 
 		public void Delete_Click()

@@ -42,7 +42,6 @@ namespace Syntec_Developer.Controls.PropertyClasses
 
 		public ProtectedActions()
 		{
-			this.m_sPassword = string.Empty;
 			this.m_lstCorrectActions = new List<string>();
 			this.m_lstIncorrectActions = new List<string>();
 		}

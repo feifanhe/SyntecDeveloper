@@ -28,17 +28,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BasicAttributes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\BasicAttributes.dll</HintPath>
-    </Reference>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\Ookii.Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="StockComponents, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\StockComponents.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -46,17 +38,16 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.9.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Fenubar\FenuButton.cs">
+    <Compile Include="Controls\FenuButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Fenubar\FenuButton.Designer.cs">
+    <Compile Include="Controls\FenuButton.Designer.cs">
       <DependentUpon>FenuButton.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\IniFile.cs" />
@@ -74,18 +65,22 @@
     <Compile Include="Controls\BrowserItem.Designer.cs">
       <DependentUpon>BrowserItem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Fenubar\Fenu.cs">
+    <Compile Include="Controls\Fenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Fenubar\Fenu.Designer.cs">
+    <Compile Include="Controls\Fenu.Designer.cs">
       <DependentUpon>Fenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Fenubar\FenubarPanel.cs">
+    <Compile Include="Controls\FenubarPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Fenubar\FenubarPanel.Designer.cs">
+    <Compile Include="Controls\FenubarPanel.Designer.cs">
       <DependentUpon>FenubarPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PropertyClasses\ButtonProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\CoordBoxProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\CheckBoxProperties.cs" />
+    <Compile Include="Controls\PropertyClasses\DisplayProperties.cs" />
     <Compile Include="Controls\PropertyClasses\Fenubar\FenubarProperties.cs" />
     <Compile Include="Controls\PropertyClasses\Fenubar\FenuButtonProperties.cs">
     </Compile>
@@ -146,15 +141,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>BrowserItem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenubar\Fenu.resx">
+    <EmbeddedResource Include="Controls\Fenu.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Fenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenubar\FenubarPanel.resx">
+    <EmbeddedResource Include="Controls\FenubarPanel.resx">
       <DependentUpon>FenubarPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenubar\FenuButton.resx">
+    <EmbeddedResource Include="Controls\FenuButton.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FenuButton.cs</DependentUpon>
     </EmbeddedResource>
@@ -261,6 +256,7 @@
     <None Include="Resources\SendBackwardHS.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\SendToBackHS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

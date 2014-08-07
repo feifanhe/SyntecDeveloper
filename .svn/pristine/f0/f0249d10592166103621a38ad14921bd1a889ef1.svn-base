@@ -33,7 +33,6 @@ namespace Syntec_Developer.Controls.PropertyClasses
 
 		public LanguagePack()
 		{
-			this.ID = string.Empty;
 			this.m_dicValues = new Dictionary<string, string>();
 		}
 

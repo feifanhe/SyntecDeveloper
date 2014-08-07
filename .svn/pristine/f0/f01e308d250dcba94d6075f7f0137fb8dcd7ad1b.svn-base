@@ -2,19 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
-using BasicAttributes;
 
 namespace Syntec_Developer.Controls.PropertyClasses
 {
 	public class FenubarProperties
 	{
+		private int m_nAlignment;
+		private bool m_bButton3D;
+		private int m_nLevel3D;
+		private bool m_bNoFunc;
+		private bool m_bNoLR;
+		private bool m_bBigLR;
+		private bool m_bTextOverPic;
 
 		public event EventHandler PropertiesChanged;
 
-		private Justification m_nAlignment = Justification.MiddleCenter;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( Justification.MiddleCenter )]
-		public Justification Alignment
+		public int Alignment
 		{
 			get
 			{
@@ -28,9 +32,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private bool m_bButton3D = false;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( false )]
 		public bool Button3D
 		{
 			get
@@ -45,9 +47,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private int m_nLevel3D = 0;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( 0 )]
 		public int Level3D
 		{
 			get
@@ -62,9 +62,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private bool m_bNoFunc = false;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( false )]
 		public bool NoFunc
 		{
 			get
@@ -79,9 +77,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private bool m_bNoLR = false;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( false )]
 		public bool NoLR
 		{
 			get
@@ -96,9 +92,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private bool m_bBigLR = false;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( false )]
 		public bool BigLR
 		{
 			get
@@ -113,9 +107,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private bool m_bTextOverPic = false;
 		[CategoryAttribute( "Fenubar" )]
-		[DefaultValue( false )]
 		public bool TextOverPic
 		{
 			get
@@ -131,6 +123,13 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		}
 
 		public FenubarProperties(){
+			this.m_nAlignment = 0;
+			this.m_bButton3D = false;
+			this.m_nLevel3D = 0;
+			this.m_bNoFunc = false;
+			this.m_bNoLR = false;
+			this.m_bBigLR = false;
+			this.m_bTextOverPic = false;
 		}
 
 	}
