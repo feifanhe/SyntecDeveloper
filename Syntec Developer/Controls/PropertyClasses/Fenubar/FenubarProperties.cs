@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.Drawing;
 using BasicAttributes;
 
 namespace Syntec_Developer.Controls.PropertyClasses
@@ -10,11 +11,12 @@ namespace Syntec_Developer.Controls.PropertyClasses
 	{
 
 		public event EventHandler PropertiesChanged;
+		public event EventHandler AlignmentChanged;
 
-		private Justification m_nAlignment = Justification.MiddleCenter;
+		private ContentAlignment m_nAlignment = ContentAlignment.MiddleCenter;
 		[CategoryAttribute( "Fenubar" )]
 		[DefaultValue( Justification.MiddleCenter )]
-		public Justification Alignment
+		public ContentAlignment Alignment
 		{
 			get
 			{
@@ -24,6 +26,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			{
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				if( this.AlignmentChanged != null )
+					this.AlignmentChanged.Invoke( this, new EventArgs() );
 				this.m_nAlignment = value;
 			}
 		}

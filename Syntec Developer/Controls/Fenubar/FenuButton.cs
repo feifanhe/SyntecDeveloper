@@ -56,14 +56,19 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
-		public FenuButton(XElement xeButton, ResmapTable rtResmapTable, bool bValid )
+		public FenuButton( XElement xeButton, ResmapTable rtResmapTable, bool bValid )
 		{
 			InitializeComponent();
 			this.m_bValid = bValid;
 			this.m_xeButton = xeButton;
 			this.m_rtResmapTable = rtResmapTable;
 			InitializeButtonType( this.m_xeButton.Name.LocalName );
-			this.m_fbpProperties = new FenuButtonProperties( this );
+			if( this.Type == FenuButtonType.escape ) {
+				this.m_fbpProperties = new EscapeButtonProperties( this );
+			}
+			else {
+				this.m_fbpProperties = new FenuButtonProperties( this );
+			}
 			SetText();
 		}
 
@@ -77,7 +82,7 @@ namespace Syntec_Developer.Controls
 			this.m_fbpProperties = new FenuButtonProperties( this );
 			this.m_fbpProperties.Position = nPosition;
 			SetText();
-			
+
 		}
 
 		private void InitializeButtonType( string sButtonType )
@@ -119,6 +124,11 @@ namespace Syntec_Developer.Controls
 					this.Text = ">>";
 					break;
 			}
+		}
+
+		public void UpdateAlignment( ContentAlignment Alignment )
+		{
+			this.TextAlign = ContentAlignment.TopLeft;
 		}
 
 		private void FenuButton_KeyDown( object sender, KeyEventArgs e )

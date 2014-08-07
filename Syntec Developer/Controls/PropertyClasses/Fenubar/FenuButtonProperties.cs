@@ -10,8 +10,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 {
 	public class FenuButtonProperties
 	{
-		protected XElement m_xeButton;
-		protected FenuButton m_fbButtonToSet;
+		private XElement m_xeButton;
+		private FenuButton m_fbButtonToSet;
 
 		protected List<string> m_lstActions;
 		protected ProtectedActions m_ActionsWithPassword;
@@ -397,12 +397,12 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			SaveLightOnColor();
 		}
 
-		private void SaveActions()
+		protected void SaveActions()
 		{
 			SaveActions( this.m_xeButton, this.Actions );
 		}
 
-		private void SaveActions( XElement xeActionsOwner, List<string> lstActions )
+		protected void SaveActions( XElement xeActionsOwner, List<string> lstActions )
 		{
 			if( this.Actions.Count == 0 ) {
 				if( xeActionsOwner.Element( "action" ) != null ) {
@@ -437,7 +437,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveActionsWithPassword()
+		protected void SaveActionsWithPassword()
 		{
 			XElement xePassword = this.m_xeButton.Element( "pwd" );
 			if( this.ActionsWithPassword.Password == string.Empty ) {
@@ -466,7 +466,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveSatate()
+		protected void SaveSatate()
 		{
 			if( this.m_xeButton.Element( "state" ) == null ) {
 				this.m_xeButton.Add( new XElement( "state" ) );
@@ -474,7 +474,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			this.m_xeButton.Element( "state" ).Value = this.State.ToString();
 		}
 
-		private void SaveLink()
+		protected void SaveLink()
 		{
 			if( this.Link == string.Empty ) {
 				if( this.m_xeButton.Element( "link" ) != null ) {
@@ -489,7 +489,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveVisible()
+		protected void SaveVisible()
 		{
 			if( this.m_xeButton.Element( "visible" ) == null ) {
 				this.m_xeButton.Add( new XElement( "visible" ) );
@@ -497,7 +497,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			this.m_xeButton.Element( "visible" ).Value = this.Visible.ToString();
 		}
 
-		private void SaveUserLevel()
+		protected void SaveUserLevel()
 		{
 			if( this.UserLevel == 0 ) {
 				if( this.m_xeButton.Element( "userlevel" ) != null ) {
@@ -511,7 +511,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 				this.m_xeButton.Element( "userlevel" ).Value = this.UserLevel.ToString();
 			}
 		}
-		private void SaveTitle()
+		protected void SaveTitle()
 		{
 			if( this.Title.ID == string.Empty ) {
 				if( this.m_xeButton.Element( "title" ) != null ) {
@@ -526,7 +526,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SavePosition()
+		protected void SavePosition()
 		{
 			if( this.m_xeButton.Element( "position" ) == null ) {
 				this.m_xeButton.Add( new XElement( "position" ) );
@@ -534,7 +534,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			this.m_xeButton.Element( "position" ).Value = this.Position.ToString();
 		}
 
-		private void SavePicture()
+		protected void SavePicture()
 		{
 			if( this.Picture == string.Empty ) {
 				if( this.m_xeButton.Element( "picture" ) != null ) {
@@ -549,7 +549,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveForeColor()
+		protected void SaveForeColor()
 		{
 			if( this.ForeColor == Color.Black ) {
 				if( this.m_xeButton.Element( "forecolor" ) != null ) {
@@ -564,7 +564,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveBackColor()
+		protected void SaveBackColor()
 		{
 			if( this.BackColor == SystemColors.Control ) {
 				if( this.m_xeButton.Element( "backcolor" ) != null ) {
@@ -579,7 +579,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveHoldMode()
+		protected void SaveHoldMode()
 		{
 			if( this.HoldMode == false ) {
 				if( this.m_xeButton.Element( "HoldMode" ) != null ) {
@@ -594,7 +594,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private void SaveLightOnColor()
+		protected void SaveLightOnColor()
 		{
 			if( this.LightOnColor == SystemColors.Control ) {
 				if( this.m_xeButton.Element( "LightOnColor" ) != null ) {
@@ -609,7 +609,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		private string ColorToRGB( Color clrSource )
+		protected string ColorToRGB( Color clrSource )
 		{
 			return string.Format( "{0},{1},{2}", clrSource.R, clrSource.G, clrSource.B );
 		}

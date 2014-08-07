@@ -208,6 +208,13 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
+		public void UpdateButtonAlignment( ContentAlignment Alignment )
+		{
+			foreach( FenuButton fbButton in this.m_afbFenuButtons ) {
+				fbButton.UpdateAlignment( Alignment );
+			}
+		}
+
 		#endregion
 
 		#region Save

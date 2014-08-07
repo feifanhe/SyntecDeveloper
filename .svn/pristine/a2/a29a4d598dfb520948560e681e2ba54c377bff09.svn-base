@@ -86,8 +86,6 @@
     <Compile Include="Controls\Fenubar\FenubarPanel.Designer.cs">
       <DependentUpon>FenubarPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyClasses\Fenubar\EscapeButtonProperties.cs">
-    </Compile>
     <Compile Include="Controls\PropertyClasses\Fenubar\FenubarProperties.cs" />
     <Compile Include="Controls\PropertyClasses\Fenubar\FenuButtonProperties.cs">
     </Compile>

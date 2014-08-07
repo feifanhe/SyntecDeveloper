@@ -41,13 +41,14 @@ namespace Syntec_Developer.Controls
 			Contents.Clear();
 		}
 
-		public void SaveResmap()
-		{
+		public void SaveResmap( ) {
 			XmlDocument InMemory = new XmlDocument();
 
-			foreach( Messages DummyMsg in Contents.Values ) {
-				foreach( XmlElement DummyElm in DummyMsg.Values.Values ) {
-					Console.WriteLine( DummyElm.GetAttribute( "Content" ) );
+			foreach( Messages DummyMsg in Contents.Values )
+			{
+				foreach( XmlElement DummyElm in DummyMsg.Values.Values )
+				{
+					Console.WriteLine( DummyElm.GetAttribute("Content") );
 					InMemory = DummyElm.OwnerDocument;
 					break;
 				}
@@ -59,7 +60,8 @@ namespace Syntec_Developer.Controls
 		public string GetContent( string Language, string ID )
 		{
 			if( Contents.ContainsKey( Language ) ) {
-				if( Contents[ Language ].Values.ContainsKey( ID ) ) {
+				if( Contents[ Language ].Values.ContainsKey( ID ) )
+				{
 					return Contents[ Language ][ ID ];
 				}
 			}
@@ -74,8 +76,10 @@ namespace Syntec_Developer.Controls
 		public List<string> GetIDsByKeyWord( string Language, string KeyWord )
 		{
 			List<string> IDs = new List<string>();
-			foreach( string Key in this.Contents[ Language ].Values.Keys ) {
-				if( Key.Contains( KeyWord ) ) {
+			foreach( string Key in this.Contents[ Language ].Values.Keys )
+			{
+				if( Key.Contains( KeyWord ) )
+				{
 					IDs.Add( Key );
 				}
 			}
@@ -156,7 +160,7 @@ namespace Syntec_Developer.Controls
 					MessageElement = MessageNode as XmlElement;
 					ID = MessageElement.GetAttribute( "ID" );
 					Content = MessageElement.GetAttribute( "Content" );
-					if( !Contents[ ProcessingLanguage ].Values.ContainsKey( ID ) ) {
+					if( !Contents[ProcessingLanguage].Values.ContainsKey( ID ) ) {
 						Contents[ ProcessingLanguage ].ImportNode( MessageElement );
 					}
 				}
@@ -165,29 +169,23 @@ namespace Syntec_Developer.Controls
 
 		internal class Messages
 		{
-			private Dictionary<string, XmlElement> _Values =
+			private static Dictionary<string, XmlElement> _Values =
 				new Dictionary<string, XmlElement>();
 
-			public Messages()
-			{
+			public Messages() {
 			}
 
-			public Dictionary<string, XmlElement> Values
-			{
-				get
-				{
+			public Dictionary<string, XmlElement> Values {
+				get {
 					return _Values;
 				}
-				set
-				{
+				set {
 					_Values = value;
 				}
 			}
 
-			public string this[ string ID ]
-			{
-				get
-				{
+			public string this[ string ID ] {
+				get {
 					if( _Values.ContainsKey( ID ) )
 						return _Values[ ID ].GetAttribute( "Content" );
 					return string.Empty;
@@ -208,8 +206,7 @@ namespace Syntec_Developer.Controls
 				//}
 			}
 
-			public void ImportNode( XmlElement Node )
-			{
+			public void ImportNode(XmlElement Node) {
 				_Values.Add( Node.GetAttribute( "ID" ), Node );
 			}
 		}

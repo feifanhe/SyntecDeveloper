@@ -103,6 +103,7 @@ namespace Syntec_Developer.Controls
 			this.m_fpProperties = new FenubarProperties();
 
 			this.m_fpProperties.PropertiesChanged += new EventHandler( Fenubar_PropertiesChanged );
+			this.m_fpProperties.AlignmentChanged += new EventHandler( Fenubar_AlignmentChanged );
 		}
 
 
@@ -133,7 +134,7 @@ namespace Syntec_Developer.Controls
 			foreach( XElement xeChildElement in this.m_xeRoot.Elements() ) {
 				switch( xeChildElement.Name.LocalName ) {
 					case "Alignment":
-						this.Properties.Alignment = ConvertIntToJustification( int.Parse( xeChildElement.Value ) );
+						this.Properties.Alignment = ConvertIntToContentAlignment( int.Parse( xeChildElement.Value ) );
 						break;
 					case "Button3D":
 						this.Properties.Button3D = bool.Parse( xeChildElement.Value );
@@ -176,29 +177,29 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
-		private BasicAttributes.Justification ConvertIntToJustification( int nAlignment )
+		private ContentAlignment ConvertIntToContentAlignment( int nAlignment )
 		{
 			switch( nAlignment ) {
-				case 0:
-					return BasicAttributes.Justification.TopLeft;
 				case 1:
-					return BasicAttributes.Justification.TopCenter;
+					return ContentAlignment.TopLeft;
 				case 2:
-					return BasicAttributes.Justification.TopRight;
+					return ContentAlignment.TopCenter;
 				case 3:
-					return BasicAttributes.Justification.MiddleLeft;
+					return ContentAlignment.TopRight;
 				case 4:
-					return BasicAttributes.Justification.MiddleCenter;
+					return ContentAlignment.MiddleLeft;
 				case 5:
-					return BasicAttributes.Justification.MiddleRight;
+					return ContentAlignment.MiddleCenter;
 				case 6:
-					return BasicAttributes.Justification.BottomLeft;
+					return ContentAlignment.MiddleRight;
 				case 7:
-					return BasicAttributes.Justification.BottomCenter;
+					return ContentAlignment.BottomLeft;
 				case 8:
-					return BasicAttributes.Justification.BottomRight;
+					return ContentAlignment.BottomCenter;
+				case 9:
+					return ContentAlignment.BottomRight;
 				default:
-					return BasicAttributes.Justification.MiddleCenter;
+					return ContentAlignment.MiddleCenter;
 			}
 		}
 
@@ -285,6 +286,13 @@ namespace Syntec_Developer.Controls
 		{
 			if( this.m_bHasLoaded ) {
 				this.FenubarPropertiesChanged.Invoke( this, e );
+			}
+		}
+
+		private void Fenubar_AlignmentChanged( object sneder, EventArgs e )
+		{
+			foreach( Fenu fnFenu in this.m_htbFenus.Values ) {
+				fnFenu.UpdateButtonAlignment( this.Properties.Alignment );
 			}
 		}
 
