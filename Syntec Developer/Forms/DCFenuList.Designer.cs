@@ -27,14 +27,22 @@ namespace Syntec_Developer.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tbcSelectDisplayMode = new System.Windows.Forms.TabControl();
 			this.tbpFenuList = new System.Windows.Forms.TabPage();
 			this.chklstFenuList = new System.Windows.Forms.CheckedListBox();
 			this.tbpFenuLinkTree = new System.Windows.Forms.TabPage();
 			this.tvwFenuLinkTree = new System.Windows.Forms.TreeView();
+			this.ctmsRightClickItem = new System.Windows.Forms.ContextMenuStrip( this.components );
+			this.tsmiNewFenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiDeleteFenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiCopyFenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
+			this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tbcSelectDisplayMode.SuspendLayout();
 			this.tbpFenuList.SuspendLayout();
 			this.tbpFenuLinkTree.SuspendLayout();
+			this.ctmsRightClickItem.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tbcSelectDisplayMode
@@ -71,6 +79,7 @@ namespace Syntec_Developer.Forms
 			this.chklstFenuList.Name = "chklstFenuList";
 			this.chklstFenuList.Size = new System.Drawing.Size( 270, 223 );
 			this.chklstFenuList.TabIndex = 2;
+			this.chklstFenuList.MouseUp += new System.Windows.Forms.MouseEventHandler( this.chklstFenuList_MouseUp );
 			this.chklstFenuList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler( this.chklstFenuList_ItemCheck );
 			// 
 			// tbpFenuLinkTree
@@ -95,6 +104,48 @@ namespace Syntec_Developer.Forms
 			this.tvwFenuLinkTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler( this.tvwFenuLinkTree_AfterCheck );
 			this.tvwFenuLinkTree.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler( this.tvwFenuLinkTree_BeforeCheck );
 			// 
+			// ctmsRightClickItem
+			// 
+			this.ctmsRightClickItem.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiNewFenu,
+            this.tssSep1,
+            this.tsmiCopyFenu,
+            this.tssSep2,
+            this.tsmiDeleteFenu} );
+			this.ctmsRightClickItem.Name = "ctmsRightClickItem";
+			this.ctmsRightClickItem.Size = new System.Drawing.Size( 153, 104 );
+			// 
+			// tsmiNewFenu
+			// 
+			this.tsmiNewFenu.Name = "tsmiNewFenu";
+			this.tsmiNewFenu.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiNewFenu.Text = "新增";
+			this.tsmiNewFenu.Click += new System.EventHandler( this.tsmiNewFenu_Click );
+			// 
+			// tsmiDeleteFenu
+			// 
+			this.tsmiDeleteFenu.Name = "tsmiDeleteFenu";
+			this.tsmiDeleteFenu.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiDeleteFenu.Text = "刪除";
+			this.tsmiDeleteFenu.Click += new System.EventHandler( this.tsmiDeleteFenu_Click );
+			// 
+			// tsmiCopyFenu
+			// 
+			this.tsmiCopyFenu.Name = "tsmiCopyFenu";
+			this.tsmiCopyFenu.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiCopyFenu.Text = "複製";
+			this.tsmiCopyFenu.Click += new System.EventHandler( this.tsmiCopyFenu_Click );
+			// 
+			// tssSep1
+			// 
+			this.tssSep1.Name = "tssSep1";
+			this.tssSep1.Size = new System.Drawing.Size( 149, 6 );
+			// 
+			// tssSep2
+			// 
+			this.tssSep2.Name = "tssSep2";
+			this.tssSep2.Size = new System.Drawing.Size( 149, 6 );
+			// 
 			// DCFenuList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 12F );
@@ -107,6 +158,7 @@ namespace Syntec_Developer.Forms
 			this.tbcSelectDisplayMode.ResumeLayout( false );
 			this.tbpFenuList.ResumeLayout( false );
 			this.tbpFenuLinkTree.ResumeLayout( false );
+			this.ctmsRightClickItem.ResumeLayout( false );
 			this.ResumeLayout( false );
 
 		}
@@ -118,6 +170,12 @@ namespace Syntec_Developer.Forms
 		private System.Windows.Forms.TabPage tbpFenuList;
 		private System.Windows.Forms.CheckedListBox chklstFenuList;
 		private System.Windows.Forms.TreeView tvwFenuLinkTree;
+		private System.Windows.Forms.ContextMenuStrip ctmsRightClickItem;
+		private System.Windows.Forms.ToolStripMenuItem tsmiNewFenu;
+		private System.Windows.Forms.ToolStripMenuItem tsmiDeleteFenu;
+		private System.Windows.Forms.ToolStripSeparator tssSep1;
+		private System.Windows.Forms.ToolStripMenuItem tsmiCopyFenu;
+		private System.Windows.Forms.ToolStripSeparator tssSep2;
 
 	}
 }

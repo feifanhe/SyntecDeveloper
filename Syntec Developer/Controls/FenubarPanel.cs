@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Collections;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using Syntec_Developer.Controls.PropertyClasses;
 
 namespace Syntec_Developer.Controls
@@ -23,6 +25,9 @@ namespace Syntec_Developer.Controls
 		private List<Fenu> m_lstOpenedFenu;
 		private FenubarProperties m_fpProperties;
 		private ResmapTable m_rtResmapTable;
+
+		private bool isCut = false;
+		private FenuButton m_fbCopySource;
 
 		private XDocument m_xdDocument;
 		private XElement m_xeRoot;
@@ -166,15 +171,22 @@ namespace Syntec_Developer.Controls
 		private void LoadFenu( XElement xeFenu )
 		{
 			Fenu fnFenuToAdd = new Fenu( xeFenu, m_rtResmapTable );
+			AddFenu( fnFenuToAdd );
+		}
+
+		private void AddFenu( Fenu fnFenuToAdd )
+		{
 			if( this.m_htbFenus.ContainsKey( fnFenuToAdd.Properties.Name ) ) {
 				MessageBox.Show( "Error: The same fenu name has been used!" );
+				return;
 			}
-			else {
-				this.m_htbFenus.Add( fnFenuToAdd.Properties.Name, fnFenuToAdd );
-				fnFenuToAdd.FenuClose += new EventHandler( Fenu_Close );
-				fnFenuToAdd.FenuButtonClick += new EventHandler( FenuButton_Click );
-				fnFenuToAdd.FenuButtonKeyLink += new KeyEventHandler( FenuButton_KeyLink );
-			}
+			this.m_htbFenus.Add( fnFenuToAdd.Properties.Name, fnFenuToAdd );
+			fnFenuToAdd.FenuClose += new EventHandler( Fenu_Close );
+			fnFenuToAdd.FenuButtonClick += new EventHandler( FenuButton_Click );
+			fnFenuToAdd.FenuButtonKeyLink += new KeyEventHandler( FenuButton_KeyLink );
+			fnFenuToAdd.FenuButtonCut += new EventHandler( FenuButton_Cut );
+			fnFenuToAdd.FenuButtonCopy += new EventHandler( FenuButton_Copy );
+			fnFenuToAdd.FenuButtonPaste += new EventHandler( FenuButton_Paste );
 		}
 
 		private ContentAlignment ConvertIntToContentAlignment( int nAlignment )
@@ -269,6 +281,32 @@ namespace Syntec_Developer.Controls
 			this.m_lstOpenedFenu.Remove( fnFenuToHide );
 		}
 
+		public void DeleteFenu( string sFenuName )
+		{
+			Fenu fnFenuToDelete = this.m_htbFenus[ sFenuName ] as Fenu;
+			this.Controls.Remove( fnFenuToDelete );
+			this.m_lstOpenedFenu.Remove( fnFenuToDelete );
+			this.m_htbFenus.Remove( sFenuName );
+			fnFenuToDelete.Remove();
+		}
+
+		public void NewFenu( string sFenuName )
+		{
+			XElement xeNewFenu = new XElement( "fenu" );
+			this.m_xeRoot.Add( xeNewFenu );
+			Fenu fnNewFenu = new Fenu( xeNewFenu, this.m_rtResmapTable, sFenuName );
+			AddFenu( fnNewFenu );
+
+		}
+
+		public void CopyFenu( string sFenuName )
+		{
+			Fenu fnSourceFenu = this.m_htbFenus[ sFenuName ] as Fenu;
+			Fenu fnCloneFenu = fnSourceFenu.Clone();
+			fnCloneFenu.Properties.Name = string.Concat( fnCloneFenu.Properties.Name, " - Copy" );
+			AddFenu( fnCloneFenu );
+		}
+
 		private void Fenu_Close( object sender, EventArgs e )
 		{
 			FenuClose.Invoke( sender, e );
@@ -279,7 +317,35 @@ namespace Syntec_Developer.Controls
 
 		private void FenuButton_Click( object sender, EventArgs e )
 		{
-			this.FenuButtonClick.Invoke( sender, e );
+			if( this.FenuButtonClick != null ) {
+				this.FenuButtonClick.Invoke( sender, e );
+			}
+		}
+
+		private void FenuButton_Cut( object sender, EventArgs e )
+		{
+			Console.WriteLine( "CUT" );
+			this.isCut = true;
+			this.m_fbCopySource = sender as FenuButton;
+		}
+
+		private void FenuButton_Copy( object sender, EventArgs e )
+		{
+			this.isCut = false;
+			this.m_fbCopySource = sender as FenuButton;
+		}
+
+		private void FenuButton_Paste( object sender, EventArgs e )
+		{
+			if( this.m_fbCopySource == null ) {
+				return;
+			}
+			FenuButton fbPasteTarget = sender as FenuButton;
+			fbPasteTarget.CopyProperties( this.m_fbCopySource );
+			if( isCut ) {
+				Console.WriteLine( "CLEAR" );
+				this.m_fbCopySource.Clear();
+			}
 		}
 
 		private void Fenubar_PropertiesChanged( object sneder, EventArgs e )

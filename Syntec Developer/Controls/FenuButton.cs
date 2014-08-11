@@ -27,6 +27,9 @@ namespace Syntec_Developer.Controls
 		internal XElement m_xeButton;
 
 		public event KeyEventHandler KeyLink;
+		public event EventHandler Cut;
+		public event EventHandler Copy;
+		public event EventHandler Paste;
 
 		public bool Valid
 		{
@@ -158,5 +161,71 @@ namespace Syntec_Developer.Controls
 		{
 			this.m_fbpProperties.SaveFenuButtonProperties();
 		}
+
+		public void CopyProperties( FenuButton fbSource )
+		{
+			int nPosition = this.m_fbpProperties.Position;
+			this.m_fbpProperties = fbSource.m_fbpProperties.Clone();
+			this.m_fbpProperties.Position = nPosition;
+			SetText();
+		}
+
+		private void FenuButton_MouseUp( object sender, MouseEventArgs e )
+		{
+			if( e.Button == MouseButtons.Right ) {
+				this.ctmsRightClick.Show( this, e.Location );
+			}
+		}
+
+		private void tsmiClear_Click( object sender, EventArgs e )
+		{
+			Clear();
+		}
+
+		private void tsmiCut_Click( object sender, EventArgs e )
+		{
+			CutFenuButton();
+		}
+
+		private void tsmiCopy_Click( object sender, EventArgs e )
+		{
+			CopyFenuButton();
+		}
+
+		private void tsmiPaste_Click( object sender, EventArgs e )
+		{
+			PasteFenuButton();
+		}
+
+		public void Clear()
+		{
+			this.m_xeButton.RemoveNodes();
+			this.m_xeButton.Add( new XElement( "position", this.Properties.Position.ToString() ) );
+			FenuButtonProperties fbpNewProperties = new FenuButtonProperties( this );
+			this.m_fbpProperties = fbpNewProperties;
+			SetText();
+		}
+
+		private void CutFenuButton()
+		{
+			if( this.Cut != null ) {
+				this.Cut.Invoke( this, new EventArgs() );
+			}
+		}
+
+		private void CopyFenuButton()
+		{
+			if( this.Copy != null ) {
+				this.Copy.Invoke( this, new EventArgs() );
+			}
+		}
+
+		private void PasteFenuButton()
+		{
+			if( this.Paste != null ) {
+				this.Paste.Invoke( this, new EventArgs() );
+			}
+		}
+
 	}
 }

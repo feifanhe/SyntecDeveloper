@@ -212,5 +212,45 @@ namespace Syntec_Developer.Forms
 
 		#endregion
 
+		private void chklstFenuList_MouseUp( object sender, MouseEventArgs e )
+		{
+			if( e.Button == MouseButtons.Right ) {
+				int nItemIndex = chklstFenuList.IndexFromPoint( e.Location );
+				if( nItemIndex >= 0 ) {
+					chklstFenuList.SelectedIndex = nItemIndex;
+					ctmsRightClickItem.Show( chklstFenuList, e.Location );
+				}
+			}
+		}
+
+		private void tsmiNewFenu_Click( object sender, EventArgs e )
+		{
+			FormNewFenu frmNewFenu = new FormNewFenu();
+			if( frmNewFenu.ShowDialog( this ) == DialogResult.OK ) {
+				this.m_dcdRecentFocusedDocument.Fenubar.NewFenu( frmNewFenu.FenuName );
+				ConstructFenuList();
+			}
+
+		}
+
+		private void tsmiDeleteFenu_Click( object sender, EventArgs e )
+		{
+			string sFenuName = this.chklstFenuList.SelectedItem.ToString();
+			DialogResult dlgrsDelete = MessageBox.Show(
+				string.Concat( "刪除", sFenuName, "?" ), "刪除功能鍵", MessageBoxButtons.YesNo
+			);
+			if( dlgrsDelete == DialogResult.Yes ) {
+				this.m_dcdRecentFocusedDocument.Fenubar.DeleteFenu( sFenuName );
+				ConstructFenuList();
+			}
+		}
+
+		private void tsmiCopyFenu_Click( object sender, EventArgs e )
+		{
+			string sFenuName = this.chklstFenuList.SelectedItem.ToString();
+			this.m_dcdRecentFocusedDocument.Fenubar.CopyFenu( sFenuName );
+			ConstructFenuList();
+		}
+
 	}
 }

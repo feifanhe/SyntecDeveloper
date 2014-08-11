@@ -24,6 +24,9 @@ namespace Syntec_Developer.Controls
 		public event EventHandler FenuClose;
 		public event EventHandler FenuButtonClick;
 		public event KeyEventHandler FenuButtonKeyLink;
+		public event EventHandler FenuButtonCut;
+		public event EventHandler FenuButtonCopy;
+		public event EventHandler FenuButtonPaste;
 		public new event EventHandler Click;
 
 		public FenuProperties Properties
@@ -69,6 +72,20 @@ namespace Syntec_Developer.Controls
 			ShowFenu();
 		}
 
+		public Fenu( XElement xeNewFenu, ResmapTable rtResmapTable, string sFenuName )
+		{
+			InitializeComponent();
+			this.m_xeFenu = xeNewFenu;
+			this.m_rtResmapTable = rtResmapTable;
+			this.m_fpProperties = new FenuProperties();
+			this.m_fpProperties.Name = sFenuName;
+			this.m_afbFenuButtons =
+				new FenuButton[ 10 ];
+
+			CheckUndefinedFenuButton();
+			ShowFenu();
+		}
+
 		#endregion
 
 		#region Load
@@ -78,10 +95,18 @@ namespace Syntec_Developer.Controls
 			this.m_fpProperties.Name = this.m_xeFenu.Attribute( "name" ).Value;
 			foreach( XElement xeButton in this.m_xeFenu.Elements() ) {
 				FenuButton fbButton = new FenuButton( xeButton, this.m_rtResmapTable, true );
-				fbButton.Click += new EventHandler( FenuButton_Click );
-				fbButton.KeyLink += new KeyEventHandler( FenuButton_KeyLink );
+				SetButtonEvent( fbButton );
 				AddButtonIntoList( fbButton );
 			}
+		}
+
+		private void SetButtonEvent( FenuButton fbButton )
+		{
+			fbButton.Click += new EventHandler( FenuButton_Click );
+			fbButton.KeyLink += new KeyEventHandler( FenuButton_KeyLink );
+			fbButton.Cut += new EventHandler( FenuButton_Cut );
+			fbButton.Copy += new EventHandler( FenuButton_Copy );
+			fbButton.Paste += new EventHandler( FenuButton_Paste );
 		}
 
 		private void AddButtonIntoList( FenuButton fbButton )
@@ -119,6 +144,10 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
+		#endregion
+
+		#region Check Buttons
+
 		private void CheckUndefinedFenuButton()
 		{
 			CheckEscapeButton();
@@ -131,6 +160,8 @@ namespace Syntec_Developer.Controls
 			if( this.m_afbFenuButtons[ ESCAPE_INDEX ] == null ) {
 				this.m_afbFenuButtons[ ESCAPE_INDEX ] =
 					new FenuButton( new XElement( "escape" ), this.m_rtResmapTable, false );
+				this.m_xeFenu.Add( this.m_afbFenuButtons[ ESCAPE_INDEX ].m_xeButton );
+				SetButtonEvent( this.m_afbFenuButtons[ ESCAPE_INDEX ] );
 			}
 		}
 
@@ -140,6 +171,8 @@ namespace Syntec_Developer.Controls
 				if( this.m_afbFenuButtons[ i ] == null ) {
 					this.m_afbFenuButtons[ i ] =
 						new FenuButton( new XElement( "button" ), this.m_rtResmapTable, i );
+					this.m_xeFenu.Add( this.m_afbFenuButtons[ i ].m_xeButton );
+					SetButtonEvent( this.m_afbFenuButtons[ i ] );
 				}
 			}
 		}
@@ -149,6 +182,8 @@ namespace Syntec_Developer.Controls
 			if( this.m_afbFenuButtons[ NEXT_INDEX ] == null ) {
 				this.m_afbFenuButtons[ NEXT_INDEX ] =
 					new FenuButton( new XElement( "next" ), this.m_rtResmapTable, false );
+				this.m_xeFenu.Add( this.m_afbFenuButtons[ NEXT_INDEX ].m_xeButton );
+				SetButtonEvent( this.m_afbFenuButtons[ NEXT_INDEX ] );
 			}
 		}
 
@@ -200,6 +235,27 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
+		private void FenuButton_Cut( object sender, EventArgs e )
+		{
+			if( this.FenuButtonCut != null ) {
+				this.FenuButtonCut.Invoke( sender, e );
+			}
+		}
+
+		private void FenuButton_Copy( object sender, EventArgs e )
+		{
+			if( this.FenuButtonCopy != null ) {
+				this.FenuButtonCopy.Invoke( sender, e );
+			}
+		}
+
+		private void FenuButton_Paste( object sender, EventArgs e )
+		{
+			if( this.FenuButtonPaste != null ) {
+				this.FenuButtonPaste.Invoke( sender, e );
+			}
+		}
+
 		private void Control_Click( object sender, EventArgs e )
 		{
 			this.Focus();
@@ -235,5 +291,31 @@ namespace Syntec_Developer.Controls
 		}
 
 		#endregion
+
+		public void Remove()
+		{
+			this.m_xeFenu.Remove();
+			this.Dispose();
+		}
+
+		public Fenu Clone()
+		{
+			XElement xeCloneFenu = new XElement( "fenu" );
+			this.m_xeFenu.Parent.Add( xeCloneFenu );
+
+			Fenu fnCloneFenu = new Fenu( xeCloneFenu, this.m_rtResmapTable, this.Properties.Name );
+
+			fnCloneFenu.CloneFenuButtons( this );
+
+			return fnCloneFenu;
+		}
+
+		private void CloneFenuButtons( Fenu fnSourceFenu )
+		{
+			for( int i = ESCAPE_INDEX; i <= NEXT_INDEX; i++ ) {
+				this.Buttons[ i ].CopyProperties( fnSourceFenu.Buttons[ i ] );
+				this.m_xeFenu.Add( this.Buttons[ i ].m_xeButton );
+			}
+		}
 	}
 }

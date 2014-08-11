@@ -122,6 +122,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		}
 
 		[BrowsableAttribute( true )]
+		[ReadOnlyAttribute( true )]
 		[CategoryAttribute( "Button" )]
 		public int Position
 		{
@@ -612,6 +613,12 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		protected string ColorToRGB( Color clrSource )
 		{
 			return string.Format( "{0},{1},{2}", clrSource.R, clrSource.G, clrSource.B );
+		}
+
+		public FenuButtonProperties Clone()
+		{
+			FenuButtonProperties fbpClone = this.MemberwiseClone() as FenuButtonProperties;
+			return fbpClone;
 		}
 	}
 }
