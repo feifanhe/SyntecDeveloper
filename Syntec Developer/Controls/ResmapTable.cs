@@ -156,7 +156,9 @@ namespace Syntec_Developer.Controls
 					MessageElement = MessageNode as XmlElement;
 					ID = MessageElement.GetAttribute( "ID" );
 					Content = MessageElement.GetAttribute( "Content" );
-					if( !Contents[ ProcessingLanguage ].Values.ContainsKey( ID ) ) {
+					//Console.WriteLine( " * " + ProcessingLanguage + " :: " + ID + " :: " + Content );
+					if( !Contents[ProcessingLanguage].Values.ContainsKey( ID ) ) {
+
 						Contents[ ProcessingLanguage ].ImportNode( MessageElement );
 					}
 				}
@@ -192,20 +194,6 @@ namespace Syntec_Developer.Controls
 						return _Values[ ID ].GetAttribute( "Content" );
 					return string.Empty;
 				}
-				//set {
-				//    if( value == string.Empty )
-				//        return;
-				//    if( _Values.ContainsKey( ID ) )
-				//        //_Values[ ID ].SetAttribute( "Content", value );
-				//    else
-				//    {
-				//        ParentNode.crea
-				//        element.ParentNode = this.ParentNode;
-				//        element.SetAttribute( "ID", ID );
-				//        element.SetAttribute( "Content", value );
-				//        _Values.Add( ID, element );
-				//    }
-				//}
 			}
 
 			public void ImportNode( XmlElement Node )

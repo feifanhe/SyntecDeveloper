@@ -53,10 +53,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Fenubar\FenuButton.cs">
+    <Compile Include="Controls\FenuButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Fenubar\FenuButton.Designer.cs">
+    <Compile Include="Controls\FenuButton.Designer.cs">
       <DependentUpon>FenuButton.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\IniFile.cs" />
@@ -74,16 +74,16 @@
     <Compile Include="Controls\BrowserItem.Designer.cs">
       <DependentUpon>BrowserItem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Fenubar\Fenu.cs">
+    <Compile Include="Controls\Fenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Fenubar\Fenu.Designer.cs">
+    <Compile Include="Controls\Fenu.Designer.cs">
       <DependentUpon>Fenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Fenubar\FenubarPanel.cs">
+    <Compile Include="Controls\FenubarPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Fenubar\FenubarPanel.Designer.cs">
+    <Compile Include="Controls\FenubarPanel.Designer.cs">
       <DependentUpon>FenubarPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PropertyClasses\Fenubar\EscapeButtonProperties.cs">
@@ -148,15 +148,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>BrowserItem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenubar\Fenu.resx">
+    <EmbeddedResource Include="Controls\Fenu.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Fenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenubar\FenubarPanel.resx">
+    <EmbeddedResource Include="Controls\FenubarPanel.resx">
       <DependentUpon>FenubarPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenubar\FenuButton.resx">
+    <EmbeddedResource Include="Controls\FenuButton.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FenuButton.cs</DependentUpon>
     </EmbeddedResource>
