@@ -35,10 +35,10 @@ namespace Syntec_Developer.Forms
 			this.tvwFenuLinkTree = new System.Windows.Forms.TreeView();
 			this.ctmsRightClickItem = new System.Windows.Forms.ContextMenuStrip( this.components );
 			this.tsmiNewFenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
-			this.tsmiCopyFenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tsmiDeleteFenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiCopyFenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
+			this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tbcSelectDisplayMode.SuspendLayout();
 			this.tbpFenuList.SuspendLayout();
 			this.tbpFenuLinkTree.SuspendLayout();
@@ -113,38 +113,38 @@ namespace Syntec_Developer.Forms
             this.tssSep2,
             this.tsmiDeleteFenu} );
 			this.ctmsRightClickItem.Name = "ctmsRightClickItem";
-			this.ctmsRightClickItem.Size = new System.Drawing.Size( 101, 82 );
+			this.ctmsRightClickItem.Size = new System.Drawing.Size( 153, 104 );
 			// 
 			// tsmiNewFenu
 			// 
 			this.tsmiNewFenu.Name = "tsmiNewFenu";
-			this.tsmiNewFenu.Size = new System.Drawing.Size( 100, 22 );
+			this.tsmiNewFenu.Size = new System.Drawing.Size( 152, 22 );
 			this.tsmiNewFenu.Text = "新增";
 			this.tsmiNewFenu.Click += new System.EventHandler( this.tsmiNewFenu_Click );
-			// 
-			// tssSep1
-			// 
-			this.tssSep1.Name = "tssSep1";
-			this.tssSep1.Size = new System.Drawing.Size( 97, 6 );
-			// 
-			// tsmiCopyFenu
-			// 
-			this.tsmiCopyFenu.Name = "tsmiCopyFenu";
-			this.tsmiCopyFenu.Size = new System.Drawing.Size( 100, 22 );
-			this.tsmiCopyFenu.Text = "複製";
-			this.tsmiCopyFenu.Click += new System.EventHandler( this.tsmiCopyFenu_Click );
-			// 
-			// tssSep2
-			// 
-			this.tssSep2.Name = "tssSep2";
-			this.tssSep2.Size = new System.Drawing.Size( 97, 6 );
 			// 
 			// tsmiDeleteFenu
 			// 
 			this.tsmiDeleteFenu.Name = "tsmiDeleteFenu";
-			this.tsmiDeleteFenu.Size = new System.Drawing.Size( 100, 22 );
+			this.tsmiDeleteFenu.Size = new System.Drawing.Size( 152, 22 );
 			this.tsmiDeleteFenu.Text = "刪除";
 			this.tsmiDeleteFenu.Click += new System.EventHandler( this.tsmiDeleteFenu_Click );
+			// 
+			// tsmiCopyFenu
+			// 
+			this.tsmiCopyFenu.Name = "tsmiCopyFenu";
+			this.tsmiCopyFenu.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiCopyFenu.Text = "複製";
+			this.tsmiCopyFenu.Click += new System.EventHandler( this.tsmiCopyFenu_Click );
+			// 
+			// tssSep1
+			// 
+			this.tssSep1.Name = "tssSep1";
+			this.tssSep1.Size = new System.Drawing.Size( 149, 6 );
+			// 
+			// tssSep2
+			// 
+			this.tssSep2.Name = "tssSep2";
+			this.tssSep2.Size = new System.Drawing.Size( 149, 6 );
 			// 
 			// DCFenuList
 			// 

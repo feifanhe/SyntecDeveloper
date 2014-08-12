@@ -173,9 +173,32 @@ namespace Syntec_Developer.Forms
 
 		#region Edit Control Event
 
+		private void Cut_Click( object sender, EventArgs e )
+		{
+			if( this.m_dcdLastFocusedDocument != null ) {
+				this.m_dcdLastFocusedDocument.Cut_Click();
+			}
+		}
+
+		private void Copy_Click( object sender, EventArgs e )
+		{
+			if( this.m_dcdLastFocusedDocument != null ) {
+				this.m_dcdLastFocusedDocument.Copy_Click();
+			}
+		}
+
+		private void Paste_Click( object sender, EventArgs e )
+		{
+			if( this.m_dcdLastFocusedDocument != null ) {
+				this.m_dcdLastFocusedDocument.Paste_Click();
+			}
+		}
+
 		private void Delete_Click( object sender, EventArgs e )
 		{
-			this.m_dcdLastFocusedDocument.Delete_Click();
+			if( this.m_dcdLastFocusedDocument != null ) {
+				this.m_dcdLastFocusedDocument.Delete_Click();
+			}
 		}
 
 		private void Search_Click( object sender, EventArgs e )
@@ -509,6 +532,8 @@ namespace Syntec_Developer.Forms
 		}
 
 		#endregion
+
+		
 
 	}
 }

@@ -104,6 +104,7 @@ namespace Syntec_Developer.Controls
 			this.Size = new System.Drawing.Size( 500, 100 );
 			this.Leave += new System.EventHandler( this.Fenu_Leave );
 			this.Enter += new System.EventHandler( this.Fenu_Enter );
+			this.SizeChanged += new System.EventHandler( this.Fenu_SizeChanged );
 			this.pnlHeader.ResumeLayout( false );
 			this.pnlHeader.PerformLayout();
 			this.pnlContent.ResumeLayout( false );

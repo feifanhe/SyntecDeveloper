@@ -317,12 +317,5 @@ namespace Syntec_Developer.Controls
 				this.m_xeFenu.Add( this.Buttons[ i ].m_xeButton );
 			}
 		}
-
-		private void Fenu_SizeChanged( object sender, EventArgs e )
-		{
-			for( int i = ESCAPE_INDEX; i <= NEXT_INDEX; i++ ) {
-				this.m_afbFenuButtons[ i ].Width = this.Width / 10;
-			}
-		}
 	}
 }

@@ -131,7 +131,7 @@ namespace Syntec_Developer.Controls
 
 		public void UpdateAlignment( ContentAlignment Alignment )
 		{
-			this.TextAlign = Alignment;
+			this.TextAlign = ContentAlignment.TopLeft;
 		}
 
 		private void FenuButton_KeyDown( object sender, KeyEventArgs e )

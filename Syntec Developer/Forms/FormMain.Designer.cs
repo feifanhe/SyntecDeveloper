@@ -27,21 +27,21 @@ namespace Syntec_Developer.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
-			WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
-			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient1 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
-			WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient2 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient3 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient4 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient5 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin4 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
+			WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin4 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
+			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient10 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient22 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin4 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
+			WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient4 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient23 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient11 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient24 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient4 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient25 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient26 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient12 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient27 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient28 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
 			this.mnsMain = new System.Windows.Forms.MenuStrip();
 			this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +66,7 @@ namespace Syntec_Developer.Forms
 			this.tsmsEditSep2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tsmiSearch = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiToolWindows = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiTreeView = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiToolBox = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiProperties = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,7 +102,6 @@ namespace Syntec_Developer.Forms
 			this.ofdlgOpenFile = new System.Windows.Forms.OpenFileDialog();
 			this.fbdlgWorkDirectory = new Ookii.Dialogs.VistaFolderBrowserDialog();
 			this.stsStatusBar = new System.Windows.Forms.StatusStrip();
-			this.tsmiToolWindows = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnsMain.SuspendLayout();
 			this.tsrFile.SuspendLayout();
 			this.tspTop.SuspendLayout();
@@ -260,30 +260,30 @@ namespace Syntec_Developer.Forms
 			// 
 			// tsmiCut
 			// 
-			this.tsmiCut.Enabled = false;
 			this.tsmiCut.Image = global::Syntec_Developer.Properties.Resources.CutHS;
 			this.tsmiCut.Name = "tsmiCut";
 			this.tsmiCut.ShortcutKeys = ( (System.Windows.Forms.Keys)( ( System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X ) ) );
 			this.tsmiCut.Size = new System.Drawing.Size( 152, 22 );
 			this.tsmiCut.Text = "剪下";
+			this.tsmiCut.Click += new System.EventHandler( this.Cut_Click );
 			// 
 			// tsmiCopy
 			// 
-			this.tsmiCopy.Enabled = false;
 			this.tsmiCopy.Image = global::Syntec_Developer.Properties.Resources.CopyHS;
 			this.tsmiCopy.Name = "tsmiCopy";
 			this.tsmiCopy.ShortcutKeys = ( (System.Windows.Forms.Keys)( ( System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C ) ) );
 			this.tsmiCopy.Size = new System.Drawing.Size( 152, 22 );
 			this.tsmiCopy.Text = "複製";
+			this.tsmiCopy.Click += new System.EventHandler( this.Copy_Click );
 			// 
 			// tsmiPaste
 			// 
-			this.tsmiPaste.Enabled = false;
 			this.tsmiPaste.Image = global::Syntec_Developer.Properties.Resources.PasteHS;
 			this.tsmiPaste.Name = "tsmiPaste";
 			this.tsmiPaste.ShortcutKeys = ( (System.Windows.Forms.Keys)( ( System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V ) ) );
 			this.tsmiPaste.Size = new System.Drawing.Size( 152, 22 );
 			this.tsmiPaste.Text = "貼上";
+			this.tsmiPaste.Click += new System.EventHandler( this.Paste_Click );
 			// 
 			// tsmiDelete
 			// 
@@ -315,24 +315,35 @@ namespace Syntec_Developer.Forms
 			this.tsmiView.Size = new System.Drawing.Size( 60, 20 );
 			this.tsmiView.Text = "檢視(&V)";
 			// 
+			// tsmiToolWindows
+			// 
+			this.tsmiToolWindows.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiTreeView,
+            this.tsmiToolBox,
+            this.tsmiProperties,
+            this.tsmiFenuList} );
+			this.tsmiToolWindows.Name = "tsmiToolWindows";
+			this.tsmiToolWindows.Size = new System.Drawing.Size( 124, 22 );
+			this.tsmiToolWindows.Text = "工具視窗";
+			// 
 			// tsmiTreeView
 			// 
 			this.tsmiTreeView.Name = "tsmiTreeView";
-			this.tsmiTreeView.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiTreeView.Size = new System.Drawing.Size( 136, 22 );
 			this.tsmiTreeView.Text = "瀏覽";
 			this.tsmiTreeView.Click += new System.EventHandler( this.tsmiTreeView_Click );
 			// 
 			// tsmiToolBox
 			// 
 			this.tsmiToolBox.Name = "tsmiToolBox";
-			this.tsmiToolBox.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiToolBox.Size = new System.Drawing.Size( 136, 22 );
 			this.tsmiToolBox.Text = "工具箱";
 			this.tsmiToolBox.Click += new System.EventHandler( this.tsmiToolBox_Click );
 			// 
 			// tsmiProperties
 			// 
 			this.tsmiProperties.Name = "tsmiProperties";
-			this.tsmiProperties.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiProperties.Size = new System.Drawing.Size( 136, 22 );
 			this.tsmiProperties.Text = "屬性";
 			this.tsmiProperties.Click += new System.EventHandler( this.tsmiProperties_Click );
 			// 
@@ -340,7 +351,7 @@ namespace Syntec_Developer.Forms
 			// 
 			this.tsmiFenuList.Enabled = false;
 			this.tsmiFenuList.Name = "tsmiFenuList";
-			this.tsmiFenuList.Size = new System.Drawing.Size( 152, 22 );
+			this.tsmiFenuList.Size = new System.Drawing.Size( 136, 22 );
 			this.tsmiFenuList.Text = "功能鍵列表";
 			this.tsmiFenuList.Click += new System.EventHandler( this.tsmiFenuList_Click );
 			// 
@@ -499,32 +510,33 @@ namespace Syntec_Developer.Forms
 			// tsbCut
 			// 
 			this.tsbCut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbCut.Enabled = false;
 			this.tsbCut.Image = global::Syntec_Developer.Properties.Resources.CutHS;
 			this.tsbCut.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsbCut.Name = "tsbCut";
 			this.tsbCut.Size = new System.Drawing.Size( 23, 22 );
 			this.tsbCut.Text = "剪下";
+			this.tsbCut.Click += new System.EventHandler( this.Cut_Click );
 			// 
 			// tsbCopy
 			// 
 			this.tsbCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbCopy.Enabled = false;
 			this.tsbCopy.Image = global::Syntec_Developer.Properties.Resources.CopyHS;
 			this.tsbCopy.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsbCopy.Name = "tsbCopy";
 			this.tsbCopy.Size = new System.Drawing.Size( 23, 22 );
 			this.tsbCopy.Text = "複製";
+			this.tsbCopy.Click += new System.EventHandler( this.Copy_Click );
 			// 
 			// tsbPaste
 			// 
 			this.tsbPaste.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbPaste.Enabled = false;
 			this.tsbPaste.Image = global::Syntec_Developer.Properties.Resources.PasteHS;
 			this.tsbPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsbPaste.Name = "tsbPaste";
+			this.tsbPaste.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.tsbPaste.Size = new System.Drawing.Size( 23, 22 );
 			this.tsbPaste.Text = "貼上";
+			this.tsbPaste.Click += new System.EventHandler( this.Paste_Click );
 			// 
 			// tsbDelete
 			// 
@@ -629,52 +641,52 @@ namespace Syntec_Developer.Forms
 			this.dplMainPanel.Name = "dplMainPanel";
 			this.dplMainPanel.ShowDocumentIcon = true;
 			this.dplMainPanel.Size = new System.Drawing.Size( 984, 531 );
-			dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
-			dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
-			autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
-			tabGradient1.EndColor = System.Drawing.SystemColors.Control;
-			tabGradient1.StartColor = System.Drawing.SystemColors.Control;
-			tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-			autoHideStripSkin1.TabGradient = tabGradient1;
-			autoHideStripSkin1.TextFont = new System.Drawing.Font( "Microsoft JhengHei", 9F );
-			dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
-			tabGradient2.EndColor = System.Drawing.SystemColors.ActiveCaption;
-			tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
-			tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
-			dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
-			dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
-			dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
-			dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
-			tabGradient3.EndColor = System.Drawing.SystemColors.ControlDark;
-			tabGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
-			tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
-			dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
-			dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-			dockPaneStripSkin1.TextFont = new System.Drawing.Font( "Microsoft JhengHei", 9F );
-			tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
-			tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-			tabGradient4.StartColor = System.Drawing.SystemColors.ActiveCaption;
-			tabGradient4.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
-			dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
-			tabGradient5.EndColor = System.Drawing.SystemColors.Control;
-			tabGradient5.StartColor = System.Drawing.SystemColors.Control;
-			tabGradient5.TextColor = System.Drawing.SystemColors.ControlText;
-			dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
-			dockPanelGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
-			dockPanelGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
-			dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
-			tabGradient6.EndColor = System.Drawing.SystemColors.InactiveCaption;
-			tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-			tabGradient6.StartColor = System.Drawing.SystemColors.InactiveCaption;
-			tabGradient6.TextColor = System.Drawing.SystemColors.InactiveCaptionText;
-			dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
-			tabGradient7.EndColor = System.Drawing.Color.Transparent;
-			tabGradient7.StartColor = System.Drawing.Color.Transparent;
-			tabGradient7.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-			dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
-			dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
-			dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-			this.dplMainPanel.Skin = dockPanelSkin1;
+			dockPanelGradient10.EndColor = System.Drawing.SystemColors.ControlLight;
+			dockPanelGradient10.StartColor = System.Drawing.SystemColors.ControlLight;
+			autoHideStripSkin4.DockStripGradient = dockPanelGradient10;
+			tabGradient22.EndColor = System.Drawing.SystemColors.Control;
+			tabGradient22.StartColor = System.Drawing.SystemColors.Control;
+			tabGradient22.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+			autoHideStripSkin4.TabGradient = tabGradient22;
+			autoHideStripSkin4.TextFont = new System.Drawing.Font( "Microsoft JhengHei", 9F );
+			dockPanelSkin4.AutoHideStripSkin = autoHideStripSkin4;
+			tabGradient23.EndColor = System.Drawing.SystemColors.ActiveCaption;
+			tabGradient23.StartColor = System.Drawing.SystemColors.ControlLightLight;
+			tabGradient23.TextColor = System.Drawing.SystemColors.ControlText;
+			dockPaneStripGradient4.ActiveTabGradient = tabGradient23;
+			dockPanelGradient11.EndColor = System.Drawing.SystemColors.Control;
+			dockPanelGradient11.StartColor = System.Drawing.SystemColors.Control;
+			dockPaneStripGradient4.DockStripGradient = dockPanelGradient11;
+			tabGradient24.EndColor = System.Drawing.SystemColors.ControlDark;
+			tabGradient24.StartColor = System.Drawing.SystemColors.ControlLight;
+			tabGradient24.TextColor = System.Drawing.SystemColors.ControlText;
+			dockPaneStripGradient4.InactiveTabGradient = tabGradient24;
+			dockPaneStripSkin4.DocumentGradient = dockPaneStripGradient4;
+			dockPaneStripSkin4.TextFont = new System.Drawing.Font( "Microsoft JhengHei", 9F );
+			tabGradient25.EndColor = System.Drawing.SystemColors.ActiveCaption;
+			tabGradient25.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+			tabGradient25.StartColor = System.Drawing.SystemColors.ActiveCaption;
+			tabGradient25.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
+			dockPaneStripToolWindowGradient4.ActiveCaptionGradient = tabGradient25;
+			tabGradient26.EndColor = System.Drawing.SystemColors.Control;
+			tabGradient26.StartColor = System.Drawing.SystemColors.Control;
+			tabGradient26.TextColor = System.Drawing.SystemColors.ControlText;
+			dockPaneStripToolWindowGradient4.ActiveTabGradient = tabGradient26;
+			dockPanelGradient12.EndColor = System.Drawing.SystemColors.ControlLight;
+			dockPanelGradient12.StartColor = System.Drawing.SystemColors.ControlLight;
+			dockPaneStripToolWindowGradient4.DockStripGradient = dockPanelGradient12;
+			tabGradient27.EndColor = System.Drawing.SystemColors.InactiveCaption;
+			tabGradient27.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+			tabGradient27.StartColor = System.Drawing.SystemColors.InactiveCaption;
+			tabGradient27.TextColor = System.Drawing.SystemColors.InactiveCaptionText;
+			dockPaneStripToolWindowGradient4.InactiveCaptionGradient = tabGradient27;
+			tabGradient28.EndColor = System.Drawing.Color.Transparent;
+			tabGradient28.StartColor = System.Drawing.Color.Transparent;
+			tabGradient28.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+			dockPaneStripToolWindowGradient4.InactiveTabGradient = tabGradient28;
+			dockPaneStripSkin4.ToolWindowGradient = dockPaneStripToolWindowGradient4;
+			dockPanelSkin4.DockPaneStripSkin = dockPaneStripSkin4;
+			this.dplMainPanel.Skin = dockPanelSkin4;
 			this.dplMainPanel.TabIndex = 3;
 			// 
 			// ofdlgOpenFile
@@ -689,17 +701,6 @@ namespace Syntec_Developer.Forms
 			this.stsStatusBar.Name = "stsStatusBar";
 			this.stsStatusBar.Size = new System.Drawing.Size( 984, 22 );
 			this.stsStatusBar.TabIndex = 10;
-			// 
-			// tsmiToolWindows
-			// 
-			this.tsmiToolWindows.DropDownItems.AddRange( new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiTreeView,
-            this.tsmiToolBox,
-            this.tsmiProperties,
-            this.tsmiFenuList} );
-			this.tsmiToolWindows.Name = "tsmiToolWindows";
-			this.tsmiToolWindows.Size = new System.Drawing.Size( 152, 22 );
-			this.tsmiToolWindows.Text = "工具視窗";
 			// 
 			// FormMain
 			// 

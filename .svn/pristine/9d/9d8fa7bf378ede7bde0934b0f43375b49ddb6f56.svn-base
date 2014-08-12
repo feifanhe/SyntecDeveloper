@@ -24,11 +24,11 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_nAlignment = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
 				if( this.AlignmentChanged != null )
 					this.AlignmentChanged.Invoke( this, new EventArgs() );
+				this.m_nAlignment = value;
 			}
 		}
 
@@ -43,9 +43,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_bButton3D = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				this.m_bButton3D = value;
 			}
 		}
 
@@ -60,9 +60,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_nLevel3D = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				this.m_nLevel3D = value;
 			}
 		}
 
@@ -77,9 +77,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_bNoFunc = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				this.m_bNoFunc = value;
 			}
 		}
 
@@ -94,9 +94,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_bNoLR = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				this.m_bNoLR = value;
 			}
 		}
 
@@ -111,9 +111,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_bBigLR = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				this.m_bBigLR = value;
 			}
 		}
 
@@ -128,9 +128,9 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 			set
 			{
-				this.m_bTextOverPic = value;
 				if( this.PropertiesChanged != null )
 					this.PropertiesChanged.Invoke( this, new EventArgs() );
+				this.m_bTextOverPic = value;
 			}
 		}
 

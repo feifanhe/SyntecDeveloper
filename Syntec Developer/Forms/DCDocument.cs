@@ -12,12 +12,6 @@ using System.Diagnostics;
 
 namespace Syntec_Developer.Forms
 {
-	//public enum DocumentType
-	//{
-	//    browser,
-	//    fenubar
-	//};
-
 	public partial class DCDocument : DockContent
 	{
 		private string m_sFullName;
@@ -139,7 +133,6 @@ namespace Syntec_Developer.Forms
 			this.Controls.Add( this.m_fpFenubar );
 		}
 
-
 		#endregion
 
 		#region Event functions to pass up, called by browser or fenubar
@@ -202,7 +195,6 @@ namespace Syntec_Developer.Forms
 		private void Fenubar_PropertiesChanged( object sender, EventArgs e )
 		{
 			CheckModifiedState();
-			//BrowserItemPropertiesChanged.Invoke( sender, e );
 		}
 
 		#endregion
@@ -228,6 +220,39 @@ namespace Syntec_Developer.Forms
 			//}
 		}
 
+		public void Cut_Click()
+		{
+			switch( this.m_dtType ) {
+				case DocumentType.browser:
+					break;
+				case DocumentType.fenubar:
+					this.m_fpFenubar.Cut_Click();
+					break;
+			}
+		}
+
+		public void Copy_Click()
+		{
+			switch( this.m_dtType ) {
+				case DocumentType.browser:
+					break;
+				case DocumentType.fenubar:
+					this.m_fpFenubar.Copy_Click();
+					break;
+			}
+		}
+
+		public void Paste_Click()
+		{
+			switch( this.m_dtType ) {
+				case DocumentType.browser:
+					break;
+				case DocumentType.fenubar:
+					this.m_fpFenubar.Paste_Click();
+					break;
+			}
+		}
+
 		public void Delete_Click()
 		{
 			switch( this.m_dtType ) {
@@ -235,6 +260,7 @@ namespace Syntec_Developer.Forms
 					this.m_bpBrowser.DeleteItems();
 					break;
 				case DocumentType.fenubar:
+					this.m_fpFenubar.Delete_Click();
 					break;
 			}
 		}

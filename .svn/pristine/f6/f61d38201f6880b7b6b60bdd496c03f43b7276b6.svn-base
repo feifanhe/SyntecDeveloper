@@ -72,7 +72,7 @@ namespace Syntec_Developer.Controls
 			// tssSep1
 			// 
 			this.tssSep1.Name = "tssSep1";
-			this.tssSep1.Size = new System.Drawing.Size( 97, 6 );
+			this.tssSep1.Size = new System.Drawing.Size( 187, 6 );
 			// 
 			// tsmiClear
 			// 
@@ -86,7 +86,7 @@ namespace Syntec_Developer.Controls
 			this.Dock = System.Windows.Forms.DockStyle.Left;
 			this.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Margin = new System.Windows.Forms.Padding( 0 );
-			this.Size = new System.Drawing.Size( 65, 55 );
+			this.Size = new System.Drawing.Size( 75, 60 );
 			this.UseVisualStyleBackColor = false;
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler( this.FenuButton_MouseUp );
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler( this.FenuButton_KeyDown );

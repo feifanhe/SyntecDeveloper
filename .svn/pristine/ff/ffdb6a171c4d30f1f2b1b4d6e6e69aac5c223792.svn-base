@@ -26,7 +26,6 @@ namespace Syntec_Developer.Controls
 		private FenubarProperties m_fpProperties;
 		private ResmapTable m_rtResmapTable;
 
-		private FenuButton m_fbLastFocusedFenuButton;
 		private bool isCut = false;
 		private FenuButton m_fbCopySource;
 
@@ -92,9 +91,6 @@ namespace Syntec_Developer.Controls
 
 		#endregion
 
-
-		#region Initialize
-
 		public FenubarPanel( string sFileName, bool bIsNewFile, ResmapTable rtResmapTable )
 		{
 			InitializeComponent();
@@ -115,7 +111,6 @@ namespace Syntec_Developer.Controls
 			this.m_fpProperties.AlignmentChanged += new EventHandler( Fenubar_AlignmentChanged );
 		}
 
-		#endregion
 
 		#region Load
 
@@ -135,7 +130,6 @@ namespace Syntec_Developer.Controls
 		private void bgwLoadXml_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
 			this.m_bHasLoaded = true;
-			UpdateButtonsAlignment();
 			this.XmlLoadCompleted.Invoke( this, e );
 		}
 
@@ -267,31 +261,6 @@ namespace Syntec_Developer.Controls
 		}
 
 		#endregion
-		
-		#region Edit Fenubar
-
-		private void Fenubar_PropertiesChanged( object sneder, EventArgs e )
-		{
-			if( this.m_bHasLoaded ) {
-				this.FenubarPropertiesChanged.Invoke( this, e );
-			}
-		}
-
-		private void Fenubar_AlignmentChanged( object sneder, EventArgs e )
-		{
-			UpdateButtonsAlignment();
-		}
-
-		private void UpdateButtonsAlignment()
-		{
-			foreach( Fenu fnFenu in this.m_htbFenus.Values ) {
-				fnFenu.UpdateButtonAlignment( this.Properties.Alignment );
-			}
-		}
-
-		#endregion
-
-		#region Edit Fenu
 
 		public void ShowFenu( string sFenuName )
 		{
@@ -346,59 +315,16 @@ namespace Syntec_Developer.Controls
 			this.m_lstOpenedFenu.Remove( fnFenuToClose );
 		}
 
-		#endregion
-
-		#region Edit FenuButton
-
-
 		private void FenuButton_Click( object sender, EventArgs e )
 		{
-			this.m_fbLastFocusedFenuButton = sender as FenuButton;
 			if( this.FenuButtonClick != null ) {
 				this.FenuButtonClick.Invoke( sender, e );
 			}
 		}
 
-		public void Cut_Click()
-		{
-			if( this.m_fbLastFocusedFenuButton != null && this.m_fbLastFocusedFenuButton.Focused ) {
-				this.m_fbCopySource = this.m_fbLastFocusedFenuButton;
-				this.isCut = true;
-			}
-		}
-
-		public void Copy_Click()
-		{
-			if( this.m_fbLastFocusedFenuButton != null && this.m_fbLastFocusedFenuButton.Focused ) {
-				this.m_fbCopySource = this.m_fbLastFocusedFenuButton;
-				this.isCut = false;
-			}
-		}
-
-		public void Paste_Click()
-		{
-			if( this.m_fbCopySource == null ) {
-				return;
-			}
-
-			if( this.m_fbLastFocusedFenuButton != null && this.m_fbLastFocusedFenuButton.Focused ) {
-				FenuButton fbPasteTarget = this.m_fbLastFocusedFenuButton;
-				fbPasteTarget.CopyProperties( this.m_fbCopySource );
-				if( isCut ) {
-					this.m_fbCopySource.Clear();
-				}
-			}
-		}
-
-		public void Delete_Click()
-		{
-			if( this.m_fbLastFocusedFenuButton != null && this.m_fbLastFocusedFenuButton.Focused ) {
-				this.m_fbLastFocusedFenuButton.Clear();
-			}
-		}
-
 		private void FenuButton_Cut( object sender, EventArgs e )
 		{
+			Console.WriteLine( "CUT" );
 			this.isCut = true;
 			this.m_fbCopySource = sender as FenuButton;
 		}
@@ -417,11 +343,24 @@ namespace Syntec_Developer.Controls
 			FenuButton fbPasteTarget = sender as FenuButton;
 			fbPasteTarget.CopyProperties( this.m_fbCopySource );
 			if( isCut ) {
+				Console.WriteLine( "CLEAR" );
 				this.m_fbCopySource.Clear();
 			}
 		}
 
-		#endregion
+		private void Fenubar_PropertiesChanged( object sneder, EventArgs e )
+		{
+			if( this.m_bHasLoaded ) {
+				this.FenubarPropertiesChanged.Invoke( this, e );
+			}
+		}
+
+		private void Fenubar_AlignmentChanged( object sneder, EventArgs e )
+		{
+			foreach( Fenu fnFenu in this.m_htbFenus.Values ) {
+				fnFenu.UpdateButtonAlignment( this.Properties.Alignment );
+			}
+		}
 
 		#region Save
 
@@ -471,7 +410,5 @@ namespace Syntec_Developer.Controls
 		}
 
 		#endregion
-
-		
 	}
 }
