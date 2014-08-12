@@ -42,6 +42,12 @@ namespace Syntec_Developer.Forms
 			ConstructFenuLinkTree();
 		}
 
+		public void Fenubar_FenuShowByKeyLink( object sender, EventArgs e )
+		{
+			SetFenuListCheckState();
+			SetFenuLinkTreeCheckState();
+		}
+
 		public void Fenu_Close( object sender, EventArgs e )
 		{
 			Fenu fnFenuToClose = sender as Fenu;

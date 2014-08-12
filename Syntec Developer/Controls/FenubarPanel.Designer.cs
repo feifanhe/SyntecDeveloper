@@ -41,6 +41,7 @@ namespace Syntec_Developer.Controls
 			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 12F );
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoScroll = true;
+			this.AutoScrollMargin = new System.Drawing.Size( 0, 10 );
 			this.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this.Name = "FenubarPanel";
 			this.Load += new System.EventHandler( this.FenubarPanel_Load );

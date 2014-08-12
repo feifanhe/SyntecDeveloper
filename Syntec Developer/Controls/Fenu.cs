@@ -280,7 +280,15 @@ namespace Syntec_Developer.Controls
 			SaveFenuName();
 			foreach( FenuButton fbButton in this.m_afbFenuButtons ) {
 				if( fbButton.Valid ) {
+					if( fbButton.m_xeButton.Parent == null ) {
+						this.m_xeFenu.Add( fbButton.m_xeButton );
+					}
 					fbButton.SaveFenuButton();
+				}
+				else {
+					if( fbButton.m_xeButton.Parent != null ) {
+						fbButton.m_xeButton.Remove();
+					}
 				}
 			}
 		}

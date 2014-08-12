@@ -35,6 +35,7 @@ namespace Syntec_Developer.Controls
 
 		public event RunWorkerCompletedEventHandler XmlLoadCompleted;
 		public event EventHandler FenuClose;
+		public event EventHandler FenuShowByKeyLink;
 		public event EventHandler FenuButtonClick;
 		public event EventHandler FenubarPropertiesChanged;
 
@@ -92,7 +93,6 @@ namespace Syntec_Developer.Controls
 
 		#endregion
 
-
 		#region Initialize
 
 		public FenubarPanel( string sFileName, bool bIsNewFile, ResmapTable rtResmapTable )
@@ -123,6 +123,10 @@ namespace Syntec_Developer.Controls
 		{
 			if( !this.m_bIsNewFile && !this.m_bHasLoaded ) {
 				this.bgwLoadXml.RunWorkerAsync();
+			}
+			else if( this.m_bIsNewFile ) {
+				this.m_xeRoot = new XElement( "root" );
+				this.m_xdDocument = new XDocument( this.m_xeRoot );
 			}
 		}
 
@@ -230,13 +234,20 @@ namespace Syntec_Developer.Controls
 			FenuButton fbButton = sender as FenuButton;
 			if( !fbButton.Properties.Link.Equals( string.Empty ) ) {
 				ShowFenu( fbButton.Properties.Link );
+				if( this.FenuShowByKeyLink != null ) {
+					this.FenuShowByKeyLink.Invoke( sender, e );
+				}
 			}
 			else {
 				string sActionLinkFenuName = GetActionLinkedFenuOfButton( fbButton );
 				if( !sActionLinkFenuName.Equals( string.Empty ) ) {
 					ShowFenu( sActionLinkFenuName );
+					if( this.FenuShowByKeyLink != null ) {
+						this.FenuShowByKeyLink.Invoke( sender, e );
+					}
 				}
 			}
+			
 		}
 
 		private string GetActionLinkedFenuOfButton( FenuButton fbButton )
@@ -267,7 +278,7 @@ namespace Syntec_Developer.Controls
 		}
 
 		#endregion
-		
+
 		#region Edit Fenubar
 
 		private void Fenubar_PropertiesChanged( object sneder, EventArgs e )
@@ -335,6 +346,7 @@ namespace Syntec_Developer.Controls
 			Fenu fnSourceFenu = this.m_htbFenus[ sFenuName ] as Fenu;
 			Fenu fnCloneFenu = fnSourceFenu.Clone();
 			fnCloneFenu.Properties.Name = string.Concat( fnCloneFenu.Properties.Name, " - Copy" );
+			fnCloneFenu.Text = fnCloneFenu.Properties.Name;
 			AddFenu( fnCloneFenu );
 		}
 
@@ -384,6 +396,7 @@ namespace Syntec_Developer.Controls
 			if( this.m_fbLastFocusedFenuButton != null && this.m_fbLastFocusedFenuButton.Focused ) {
 				FenuButton fbPasteTarget = this.m_fbLastFocusedFenuButton;
 				fbPasteTarget.CopyProperties( this.m_fbCopySource );
+				fbPasteTarget.Valid = this.m_fbCopySource.Valid;
 				if( isCut ) {
 					this.m_fbCopySource.Clear();
 				}
@@ -416,6 +429,7 @@ namespace Syntec_Developer.Controls
 			}
 			FenuButton fbPasteTarget = sender as FenuButton;
 			fbPasteTarget.CopyProperties( this.m_fbCopySource );
+			fbPasteTarget.Valid = this.m_fbCopySource.Valid;
 			if( isCut ) {
 				this.m_fbCopySource.Clear();
 			}
@@ -436,13 +450,39 @@ namespace Syntec_Developer.Controls
 
 		private void SaveFenubarProperties()
 		{
-			SaveValueIntoXmlNode( "Alignment", ( (int)this.Properties.Alignment ).ToString() );
+			SaveValueIntoXmlNode( "Alignment", ConvertAlignmentToInt().ToString() );
 			SaveValueIntoXmlNode( "Button3D", this.Properties.Button3D.ToString() );
 			SaveValueIntoXmlNode( "Level3D", this.Properties.Level3D.ToString() );
 			SaveValueIntoXmlNode( "NoFunc", this.Properties.NoFunc.ToString() );
 			SaveValueIntoXmlNode( "NoLR", this.Properties.NoLR.ToString() );
 			SaveValueIntoXmlNode( "BigLR", this.Properties.BigLR.ToString() );
 			SaveValueIntoXmlNode( "TextOverPic", this.Properties.TextOverPic.ToString() );
+		}
+
+		private int ConvertAlignmentToInt()
+		{
+			switch( this.Properties.Alignment ) {
+				case ContentAlignment.TopLeft:
+					return 1;
+				case ContentAlignment.TopCenter:
+					return 2;
+				case ContentAlignment.TopRight:
+					return 3;
+				case ContentAlignment.MiddleLeft:
+					return 4;
+				case ContentAlignment.MiddleCenter:
+					return 5;
+				case ContentAlignment.MiddleRight:
+					return 6;
+				case ContentAlignment.BottomLeft:
+					return 7;
+				case ContentAlignment.BottomCenter:
+					return 8;
+				case ContentAlignment.BottomRight:
+					return 9;
+				default:
+					return 1;
+			}
 		}
 
 		private void SaveValueIntoXmlNode( string sNodeName, string sValue )
@@ -472,6 +512,6 @@ namespace Syntec_Developer.Controls
 
 		#endregion
 
-		
+
 	}
 }

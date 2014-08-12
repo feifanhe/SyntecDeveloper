@@ -75,7 +75,7 @@ namespace Syntec_Developer.Controls
 		{
 			List<string> IDs = new List<string>();
 			foreach( string Key in this.Contents[ Language ].Values.Keys ) {
-				if( Key.Contains( KeyWord ) ) {
+				if( this.Contents[ Language ][ Key ].Contains( KeyWord ) ) {
 					IDs.Add( Key );
 				}
 			}
@@ -157,7 +157,7 @@ namespace Syntec_Developer.Controls
 					ID = MessageElement.GetAttribute( "ID" );
 					Content = MessageElement.GetAttribute( "Content" );
 					//Console.WriteLine( " * " + ProcessingLanguage + " :: " + ID + " :: " + Content );
-					if( !Contents[ProcessingLanguage].Values.ContainsKey( ID ) ) {
+					if( !Contents[ ProcessingLanguage ].Values.ContainsKey( ID ) ) {
 
 						Contents[ ProcessingLanguage ].ImportNode( MessageElement );
 					}

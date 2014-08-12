@@ -21,7 +21,7 @@ namespace Syntec_Developer.Forms
 		private BrowserPanel m_bpBrowser;
 		private FenubarPanel m_fpFenubar;
 		private ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
-		
+
 		internal ResmapTable m_rtResmapTable;
 
 		public DocumentType Type
@@ -75,6 +75,7 @@ namespace Syntec_Developer.Forms
 		public event FenubarXmlLoadCompletedHandler FenubarXmlLoadCompleted;
 		public delegate void FenuButtonClickHandler( object sender, EventArgs e );
 		public event FenuButtonClickHandler FenuButtonClick;
+		public event EventHandler FenuShowByKeyLink;
 
 		#region Initialize
 
@@ -127,8 +128,8 @@ namespace Syntec_Developer.Forms
 			this.m_fpFenubar.XmlLoadCompleted += new RunWorkerCompletedEventHandler( Fenubar_XmlLoadCompleted );
 			this.m_fpFenubar.FenuClose += new EventHandler( Fenu_Close );
 			this.m_fpFenubar.FenuButtonClick += new EventHandler( FenuButton_Click );
-			this.m_fpFenubar.FenubarPropertiesChanged += new EventHandler(Fenubar_PropertiesChanged);
-
+			this.m_fpFenubar.FenubarPropertiesChanged += new EventHandler( Fenubar_PropertiesChanged );
+			this.m_fpFenubar.FenuShowByKeyLink += new EventHandler( Fenubar_FenuShowByKeyLink );
 			this.Text = this.m_fpFenubar.FileName;
 			this.Controls.Add( this.m_fpFenubar );
 		}
@@ -197,6 +198,11 @@ namespace Syntec_Developer.Forms
 			CheckModifiedState();
 		}
 
+		private void Fenubar_FenuShowByKeyLink( object sender, EventArgs e )
+		{
+			this.FenuShowByKeyLink.Invoke( sender, e );
+		}
+
 		#endregion
 
 		#region FormMain-Called Functions
@@ -204,19 +210,19 @@ namespace Syntec_Developer.Forms
 		public void SaveFile()
 		{
 			//if( this.m_bIsModified ) {
-				switch( this.m_dtType ) {
-					case DocumentType.browser:
-						this.m_bpBrowser.SaveFile();
-						this.m_sFullName = this.m_bpBrowser.FullName;
-						this.Text = this.m_bpBrowser.FileName;
-						break;
-					case DocumentType.fenubar:
-						this.m_fpFenubar.SaveFile();
-						this.m_sFullName = this.m_fpFenubar.FullName;
-						this.Text = this.m_fpFenubar.FileName;
-						break;
-				}
-				this.m_bIsModified = false;
+			switch( this.m_dtType ) {
+				case DocumentType.browser:
+					this.m_bpBrowser.SaveFile();
+					this.m_sFullName = this.m_bpBrowser.FullName;
+					this.Text = this.m_bpBrowser.FileName;
+					break;
+				case DocumentType.fenubar:
+					this.m_fpFenubar.SaveFile();
+					this.m_sFullName = this.m_fpFenubar.FullName;
+					this.Text = this.m_fpFenubar.FileName;
+					break;
+			}
+			this.m_bIsModified = false;
 			//}
 		}
 
@@ -318,7 +324,7 @@ namespace Syntec_Developer.Forms
 
 		private void BrowseInExplorer()
 		{
-			Process.Start( "EXPLORER.EXE", string.Concat("/select, ", this.FullName) );
+			Process.Start( "EXPLORER.EXE", string.Concat( "/select, ", this.FullName ) );
 		}
 
 		private void tsmiClose_Click( object sender, EventArgs e )

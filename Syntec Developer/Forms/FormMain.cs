@@ -88,7 +88,8 @@ namespace Syntec_Developer.Forms
 			this.m_dcToolBox.FormClosing += new FormClosingEventHandler( m_dcToolBox_FormClosing );
 			this.m_dcToolBox.Show( this.m_dcProperties.Pane, DockAlignment.Top, 0.5 );
 
-			this.tsmiToolBox.Checked = true;
+			//this.tsmiToolBox.Checked = true;
+			this.m_dcToolBox.Hide();
 		}
 
 		private void InitializeFenuListWindow()
@@ -148,13 +149,13 @@ namespace Syntec_Developer.Forms
 		private void SaveFile_Click( object sender, EventArgs e )
 		{
 			if( this.m_dcdLastFocusedDocument != null ) {
-				m_dcdLastFocusedDocument.SaveFile();
+				this.m_dcdLastFocusedDocument.SaveFile();
 			}
 			else {
 				MessageBox.Show( "Fail to save the document." );
 			}
-
-			m_rtResmapTable.SaveResmap();
+			this.m_rtResmapTable.SaveResmap();
+			this.m_dcTreeView.LoadDirectory( this.m_sWorkDirectory );
 		}
 
 		private void SaveAll_Click( object sender, EventArgs e )
@@ -384,6 +385,7 @@ namespace Syntec_Developer.Forms
 			dcdDocumentToShow.FenuClose += new DCDocument.FenuCloseHandler( m_dcFenuList.Fenu_Close );
 			dcdDocumentToShow.FenuButtonClick +=
 				new DCDocument.FenuButtonClickHandler( m_dcProperties.FenuButton_Click );
+			dcdDocumentToShow.FenuShowByKeyLink += new EventHandler( m_dcFenuList.Fenubar_FenuShowByKeyLink );
 		}
 
 		#endregion
@@ -533,7 +535,7 @@ namespace Syntec_Developer.Forms
 
 		#endregion
 
-		
+
 
 	}
 }

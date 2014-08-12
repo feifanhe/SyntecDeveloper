@@ -7,22 +7,8 @@ using System.Xml.Linq;
 using System.Reflection;
 namespace Syntec_Developer.Controls.PropertyClasses
 {
-	class EscapeButtonProperties : FenuButtonProperties
+	class NextButtonProperties : FenuButtonProperties
 	{
-		[BrowsableAttribute( false )]
-		[CategoryAttribute( "Common" )]
-		public new int UserLevel
-		{
-			get
-			{
-				return this.m_nUserLevel;
-			}
-			set
-			{
-				this.m_nUserLevel = value;
-			}
-		}
-
 		[BrowsableAttribute( false )]
 		[CategoryAttribute( "Button" )]
 		public new LanguagePack Title
@@ -117,7 +103,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		public EscapeButtonProperties( FenuButton fbButton )
+		public NextButtonProperties( FenuButton fbButton )
 			: base( fbButton )
 		{
 		}
@@ -129,6 +115,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			SaveState();
 			SaveLink();
 			SaveVisible();
+			SaveUserLevel();
 		}
 	}
 }

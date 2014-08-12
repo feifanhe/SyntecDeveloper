@@ -27,6 +27,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		protected bool m_bHoldMode;
 		protected Color m_clrLightOnColor;
 
+		public event EventHandler PropertiesChanged;
+
 		[BrowsableAttribute( true )]
 		[CategoryAttribute( "Common" )]
 		public List<string> Actions
@@ -38,6 +40,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_lstActions = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -52,6 +56,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_ActionsWithPassword = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -66,6 +72,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_bState = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -80,6 +88,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_sLink = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -94,6 +104,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_bVisible = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -108,6 +120,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_nUserLevel = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -118,6 +132,12 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			get
 			{
 				return this.m_lpTitle;
+			}
+			set
+			{
+				this.m_lpTitle = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -147,6 +167,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_sPicture = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -161,6 +183,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_clrForeColor = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -175,6 +199,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_clrBackColor = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -189,6 +215,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_bHoldMode = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -203,6 +231,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			set
 			{
 				this.m_clrLightOnColor = value;
+				if( this.PropertiesChanged != null )
+					this.PropertiesChanged.Invoke( this, new EventArgs() );
 			}
 		}
 
@@ -385,7 +415,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		{
 			SaveActions();
 			SaveActionsWithPassword();
-			SaveSatate();
+			SaveState();
 			SaveLink();
 			SaveVisible();
 			SaveUserLevel();
@@ -467,7 +497,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			}
 		}
 
-		protected void SaveSatate()
+		protected void SaveState()
 		{
 			if( this.m_xeButton.Element( "state" ) == null ) {
 				this.m_xeButton.Add( new XElement( "state" ) );
@@ -618,6 +648,7 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		public FenuButtonProperties Clone()
 		{
 			FenuButtonProperties fbpClone = this.MemberwiseClone() as FenuButtonProperties;
+			fbpClone.Title = this.Title.Clone();
 			return fbpClone;
 		}
 	}

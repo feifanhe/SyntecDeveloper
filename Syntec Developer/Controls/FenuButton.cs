@@ -37,6 +37,10 @@ namespace Syntec_Developer.Controls
 			{
 				return this.m_bValid;
 			}
+			set
+			{
+				this.m_bValid = value;
+			}
 		}
 
 		public FenuButtonProperties Properties
@@ -66,12 +70,18 @@ namespace Syntec_Developer.Controls
 			this.m_xeButton = xeButton;
 			this.m_rtResmapTable = rtResmapTable;
 			InitializeButtonType( this.m_xeButton.Name.LocalName );
-			if( this.Type == FenuButtonType.escape ) {
-				this.m_fbpProperties = new EscapeButtonProperties( this );
+			switch( this.Type ) {
+				case FenuButtonType.button:
+					this.m_fbpProperties = new FenuButtonProperties( this );
+					break;
+				case FenuButtonType.escape:
+					this.m_fbpProperties = new EscapeButtonProperties( this );
+					break;
+				case FenuButtonType.next:
+					this.m_fbpProperties = new NextButtonProperties( this );
+					break;
 			}
-			else {
-				this.m_fbpProperties = new FenuButtonProperties( this );
-			}
+			this.m_fbpProperties.PropertiesChanged += new EventHandler( FenuButton_PropertiesChanged );
 			SetText();
 		}
 
@@ -83,6 +93,7 @@ namespace Syntec_Developer.Controls
 			this.m_rtResmapTable = rtResmapTable;
 			InitializeButtonType( this.m_xeButton.Name.LocalName );
 			this.m_fbpProperties = new FenuButtonProperties( this );
+			this.m_fbpProperties.PropertiesChanged += new EventHandler( FenuButton_PropertiesChanged );
 			this.m_fbpProperties.Position = nPosition;
 			SetText();
 
@@ -160,6 +171,10 @@ namespace Syntec_Developer.Controls
 		public void SaveFenuButton()
 		{
 			this.m_fbpProperties.SaveFenuButtonProperties();
+			List<XElement> lst = new List<XElement>( this.m_xeButton.Elements() );
+			if( lst.Count < 2 ) {
+				this.m_xeButton.Remove();
+			}
 		}
 
 		public void CopyProperties( FenuButton fbSource )
@@ -175,6 +190,11 @@ namespace Syntec_Developer.Controls
 			if( e.Button == MouseButtons.Right ) {
 				this.ctmsRightClick.Show( this, e.Location );
 			}
+		}
+
+		private void FenuButton_PropertiesChanged( object sender, EventArgs e )
+		{
+			this.Valid = true;
 		}
 
 		private void tsmiClear_Click( object sender, EventArgs e )
@@ -203,6 +223,7 @@ namespace Syntec_Developer.Controls
 			this.m_xeButton.Add( new XElement( "position", this.Properties.Position.ToString() ) );
 			FenuButtonProperties fbpNewProperties = new FenuButtonProperties( this );
 			this.m_fbpProperties = fbpNewProperties;
+			this.m_bValid = false;
 			SetText();
 		}
 

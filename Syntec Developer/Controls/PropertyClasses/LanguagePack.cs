@@ -29,7 +29,8 @@ namespace Syntec_Developer.Controls.PropertyClasses
 			{
 				return this.m_dicValues;
 			}
-			set {
+			set
+			{
 				this.m_dicValues = value;
 			}
 		}
@@ -43,6 +44,16 @@ namespace Syntec_Developer.Controls.PropertyClasses
 		public override string ToString()
 		{
 			return string.Empty;
+		}
+
+		public LanguagePack Clone()
+		{
+			LanguagePack Clone = this.MemberwiseClone() as LanguagePack;
+			Clone.Values = new Dictionary<string, string>();
+			foreach( string Key in this.Values.Keys ) {
+				Clone.Values[ Key ] = this.Values[ Key ];
+			}
+			return Clone;
 		}
 	}
 }
