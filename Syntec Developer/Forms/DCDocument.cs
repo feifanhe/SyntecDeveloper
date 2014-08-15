@@ -14,16 +14,39 @@ namespace Syntec_Developer.Forms
 {
 	public partial class DCDocument : DockContent
 	{
-		private string m_sFullName;
+		// Flags
 		private bool m_bIsNewFile;
 		private bool m_bIsModified;
-		private DocumentType m_dtType;
-		private BrowserPanel m_bpBrowser;
-		//private FenubarPanel m_fpFenubar;
+		// Tool Windows
+		private DCProperties m_dcpPropertiesWindow;
+		public DCProperties PropertiesWindow
+		{
+			get
+			{
+				return this.m_dcpPropertiesWindow;
+			}
+			set
+			{
+				this.m_dcpPropertiesWindow = value;
+			}
+		}
+		private DCFenuList m_dcflFenuListWindow;
+		public DCFenuList FenuListWindow
+		{
+			get
+			{
+				return this.m_dcflFenuListWindow;
+			}
+			set
+			{
+				this.m_dcflFenuListWindow = value;
+			}
+		}
+		// Resources
 		private ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
-		
 		internal ResmapTable m_rtResmapTable;
 
+		private DocumentType m_dtType;
 		public DocumentType Type
 		{
 			get
@@ -32,6 +55,7 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
+		private string m_sFullName;
 		public string FullName
 		{
 			get
@@ -40,6 +64,7 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
+		private BrowserPanel m_bpBrowser;
 		public BrowserPanel Browser
 		{
 			get
@@ -48,13 +73,14 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
-		//public FenubarPanel Fenubar
-		//{
-		//    get
-		//    {
-		//        return this.m_fpFenubar;
-		//    }
-		//}
+		private FenubarPanel m_fpFenubar;
+		public FenubarPanel Fenubar
+		{
+			get
+			{
+				return this.m_fpFenubar;
+			}
+		}
 
 		public delegate void BrowserItemMouseDownHandler( object sender, EventArgs e );
 		public event BrowserItemMouseDownHandler BrowserItemMouseDown;
@@ -64,17 +90,8 @@ namespace Syntec_Developer.Forms
 		public event BrowserItemAddedDeletedHandler BrowserItemAddedDeleted;
 		public delegate void BorwserMouseUpHandler( object sender, MouseEventArgs e );
 		public event BorwserMouseUpHandler BrowserMouseUp;
-
-		public delegate void FenubarClickHandler( object sender, EventArgs e );
-		public event FenubarClickHandler FenubarClick;
-		public delegate void FenuCloseHandler( object sender, EventArgs e );
-		public event FenuCloseHandler FenuClose;
 		public delegate void BrowserXmlLoadCompletedHandler( object sender, RunWorkerCompletedEventArgs e );
 		public event BrowserXmlLoadCompletedHandler BrowserXmlLoadCompleted;
-		public delegate void FenubarXmlLoadCompletedHandler( object sender, RunWorkerCompletedEventArgs e );
-		public event FenubarXmlLoadCompletedHandler FenubarXmlLoadCompleted;
-		public delegate void FenuButtonClickHandler( object sender, EventArgs e );
-		public event FenuButtonClickHandler FenuButtonClick;
 
 		#region Initialize
 
@@ -87,7 +104,12 @@ namespace Syntec_Developer.Forms
 			this.m_bIsNewFile = bIsNewFile;
 			this.m_rtResmapTable = rtResmapTable;
 
-			switch( dtType ) {
+			
+		}
+
+		public void LoadFile()
+		{
+			switch( this.m_dtType ) {
 				case DocumentType.browser:
 					InitializeBrowser();
 					break;
@@ -99,7 +121,6 @@ namespace Syntec_Developer.Forms
 
 		private void InitializeBrowser()
 		{
-			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Browser" ) ) );
 			this.m_bpBrowser = new BrowserPanel( this.m_sFullName, this.m_bIsNewFile, this.m_rtResmapTable );
 			this.m_bpBrowser.Location = new Point( 3, 3 );
 
@@ -113,13 +134,22 @@ namespace Syntec_Developer.Forms
 			this.m_bpBrowser.ItemAddedDeleted +=
 				new BrowserPanel.ItemAddedDeletedHandler( BrowserItem_AddedDeleted );
 
+			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Browser" ) ) );
 			this.Text = this.m_bpBrowser.FileName;
 			this.Controls.Add( this.m_bpBrowser );
 		}
 
 		private void InitializeFenubar()
 		{
+			this.m_fpFenubar = new FenubarPanel();
+			this.m_fpFenubar.PropertiesWindow = this.m_dcpPropertiesWindow;
+			this.m_fpFenubar.FenuListWindow = this.m_dcflFenuListWindow;
+			this.m_fpFenubar.Load( this.m_sFullName );
+			this.m_fpFenubar.Dock = DockStyle.Fill;
+
 			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Fenubar" ) ) );
+			this.Text = this.m_sFullName;
+			this.Controls.Add( this.m_fpFenubar );
 		}
 
 		#endregion
@@ -143,19 +173,6 @@ namespace Syntec_Developer.Forms
 			BrowserItemAddedDeleted.Invoke( Browser, e );
 		}
 
-		private void CheckModifiedState()
-		{
-			if( !this.m_bIsModified ) {
-				this.m_bIsModified = true;
-				this.Text = string.Concat( this.Text, "*" );
-			}
-		}
-
-		public void Fenubar_Click( object sender, EventArgs e )
-		{
-			this.FenubarClick.Invoke( sender, e );
-		}
-
 		private void Browser_MouseUp( object sender, MouseEventArgs e )
 		{
 			this.BrowserMouseUp.Invoke( sender, e );
@@ -166,45 +183,37 @@ namespace Syntec_Developer.Forms
 			this.BrowserXmlLoadCompleted.Invoke( sender, e );
 		}
 
-		private void Fenubar_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
+		#endregion
+
+		#region Save
+		
+		private void CheckModifiedState()
 		{
-			this.FenubarXmlLoadCompleted.Invoke( sender, e );
+			if( !this.m_bIsModified ) {
+				this.m_bIsModified = true;
+				this.Text = string.Concat( this.Text, "*" );
+			}
 		}
 
-		private void Fenu_Close( object sender, EventArgs e )
+		public void SaveFile()
 		{
-			this.FenuClose.Invoke( sender, e );
-		}
-
-		private void FenuButton_Click( object sender, EventArgs e )
-		{
-			this.FenuButtonClick.Invoke( sender, e );
-		}
-
-		private void Fenubar_PropertiesChanged( object sender, EventArgs e )
-		{
-			CheckModifiedState();
+			//if( this.m_bIsModified ) {
+			switch( this.m_dtType ) {
+				case DocumentType.browser:
+					this.m_bpBrowser.SaveFile();
+					this.m_sFullName = this.m_bpBrowser.FullName;
+					this.Text = this.m_bpBrowser.FileName;
+					break;
+				case DocumentType.fenubar:
+					break;
+			}
+			this.m_bIsModified = false;
+			//}
 		}
 
 		#endregion
 
 		#region FormMain-Called Functions
-
-		public void SaveFile()
-		{
-			//if( this.m_bIsModified ) {
-				switch( this.m_dtType ) {
-					case DocumentType.browser:
-						this.m_bpBrowser.SaveFile();
-						this.m_sFullName = this.m_bpBrowser.FullName;
-						this.Text = this.m_bpBrowser.FileName;
-						break;
-					case DocumentType.fenubar:
-						break;
-				}
-				this.m_bIsModified = false;
-			//}
-		}
 
 		public void Cut_Click()
 		{
@@ -302,7 +311,7 @@ namespace Syntec_Developer.Forms
 
 		private void BrowseInExplorer()
 		{
-			Process.Start( "EXPLORER.EXE", string.Concat("/select, ", this.FullName) );
+			Process.Start( "EXPLORER.EXE", string.Concat( "/select, ", this.FullName ) );
 		}
 
 		private void tsmiClose_Click( object sender, EventArgs e )

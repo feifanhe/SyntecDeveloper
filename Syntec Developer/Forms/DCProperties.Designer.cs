@@ -28,7 +28,7 @@ namespace Syntec_Developer.Forms
 		private void InitializeComponent()
 		{
 			this.cboItems = new System.Windows.Forms.ComboBox();
-			this.prgItemProperties = new System.Windows.Forms.PropertyGrid();
+			this.prgItemProperties = new Azuria.Common.Controls.FilteredPropertyGrid();
 			this.SuspendLayout();
 			// 
 			// cboItems
@@ -72,6 +72,6 @@ namespace Syntec_Developer.Forms
 		#endregion
 
 		private System.Windows.Forms.ComboBox cboItems;
-		private System.Windows.Forms.PropertyGrid prgItemProperties;
+		private Azuria.Common.Controls.FilteredPropertyGrid prgItemProperties;
 	}
 }

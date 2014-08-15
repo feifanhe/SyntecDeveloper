@@ -9,6 +9,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using System.Collections;
 using Syntec_Developer.Controls;
 using Syntec_Developer.Controls.PropertyClasses;
+using Azuria.Common.Controls;
 
 namespace Syntec_Developer.Forms
 {
@@ -16,6 +17,22 @@ namespace Syntec_Developer.Forms
 	{
 		Hashtable m_htbItemsOfFocusedDocument;
 		DCDocument m_dcdRecentFocusedDocument;
+
+		public FilteredPropertyGrid PropertyDisplay
+		{
+			get
+			{
+				return this.prgItemProperties;
+			}
+		}
+
+		public ComboBox ListDisplay
+		{
+			get
+			{
+				return this.cboItems;
+			}
+		}
 
 		public DCProperties()
 		{

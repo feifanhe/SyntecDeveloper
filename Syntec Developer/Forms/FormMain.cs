@@ -346,6 +346,9 @@ namespace Syntec_Developer.Forms
 		private void OpenDocument( DocumentType dtType, string sFileName, bool bIsNewFile )
 		{
 			DCDocument dcdDocumentToShow = new DCDocument( dtType, sFileName, bIsNewFile, m_rtResmapTable );
+			dcdDocumentToShow.PropertiesWindow = this.m_dcProperties;
+			dcdDocumentToShow.FenuListWindow = this.m_dcFenuList;
+			dcdDocumentToShow.LoadFile();
 			this.m_lstOpenedDocuments.Add( dcdDocumentToShow );
 			SetDocumentEvents( dcdDocumentToShow );
 			dcdDocumentToShow.Show( this.dplMainPanel, DockState.Document );

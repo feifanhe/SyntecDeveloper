@@ -32,6 +32,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\BasicAttributes.dll</HintPath>
     </Reference>
+    <Reference Include="Fenubars, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\Fenubars.dll</HintPath>
+    </Reference>
+    <Reference Include="FilteredPropertyGrid, Version=1.0.5321.31287, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\FilteredPropertyGrid.dll</HintPath>
+    </Reference>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\Ookii.Dialogs.dll</HintPath>
@@ -53,6 +61,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\FenubarPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FenubarPanel.Designer.cs">
+      <DependentUpon>FenubarPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IniFile.cs" />
     <Compile Include="Controls\Modification.cs" />
     <Compile Include="Controls\PropertyClasses\BrowserProperties.cs" />
@@ -129,6 +143,10 @@
     <EmbeddedResource Include="Controls\BrowserItem.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BrowserItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FenubarPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FenubarPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DCDocument.resx">
       <SubType>Designer</SubType>
