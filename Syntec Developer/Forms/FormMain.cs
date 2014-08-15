@@ -24,7 +24,7 @@ namespace Syntec_Developer.Forms
 		private DCDocument m_dcdLastFocusedDocument;
 		private List<DCDocument> m_lstOpenedDocuments;
 
-		private DCTreeView m_dcTreeView;
+		private DCWorkDirectory m_dcTreeView;
 		private DCToolBox m_dcToolBox;
 		private DCProperties m_dcProperties;
 		private DCFenuList m_dcFenuList;
@@ -63,10 +63,10 @@ namespace Syntec_Developer.Forms
 
 		private void InitializeTreeViewWindow()
 		{
-			this.m_dcTreeView = new DCTreeView();
+			this.m_dcTreeView = new DCWorkDirectory();
 			this.m_dcTreeView.FormClosing += new FormClosingEventHandler( m_dcTreeView_FormClosing );
 			this.m_dcTreeView.TreeViewDoubleClick +=
-				new DCTreeView.TreeViewDoubleClickHandler( WorkDirectoryTreeView_DoubleClick );
+				new DCWorkDirectory.TreeViewDoubleClickHandler( WorkDirectoryTreeView_DoubleClick );
 			this.m_dcTreeView.LoadDirectory( m_sWorkDirectory );
 			this.m_dcTreeView.Show( this.dplMainPanel, DockState.DockLeft );
 

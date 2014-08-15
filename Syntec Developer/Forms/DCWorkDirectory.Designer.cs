@@ -1,6 +1,6 @@
 namespace Syntec_Developer.Forms
 {
-	partial class DCTreeView
+	partial class DCWorkDirectory
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@ namespace Syntec_Developer.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( DCTreeView ) );
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( DCWorkDirectory ) );
 			this.tvwMain = new System.Windows.Forms.TreeView();
 			this.imgTreeView = new System.Windows.Forms.ImageList( this.components );
 			this.SuspendLayout();
@@ -58,14 +58,14 @@ namespace Syntec_Developer.Forms
 			this.imgTreeView.Images.SetKeyName( 3, "VSProject_xml.bmp" );
 			this.imgTreeView.Images.SetKeyName( 4, "DocumentHS.png" );
 			// 
-			// DCTreeView
+			// DCWorkDirectory
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 12F );
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size( 331, 262 );
 			this.Controls.Add( this.tvwMain );
 			this.Font = new System.Drawing.Font( "PMingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ( (byte)( 136 ) ) );
-			this.Name = "DCTreeView";
+			this.Name = "DCWorkDirectory";
 			this.Text = "¤u§@¥Ø¿ý";
 			this.ResumeLayout( false );
 

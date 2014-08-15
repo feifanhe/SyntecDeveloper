@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Syntec_Developer.Forms
 {
-	public partial class DCTreeView : DockContent
+	public partial class DCWorkDirectory : DockContent
 	{
 		public delegate void TreeViewDoubleClickHandler( object sender, EventArgs e );
 		public event TreeViewDoubleClickHandler TreeViewDoubleClick;
@@ -24,7 +24,7 @@ namespace Syntec_Developer.Forms
 			FILE
 		};
 
-		public DCTreeView()
+		public DCWorkDirectory()
 		{
 			InitializeComponent();
 		}
@@ -40,8 +40,17 @@ namespace Syntec_Developer.Forms
 					(int)ImageIndex.ROOT,
 					GetTreeNodes( difRootDirectory.GetDirectories(), difRootDirectory.GetFiles() )
 				);
+
+				TreeNode tnProduct = new TreeNode(
+					difRootDirectory.FullName,
+					(int)ImageIndex.ROOT,
+					(int)ImageIndex.ROOT,
+					GetProductNodes( difRootDirectory.GetDirectories() )
+				);
+
 				tnRootNode.Expand();
 				this.tvwMain.Nodes.Add( tnRootNode );
+				this.tvwMain.Nodes.Add( tnProduct );
 			}
 		}
 
@@ -88,6 +97,27 @@ namespace Syntec_Developer.Forms
 
 			return tnaResult;
 
+		}
+
+		private TreeNode[] GetProductNodes( DirectoryInfo[] difaDirectories )
+		{
+			List<TreeNode> lstProductNodes = new List<TreeNode>();
+
+			// Set directory nodes
+			for( int i = 0; i < difaDirectories.Length; i++ ) {
+				if( difaDirectories[ i ].Name.IndexOf( '_' ) == 0 ) {
+					lstProductNodes.Add(
+						new TreeNode(
+							difaDirectories[ i ].Name,
+							(int)ImageIndex.FOLDER,
+							(int)ImageIndex.FOLDER,
+							GetProductNodes( difaDirectories[ i ].GetDirectories() )
+						)
+					);
+				}
+			}
+
+			return lstProductNodes.ToArray();
 		}
 
 		private void tvwMain_AfterExpand( object sender, TreeViewEventArgs e )
