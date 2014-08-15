@@ -80,7 +80,6 @@ namespace Syntec_Developer.Forms
 			this.chklstFenuList.Size = new System.Drawing.Size( 270, 223 );
 			this.chklstFenuList.TabIndex = 2;
 			this.chklstFenuList.MouseUp += new System.Windows.Forms.MouseEventHandler( this.chklstFenuList_MouseUp );
-			this.chklstFenuList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler( this.chklstFenuList_ItemCheck );
 			// 
 			// tbpFenuLinkTree
 			// 
@@ -101,8 +100,6 @@ namespace Syntec_Developer.Forms
 			this.tvwFenuLinkTree.Name = "tvwFenuLinkTree";
 			this.tvwFenuLinkTree.Size = new System.Drawing.Size( 270, 230 );
 			this.tvwFenuLinkTree.TabIndex = 1;
-			this.tvwFenuLinkTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler( this.tvwFenuLinkTree_AfterCheck );
-			this.tvwFenuLinkTree.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler( this.tvwFenuLinkTree_BeforeCheck );
 			// 
 			// ctmsRightClickItem
 			// 
@@ -120,7 +117,6 @@ namespace Syntec_Developer.Forms
 			this.tsmiNewFenu.Name = "tsmiNewFenu";
 			this.tsmiNewFenu.Size = new System.Drawing.Size( 100, 22 );
 			this.tsmiNewFenu.Text = "新增";
-			this.tsmiNewFenu.Click += new System.EventHandler( this.tsmiNewFenu_Click );
 			// 
 			// tssSep1
 			// 
@@ -132,7 +128,6 @@ namespace Syntec_Developer.Forms
 			this.tsmiCopyFenu.Name = "tsmiCopyFenu";
 			this.tsmiCopyFenu.Size = new System.Drawing.Size( 100, 22 );
 			this.tsmiCopyFenu.Text = "複製";
-			this.tsmiCopyFenu.Click += new System.EventHandler( this.tsmiCopyFenu_Click );
 			// 
 			// tssSep2
 			// 
@@ -144,7 +139,6 @@ namespace Syntec_Developer.Forms
 			this.tsmiDeleteFenu.Name = "tsmiDeleteFenu";
 			this.tsmiDeleteFenu.Size = new System.Drawing.Size( 100, 22 );
 			this.tsmiDeleteFenu.Text = "刪除";
-			this.tsmiDeleteFenu.Click += new System.EventHandler( this.tsmiDeleteFenu_Click );
 			// 
 			// DCFenuList
 			// 

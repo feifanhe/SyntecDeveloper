@@ -19,7 +19,7 @@ namespace Syntec_Developer.Forms
 		private bool m_bIsModified;
 		private DocumentType m_dtType;
 		private BrowserPanel m_bpBrowser;
-		private FenubarPanel m_fpFenubar;
+		//private FenubarPanel m_fpFenubar;
 		private ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
 		
 		internal ResmapTable m_rtResmapTable;
@@ -48,13 +48,13 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
-		public FenubarPanel Fenubar
-		{
-			get
-			{
-				return this.m_fpFenubar;
-			}
-		}
+		//public FenubarPanel Fenubar
+		//{
+		//    get
+		//    {
+		//        return this.m_fpFenubar;
+		//    }
+		//}
 
 		public delegate void BrowserItemMouseDownHandler( object sender, EventArgs e );
 		public event BrowserItemMouseDownHandler BrowserItemMouseDown;
@@ -120,17 +120,6 @@ namespace Syntec_Developer.Forms
 		private void InitializeFenubar()
 		{
 			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Fenubar" ) ) );
-			this.m_fpFenubar = new FenubarPanel( this.m_sFullName, m_bIsNewFile, this.m_rtResmapTable );
-			this.m_fpFenubar.Dock = DockStyle.Fill;
-
-			this.m_fpFenubar.Click += new EventHandler( Fenubar_Click );
-			this.m_fpFenubar.XmlLoadCompleted += new RunWorkerCompletedEventHandler( Fenubar_XmlLoadCompleted );
-			this.m_fpFenubar.FenuClose += new EventHandler( Fenu_Close );
-			this.m_fpFenubar.FenuButtonClick += new EventHandler( FenuButton_Click );
-			this.m_fpFenubar.FenubarPropertiesChanged += new EventHandler(Fenubar_PropertiesChanged);
-
-			this.Text = this.m_fpFenubar.FileName;
-			this.Controls.Add( this.m_fpFenubar );
 		}
 
 		#endregion
@@ -211,9 +200,6 @@ namespace Syntec_Developer.Forms
 						this.Text = this.m_bpBrowser.FileName;
 						break;
 					case DocumentType.fenubar:
-						this.m_fpFenubar.SaveFile();
-						this.m_sFullName = this.m_fpFenubar.FullName;
-						this.Text = this.m_fpFenubar.FileName;
 						break;
 				}
 				this.m_bIsModified = false;
@@ -226,7 +212,6 @@ namespace Syntec_Developer.Forms
 				case DocumentType.browser:
 					break;
 				case DocumentType.fenubar:
-					this.m_fpFenubar.Cut_Click();
 					break;
 			}
 		}
@@ -237,7 +222,6 @@ namespace Syntec_Developer.Forms
 				case DocumentType.browser:
 					break;
 				case DocumentType.fenubar:
-					this.m_fpFenubar.Copy_Click();
 					break;
 			}
 		}
@@ -248,7 +232,6 @@ namespace Syntec_Developer.Forms
 				case DocumentType.browser:
 					break;
 				case DocumentType.fenubar:
-					this.m_fpFenubar.Paste_Click();
 					break;
 			}
 		}
@@ -260,7 +243,6 @@ namespace Syntec_Developer.Forms
 					this.m_bpBrowser.DeleteItems();
 					break;
 				case DocumentType.fenubar:
-					this.m_fpFenubar.Delete_Click();
 					break;
 			}
 		}
@@ -311,6 +293,8 @@ namespace Syntec_Developer.Forms
 
 		#endregion
 
+		#region Right Click
+
 		private void tsmiBrowseInExplorer_Click( object sender, EventArgs e )
 		{
 			BrowseInExplorer();
@@ -326,5 +310,6 @@ namespace Syntec_Developer.Forms
 			this.Close();
 		}
 
+		#endregion
 	}
 }

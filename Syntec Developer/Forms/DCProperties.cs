@@ -46,8 +46,8 @@ namespace Syntec_Developer.Forms
 					UpdateComboBoxWithBrowserItem( this.m_dcdRecentFocusedDocument.Browser );
 					break;
 				case DocumentType.fenubar:
-					prgItemProperties.SelectedObject = this.m_dcdRecentFocusedDocument.Fenubar.Properties;
-					UpdateComboBoxWithFenu( this.m_dcdRecentFocusedDocument.Fenubar );
+					//prgItemProperties.SelectedObject = this.m_dcdRecentFocusedDocument.Fenubar.Properties;
+					//UpdateComboBoxWithFenu( this.m_dcdRecentFocusedDocument.Fenubar );
 					break;
 			}
 		}
@@ -105,34 +105,6 @@ namespace Syntec_Developer.Forms
 			}
 			prgItemProperties.SelectedObjects = lstSelectedItemProperties.ToArray();
 			cboItems.SelectedItem = null;
-		}
-
-		public void Fenubar_Click( object sender, EventArgs e )
-		{
-			FenubarPanel fpClickedFenubar = sender as FenubarPanel;
-			prgItemProperties.SelectedObject = fpClickedFenubar.Properties;
-			cboItems.SelectedItem = null;
-		}
-
-		public void Fenubar_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
-		{
-			FenubarPanel fpLoadedFenubar = sender as FenubarPanel;
-			UpdateComboBoxWithFenu( fpLoadedFenubar );
-		}
-
-		public void FenuButton_Click( object sender, EventArgs e )
-		{
-			FenuButton fbButton = sender as FenuButton;
-			this.prgItemProperties.SelectedObject = fbButton.Properties;
-		}
-
-		private void UpdateComboBoxWithFenu( FenubarPanel fpFenubarToLoad )
-		{
-			this.cboItems.Items.Clear();
-			this.m_htbItemsOfFocusedDocument = fpFenubarToLoad.Fenus;
-			ArrayList arlItemNamesOfFocusedDocument = new ArrayList( this.m_htbItemsOfFocusedDocument.Keys );
-			arlItemNamesOfFocusedDocument.Sort();
-			this.cboItems.Items.AddRange( arlItemNamesOfFocusedDocument.ToArray() );
 		}
 
 		private void prgItemProperties_PropertyValueChanged( object s, PropertyValueChangedEventArgs e )

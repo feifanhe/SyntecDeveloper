@@ -53,12 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\FenuButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\FenuButton.Designer.cs">
-      <DependentUpon>FenuButton.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\IniFile.cs" />
     <Compile Include="Controls\Modification.cs" />
     <Compile Include="Controls\PropertyClasses\BrowserProperties.cs" />
@@ -74,24 +68,6 @@
     <Compile Include="Controls\BrowserItem.Designer.cs">
       <DependentUpon>BrowserItem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Fenu.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Fenu.Designer.cs">
-      <DependentUpon>Fenu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FenubarPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FenubarPanel.Designer.cs">
-      <DependentUpon>FenubarPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PropertyClasses\Fenubar\EscapeButtonProperties.cs">
-    </Compile>
-    <Compile Include="Controls\PropertyClasses\Fenubar\FenubarProperties.cs" />
-    <Compile Include="Controls\PropertyClasses\Fenubar\FenuButtonProperties.cs">
-    </Compile>
-    <Compile Include="Controls\PropertyClasses\Fenubar\FenuProperties.cs" />
     <Compile Include="Controls\PropertyClasses\ItemProperties.cs" />
     <Compile Include="Controls\PropertyClasses\LanguagePack.cs" />
     <Compile Include="Controls\PropertyClasses\ProtectedActions.cs" />
@@ -153,18 +129,6 @@
     <EmbeddedResource Include="Controls\BrowserItem.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BrowserItem.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Fenu.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Fenu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FenubarPanel.resx">
-      <DependentUpon>FenubarPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FenuButton.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FenuButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DCDocument.resx">
       <SubType>Designer</SubType>

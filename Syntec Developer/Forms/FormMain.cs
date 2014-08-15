@@ -375,15 +375,6 @@ namespace Syntec_Developer.Forms
 				new DCDocument.BrowserXmlLoadCompletedHandler( m_dcProperties.Browser_XmlLoadCompleted );
 			dcdDocumentToShow.BrowserItemAddedDeleted +=
 				new DCDocument.BrowserItemAddedDeletedHandler( m_dcProperties.BrowserItem_AddedDeleted );
-			dcdDocumentToShow.FenubarClick +=
-				new DCDocument.FenubarClickHandler( m_dcProperties.Fenubar_Click );
-			dcdDocumentToShow.FenubarXmlLoadCompleted +=
-				new DCDocument.FenubarXmlLoadCompletedHandler( m_dcProperties.Fenubar_XmlLoadCompleted );
-			dcdDocumentToShow.FenubarXmlLoadCompleted +=
-				new DCDocument.FenubarXmlLoadCompletedHandler( m_dcFenuList.Fenubar_XmlLoadCompleted );
-			dcdDocumentToShow.FenuClose += new DCDocument.FenuCloseHandler( m_dcFenuList.Fenu_Close );
-			dcdDocumentToShow.FenuButtonClick +=
-				new DCDocument.FenuButtonClickHandler( m_dcProperties.FenuButton_Click );
 		}
 
 		#endregion
