@@ -82,16 +82,11 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
-		public delegate void BrowserItemMouseDownHandler( object sender, EventArgs e );
-		public event BrowserItemMouseDownHandler BrowserItemMouseDown;
-		public delegate void BrowserItemPropertiesChangedHandler( object sender, EventArgs e );
-		public event BrowserItemPropertiesChangedHandler BrowserItemPropertiesChanged;
-		public delegate void BrowserItemAddedDeletedHandler( object sender, EventArgs e );
-		public event BrowserItemAddedDeletedHandler BrowserItemAddedDeleted;
-		public delegate void BorwserMouseUpHandler( object sender, MouseEventArgs e );
-		public event BorwserMouseUpHandler BrowserMouseUp;
-		public delegate void BrowserXmlLoadCompletedHandler( object sender, RunWorkerCompletedEventArgs e );
-		public event BrowserXmlLoadCompletedHandler BrowserXmlLoadCompleted;
+		public event EventHandler BrowserItemMouseDown;
+		public event EventHandler BrowserItemPropertiesChanged;
+		public event EventHandler BrowserItemAddedDeleted;
+		public event MouseEventHandler BrowserMouseUp;
+		public event RunWorkerCompletedEventHandler BrowserXmlLoadCompleted;
 
 		#region Initialize
 

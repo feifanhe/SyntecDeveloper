@@ -12,8 +12,7 @@ namespace Syntec_Developer.Forms
 {
 	public partial class DCWorkDirectory : DockContent
 	{
-		public delegate void TreeViewDoubleClickHandler( object sender, EventArgs e );
-		public event TreeViewDoubleClickHandler TreeViewDoubleClick;
+		public event EventHandler TreeViewDoubleClick;
 
 		enum ImageIndex
 		{

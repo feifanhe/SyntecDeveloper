@@ -24,7 +24,7 @@ namespace Syntec_Developer.Forms
 		private DCDocument m_dcdLastFocusedDocument;
 		private List<DCDocument> m_lstOpenedDocuments;
 
-		private DCWorkDirectory m_dcTreeView;
+		private DCWorkDirectory m_dcWorkDirectory;
 		private DCToolBox m_dcToolBox;
 		private DCProperties m_dcProperties;
 		private DCFenuList m_dcFenuList;
@@ -63,12 +63,11 @@ namespace Syntec_Developer.Forms
 
 		private void InitializeTreeViewWindow()
 		{
-			this.m_dcTreeView = new DCWorkDirectory();
-			this.m_dcTreeView.FormClosing += new FormClosingEventHandler( m_dcTreeView_FormClosing );
-			this.m_dcTreeView.TreeViewDoubleClick +=
-				new DCWorkDirectory.TreeViewDoubleClickHandler( WorkDirectoryTreeView_DoubleClick );
-			this.m_dcTreeView.LoadDirectory( m_sWorkDirectory );
-			this.m_dcTreeView.Show( this.dplMainPanel, DockState.DockLeft );
+			this.m_dcWorkDirectory = new DCWorkDirectory();
+			this.m_dcWorkDirectory.FormClosing += new FormClosingEventHandler( m_dcWorkDirectory_FormClosing );
+			this.m_dcWorkDirectory.TreeViewDoubleClick += new EventHandler( WorkDirectoryTreeView_DoubleClick );
+			this.m_dcWorkDirectory.LoadDirectory( m_sWorkDirectory );
+			this.m_dcWorkDirectory.Show( this.dplMainPanel, DockState.DockLeft );
 
 			this.tsmiTreeView.Checked = true;
 		}
@@ -106,7 +105,7 @@ namespace Syntec_Developer.Forms
 
 		private void LoadWorkDirectory()
 		{
-			this.m_dcTreeView.LoadDirectory( this.m_sWorkDirectory );
+			this.m_dcWorkDirectory.LoadDirectory( this.m_sWorkDirectory );
 		}
 
 		private void LoadResmapTable()
@@ -139,7 +138,7 @@ namespace Syntec_Developer.Forms
 		{
 			if( this.fbdlgWorkDirectory.ShowDialog() == DialogResult.OK ) {
 				this.m_sWorkDirectory = fbdlgWorkDirectory.SelectedPath;
-				this.m_dcTreeView.LoadDirectory( this.m_sWorkDirectory );
+				this.m_dcWorkDirectory.LoadDirectory( this.m_sWorkDirectory );
 				LoadResmapTable();
 				this.m_ifIniFile.Write( "Path", "LastWorkDirectory", this.m_sWorkDirectory );
 			}
@@ -220,10 +219,10 @@ namespace Syntec_Developer.Forms
 		{
 			this.tsmiTreeView.Checked = !this.tsmiTreeView.Checked;
 			if( this.tsmiTreeView.Checked ) {
-				this.m_dcTreeView.Show( this.dplMainPanel );
+				this.m_dcWorkDirectory.Show( this.dplMainPanel );
 			}
 			else {
-				this.m_dcTreeView.Hide();
+				this.m_dcWorkDirectory.Hide();
 			}
 		}
 
@@ -264,11 +263,11 @@ namespace Syntec_Developer.Forms
 
 		#region Tool Windows Control Event
 
-		private void m_dcTreeView_FormClosing( object sender, FormClosingEventArgs e )
+		private void m_dcWorkDirectory_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			e.Cancel = true;
 			this.tsmiTreeView.Checked = false;
-			this.m_dcTreeView.Hide();
+			this.m_dcWorkDirectory.Hide();
 		}
 
 		private void m_dcProperties_FormClosing( object sender, FormClosingEventArgs e )
@@ -367,17 +366,43 @@ namespace Syntec_Developer.Forms
 			dcdDocumentToShow.Activated += new EventHandler( Document_Activated );
 			dcdDocumentToShow.Activated += new EventHandler( m_dcFenuList.Document_Activated );
 			dcdDocumentToShow.Activated += new EventHandler( m_dcProperties.Document_Activated );
-			dcdDocumentToShow.BrowserItemMouseDown +=
-				new DCDocument.BrowserItemMouseDownHandler( m_dcProperties.BrowserItem_MouseDown );
-			dcdDocumentToShow.BrowserItemPropertiesChanged +=
-				new DCDocument.BrowserItemPropertiesChangedHandler
-					( m_dcProperties.BrowserItem_PropertiesChanged );
-			dcdDocumentToShow.BrowserMouseUp +=
-				new DCDocument.BorwserMouseUpHandler( m_dcProperties.Browser_MouseUp );
-			dcdDocumentToShow.BrowserXmlLoadCompleted +=
-				new DCDocument.BrowserXmlLoadCompletedHandler( m_dcProperties.Browser_XmlLoadCompleted );
-			dcdDocumentToShow.BrowserItemAddedDeleted +=
-				new DCDocument.BrowserItemAddedDeletedHandler( m_dcProperties.BrowserItem_AddedDeleted );
+			dcdDocumentToShow.BrowserItemMouseDown += new EventHandler( m_dcProperties.BrowserItem_MouseDown );
+			dcdDocumentToShow.BrowserItemPropertiesChanged += 
+				new EventHandler( m_dcProperties.BrowserItem_PropertiesChanged );
+			dcdDocumentToShow.BrowserItemAddedDeleted += new EventHandler( m_dcProperties.BrowserItem_AddedDeleted );
+			dcdDocumentToShow.BrowserMouseUp += new MouseEventHandler( m_dcProperties.Browser_MouseUp );
+			dcdDocumentToShow.BrowserXmlLoadCompleted += new RunWorkerCompletedEventHandler( m_dcProperties.Browser_XmlLoadCompleted );
+			
+		}
+
+		#endregion
+
+		#region Document
+
+		private void Document_Activated( object sender, EventArgs e )
+		{
+			DCDocument dcdActivated = sender as DCDocument;
+			this.m_dcdLastFocusedDocument = dcdActivated;
+			if( dcdActivated != null ) {
+				switch( dcdActivated.Type ) {
+					case DocumentType.browser:
+						ShowBrowserUI();
+						break;
+					case DocumentType.fenubar:
+						ShowFenubarUI();
+						break;
+				}
+			}
+		}
+
+		private void Document_FormClosing( object sender, FormClosingEventArgs e )
+		{
+			DCDocument dcDocumentToClose = sender as DCDocument;
+			if( this.m_dcdLastFocusedDocument == dcDocumentToClose ) {
+				this.m_dcdLastFocusedDocument = null;
+			}
+			this.m_lstOpenedDocuments.Remove( dcDocumentToClose );
+			this.Controls.Remove( dcDocumentToClose );
 		}
 
 		#endregion
@@ -417,42 +442,6 @@ namespace Syntec_Developer.Forms
 		private bool IsFenubarXmlDocument( XmlDocument xdDocument )
 		{
 			return ( xdDocument.SelectSingleNode( "root" ) != null );
-		}
-
-		private DCDocument GetFocusedDocument()
-		{
-			foreach( DCDocument dcdOpenedDocument in m_lstOpenedDocuments ) {
-				if( dcdOpenedDocument.ContainsFocus ) {
-					return dcdOpenedDocument;
-				}
-			}
-			return null;
-		}
-
-		private void Document_Activated( object sender, EventArgs e )
-		{
-			DCDocument dcdActivated = sender as DCDocument;
-			this.m_dcdLastFocusedDocument = dcdActivated;
-			if( dcdActivated != null ) {
-				switch( dcdActivated.Type ) {
-					case DocumentType.browser:
-						ShowBrowserUI();
-						break;
-					case DocumentType.fenubar:
-						ShowFenubarUI();
-						break;
-				}
-			}
-		}
-
-		private void Document_FormClosing( object sender, FormClosingEventArgs e )
-		{
-			DCDocument dcDocumentToClose = sender as DCDocument;
-			if( this.m_dcdLastFocusedDocument == dcDocumentToClose ) {
-				this.m_dcdLastFocusedDocument = null;
-			}
-			this.m_lstOpenedDocuments.Remove( dcDocumentToClose );
-			this.Controls.Remove( dcDocumentToClose );
 		}
 
 		private void ShowBrowserUI()
@@ -526,8 +515,6 @@ namespace Syntec_Developer.Forms
 		}
 
 		#endregion
-
-		
 
 	}
 }
