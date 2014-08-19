@@ -67,6 +67,7 @@ namespace Syntec_Developer.Forms
 			this.Font = new System.Drawing.Font( "PMingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ( (byte)( 136 ) ) );
 			this.Name = "DCDocument";
 			this.TabPageContextMenuStrip = this.ctmsRightClickMenu;
+			this.Activated += new System.EventHandler( this.DCDocument_Activated );
 			this.ctmsRightClickMenu.ResumeLayout( false );
 			this.ResumeLayout( false );
 

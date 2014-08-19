@@ -364,8 +364,6 @@ namespace Syntec_Developer.Forms
 			// TODO: classify the functions...
 			dcdDocumentToShow.FormClosing += new FormClosingEventHandler( Document_FormClosing );
 			dcdDocumentToShow.Activated += new EventHandler( Document_Activated );
-			dcdDocumentToShow.Activated += new EventHandler( m_dcFenuList.Document_Activated );
-			dcdDocumentToShow.Activated += new EventHandler( m_dcProperties.Document_Activated );
 		}
 
 		#endregion

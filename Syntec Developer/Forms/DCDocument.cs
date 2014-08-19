@@ -82,12 +82,6 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
-		public event EventHandler BrowserItemMouseDown;
-		public event EventHandler BrowserItemPropertiesChanged;
-		public event EventHandler BrowserItemAddedDeleted;
-		public event MouseEventHandler BrowserMouseUp;
-		public event RunWorkerCompletedEventHandler BrowserXmlLoadCompleted;
-
 		#region Initialize
 
 		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile, ResmapTable rtResmapTable )
@@ -145,6 +139,19 @@ namespace Syntec_Developer.Forms
 			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Fenubar" ) ) );
 			this.Text = this.m_sFullName;
 			this.Controls.Add( this.m_fpFenubar );
+		}
+
+
+		private void DCDocument_Activated( object sender, EventArgs e )
+		{
+			switch( this.m_dtType ) {
+				case DocumentType.browser:
+					this.m_dcpPropertiesWindow.BrowserActivated( this.Browser );
+					break;
+				case DocumentType.fenubar:
+					this.m_dcflFenuListWindow.FenubarActivated( this.Fenubar );
+					break;
+			}
 		}
 
 		#endregion
@@ -315,5 +322,6 @@ namespace Syntec_Developer.Forms
 		}
 
 		#endregion
+
 	}
 }

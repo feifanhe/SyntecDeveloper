@@ -68,6 +68,12 @@ namespace Syntec_Developer.Forms
 
 		#region Browser
 
+		public void BrowserActivated( BrowserPanel bpBrowser )
+		{
+			prgItemProperties.SelectedObject = bpBrowser.Properties;
+			UpdateComboBoxWithBrowserItem( bpBrowser );
+		}
+
 		public void MultiSelectMouseUp( BrowserPanel bpBrowser )
 		{
 			if( bpBrowser.SelectedItems.Count > 0 ) {

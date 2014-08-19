@@ -14,7 +14,7 @@ namespace Syntec_Developer.Forms
 {
 	public partial class DCFenuList : DockContent
 	{
-		private DCDocument m_dcdRecentFocusedDocument;
+		private FenubarPanel m_fpFocusedFenubar;
 
 		public CheckedListBox FenuList
 		{
@@ -29,15 +29,6 @@ namespace Syntec_Developer.Forms
 		public DCFenuList()
 		{
 			InitializeComponent();
-		}
-
-		public void Document_Activated( object sender, EventArgs e )
-		{
-			m_dcdRecentFocusedDocument = sender as DCDocument;
-			if( this.m_dcdRecentFocusedDocument.Type == DocumentType.fenubar ) {
-				this.m_dcdRecentFocusedDocument = sender as DCDocument;
-			}
-
 		}
 
 		public void FindFenu( string sFenuName )
@@ -61,16 +52,54 @@ namespace Syntec_Developer.Forms
 			//}
 		}
 
+
+		public void FenubarActivated( FenubarPanel fpFenubar )
+		{
+			this.m_fpFocusedFenubar = fpFenubar;
+			GenerateList();
+		}
+
 		#region Fenu List
 
-		public void ShowFenuList()
+		private void GenerateList()
 		{
+			foreach( Fenubars.Handler handler in this.m_fpFocusedFenubar.Fenubars ) {
+				foreach( Fenubars.XML.FenuState fs in handler.LoadedFenus ) {
+					this.chklstFenuList.Items.Add( fs.Name );
+				}
+			}
+		}
 
+		private void chklstFenuList_ItemCheck( object sender, ItemCheckEventArgs e )
+		{
+			if( e.NewValue == CheckState.Checked ) {
+				string FenuName = this.chklstFenuList.Items[ e.Index ] as string;
+				foreach( Fenubars.Handler handler in this.m_fpFocusedFenubar.Fenubars ) {
+					foreach( Fenubars.XML.FenuState fs in handler.LoadedFenus ) {
+						if( string.Compare( FenuName, fs.Name ) == 0 ) {
+							handler.LoadFenu( FenuName );
+							return;
+						}
+					}
+				}
+			}
 		}
 
 		#endregion
 
 		#region Fenu Link Tree
+
+		private void GenerateTree()
+		{
+			foreach( Fenubars.Handler handler in this.m_fpFocusedFenubar.Fenubars ) {
+				foreach( Fenubars.XML.FenuState fs in handler.LoadedFenus ) {
+					if( string.Compare( FenuName, "main" ) == 0 ) {
+						handler.LoadFenu( FenuName );
+						return;
+					}
+				}
+			}
+		}
 
 		#endregion
 
@@ -84,6 +113,5 @@ namespace Syntec_Developer.Forms
 				}
 			}
 		}
-
 	}
 }

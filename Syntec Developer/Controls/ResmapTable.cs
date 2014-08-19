@@ -12,7 +12,6 @@ namespace Syntec_Developer.Controls
 {
 	public class ResmapTable
 	{
-		bool isLoading;
 		string RootPath;
 		string ProcessingLanguage;
 		private Dictionary<string, Messages> Contents = new Dictionary<string, Messages>();
@@ -20,7 +19,6 @@ namespace Syntec_Developer.Controls
 
 		public ResmapTable()
 		{
-			this.isLoading = false;
 			this.RootPath = string.Empty;
 			this.ResmapLoader = new BackgroundWorker();
 			this.ResmapLoader.DoWork += new DoWorkEventHandler( ResmapLoader_DoWork );
@@ -84,7 +82,6 @@ namespace Syntec_Developer.Controls
 
 		private void ResmapLoader_DoWork( object sender, DoWorkEventArgs e )
 		{
-			this.isLoading = true;
 			LoadDirectory( this.RootPath );
 
 			//SaveResmap();
@@ -92,7 +89,6 @@ namespace Syntec_Developer.Controls
 
 		private void ResmapLoader_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			this.isLoading = false;
 		}
 
 

@@ -80,6 +80,7 @@ namespace Syntec_Developer.Forms
 			this.chklstFenuList.Size = new System.Drawing.Size( 270, 223 );
 			this.chklstFenuList.TabIndex = 2;
 			this.chklstFenuList.MouseUp += new System.Windows.Forms.MouseEventHandler( this.chklstFenuList_MouseUp );
+			this.chklstFenuList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler( this.chklstFenuList_ItemCheck );
 			// 
 			// tbpFenuLinkTree
 			// 
