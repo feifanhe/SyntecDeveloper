@@ -6,14 +6,20 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using Fenubars;
 using Syntec_Developer.Forms;
 
 namespace Syntec_Developer.Controls
 {
 	public partial class FenubarPanel : UserControl
 	{
-		private Handler m_hdlFenubarHandler;
+		private List<Fenubars.Handler> m_lstFenubarHandler;
+		public List<Fenubars.Handler> Fenubars
+		{
+			get
+			{
+				return this.m_lstFenubarHandler;
+			}
+		}
 
 		private DCProperties m_dcpPropertiesWindow;
 		public DCProperties PropertiesWindow
@@ -44,19 +50,23 @@ namespace Syntec_Developer.Controls
 		public FenubarPanel()
 		{
 			InitializeComponent();
+			this.m_lstFenubarHandler = new List<Fenubars.Handler>();
 		}
 
-		public void Load( string XMLPath )
+		public void LoadFenubar( string XMLPath )
 		{
 			try {
-				this.m_hdlFenubarHandler = new Handler( XMLPath );
-				this.m_hdlFenubarHandler.Canvas = this.Controls;
-				this.m_hdlFenubarHandler.PropertyViewer = this.PropertiesWindow.PropertyDisplay;
-				this.m_hdlFenubarHandler.LoadFenu( "main" );
+				Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( XMLPath );
+				hdlNewFenubar.Canvas = this.Controls;
+				hdlNewFenubar.PropertyViewer = this.PropertiesWindow.PropertyDisplay;
+				this.m_lstFenubarHandler.Add( hdlNewFenubar );
 			}
 			catch( FileLoadException ) {
 				MessageBox.Show( "Cannot load file." );
 			}
+			catch( InvalidOperationException ) {
+			}
 		}
+
 	}
 }

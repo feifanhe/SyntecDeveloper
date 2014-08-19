@@ -14,8 +14,15 @@ namespace Syntec_Developer.Forms
 {
 	public partial class DCFenuList : DockContent
 	{
-		private Hashtable m_htbFenusOfFocusedDocument;
 		private DCDocument m_dcdRecentFocusedDocument;
+
+		public CheckedListBox FenuList
+		{
+			get
+			{
+				return this.chklstFenuList;
+			}
+		}
 
 		const string CUSTOMFENU = "CUSTOMFENU_";
 
@@ -26,10 +33,11 @@ namespace Syntec_Developer.Forms
 
 		public void Document_Activated( object sender, EventArgs e )
 		{
-			this.m_dcdRecentFocusedDocument = sender as DCDocument;
+			m_dcdRecentFocusedDocument = sender as DCDocument;
 			if( this.m_dcdRecentFocusedDocument.Type == DocumentType.fenubar ) {
-
+				this.m_dcdRecentFocusedDocument = sender as DCDocument;
 			}
+
 		}
 
 		public void FindFenu( string sFenuName )
@@ -54,6 +62,11 @@ namespace Syntec_Developer.Forms
 		}
 
 		#region Fenu List
+
+		public void ShowFenuList()
+		{
+
+		}
 
 		#endregion
 

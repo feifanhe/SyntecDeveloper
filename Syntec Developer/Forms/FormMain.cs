@@ -366,13 +366,6 @@ namespace Syntec_Developer.Forms
 			dcdDocumentToShow.Activated += new EventHandler( Document_Activated );
 			dcdDocumentToShow.Activated += new EventHandler( m_dcFenuList.Document_Activated );
 			dcdDocumentToShow.Activated += new EventHandler( m_dcProperties.Document_Activated );
-			dcdDocumentToShow.BrowserItemMouseDown += new EventHandler( m_dcProperties.BrowserItem_MouseDown );
-			dcdDocumentToShow.BrowserItemPropertiesChanged += 
-				new EventHandler( m_dcProperties.BrowserItem_PropertiesChanged );
-			dcdDocumentToShow.BrowserItemAddedDeleted += new EventHandler( m_dcProperties.BrowserItem_AddedDeleted );
-			dcdDocumentToShow.BrowserMouseUp += new MouseEventHandler( m_dcProperties.Browser_MouseUp );
-			dcdDocumentToShow.BrowserXmlLoadCompleted += new RunWorkerCompletedEventHandler( m_dcProperties.Browser_XmlLoadCompleted );
-			
 		}
 
 		#endregion

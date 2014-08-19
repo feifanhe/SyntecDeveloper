@@ -139,7 +139,7 @@ namespace Syntec_Developer.Forms
 			this.m_fpFenubar = new FenubarPanel();
 			this.m_fpFenubar.PropertiesWindow = this.m_dcpPropertiesWindow;
 			this.m_fpFenubar.FenuListWindow = this.m_dcflFenuListWindow;
-			this.m_fpFenubar.Load( this.m_sFullName );
+			this.m_fpFenubar.LoadFenubar( this.m_sFullName );
 			this.m_fpFenubar.Dock = DockStyle.Fill;
 
 			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Fenubar" ) ) );
@@ -149,33 +149,33 @@ namespace Syntec_Developer.Forms
 
 		#endregion
 
-		#region Event functions to pass up, called by browser or fenubar
+		#region Browser Event
 
 		public void BrowserItem_MouseDown( object sender, EventArgs e )
 		{
-			BrowserItemMouseDown.Invoke( sender, e );
+			this.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
 		}
 
 		public void BrowserItem_PropertiesChanged( object sender, EventArgs e )
 		{
 			CheckModifiedState();
-			BrowserItemPropertiesChanged.Invoke( sender, e );
+			this.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
 		}
 
 		public void BrowserItem_AddedDeleted( object sender, EventArgs e )
 		{
 			CheckModifiedState();
-			BrowserItemAddedDeleted.Invoke( Browser, e );
+			this.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
 		}
 
 		private void Browser_MouseUp( object sender, MouseEventArgs e )
 		{
-			this.BrowserMouseUp.Invoke( sender, e );
+			this.PropertiesWindow.MultiSelectMouseUp( this.Browser );
 		}
 
 		private void Browser_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			this.BrowserXmlLoadCompleted.Invoke( sender, e );
+			this.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
 		}
 
 		#endregion
