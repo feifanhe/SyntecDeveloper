@@ -89,17 +89,7 @@ namespace Syntec_Developer.Forms
 
 		#region Fenu Link Tree
 
-		private void GenerateTree()
-		{
-			foreach( Fenubars.Handler handler in this.m_fpFocusedFenubar.Fenubars ) {
-				foreach( Fenubars.XML.FenuState fs in handler.LoadedFenus ) {
-					if( string.Compare( FenuName, "main" ) == 0 ) {
-						handler.LoadFenu( FenuName );
-						return;
-					}
-				}
-			}
-		}
+		
 
 		#endregion
 

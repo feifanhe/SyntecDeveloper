@@ -12,7 +12,8 @@ namespace Syntec_Developer.Forms
 {
 	public partial class DCWorkDirectory : DockContent
 	{
-		public event EventHandler TreeViewDoubleClick;
+		public event TreeNodeMouseClickEventHandler FileNodeMouseDoubleClick;
+		public event TreeNodeMouseClickEventHandler ProductNodeMouseDoubleClick;
 
 		enum ImageIndex
 		{
@@ -30,27 +31,40 @@ namespace Syntec_Developer.Forms
 
 		public void LoadDirectory( string sDirectory )
 		{
-			this.tvwMain.Nodes.Clear();
 			if( Directory.Exists( sDirectory ) ) {
-				DirectoryInfo difRootDirectory = new DirectoryInfo( sDirectory );
-				TreeNode tnRootNode = new TreeNode(
-					difRootDirectory.FullName,
-					(int)ImageIndex.ROOT,
-					(int)ImageIndex.ROOT,
-					GetTreeNodes( difRootDirectory.GetDirectories(), difRootDirectory.GetFiles() )
-				);
-
-				TreeNode tnProduct = new TreeNode(
-					difRootDirectory.FullName,
-					(int)ImageIndex.ROOT,
-					(int)ImageIndex.ROOT,
-					GetProductNodes( difRootDirectory.GetDirectories() )
-				);
-
-				tnRootNode.Expand();
-				this.tvwMain.Nodes.Add( tnRootNode );
-				this.tvwMain.Nodes.Add( tnProduct );
+				LoadFileTreeView();
+				LoadProductTreeView();
 			}
+
+		}
+
+		private void LoadFileTreeView()
+		{
+			this.tvwFile.Nodes.Clear();
+			DirectoryInfo difRootDirectory = new DirectoryInfo( sDirectory );
+			TreeNode tnFile = new TreeNode(
+				difRootDirectory.FullName,
+				(int)ImageIndex.ROOT,
+				(int)ImageIndex.ROOT,
+				GetTreeNodes( difRootDirectory.GetDirectories(), difRootDirectory.GetFiles() )
+			);
+			tnFile.Expand();
+			this.tvwFile.Nodes.Add( tnFile );
+		}
+
+		private void LoadProductTreeView()
+		{
+			this.tvwProduct.Nodes.Clear();
+			DirectoryInfo difRootDirectory = new DirectoryInfo( sDirectory );
+
+			TreeNode tnProduct = new TreeNode(
+				difRootDirectory.FullName,
+				(int)ImageIndex.ROOT,
+				(int)ImageIndex.ROOT,
+				GetProductNodes( difRootDirectory.GetDirectories() )
+			);
+			tnProduct.ExpandAll();
+			this.tvwProduct.Nodes.Add( tnProduct );
 		}
 
 		// This function will be delete as new standards using DiskC Structure rather than directory structure
@@ -119,21 +133,26 @@ namespace Syntec_Developer.Forms
 			return lstProductNodes.ToArray();
 		}
 
-		private void tvwMain_AfterExpand( object sender, TreeViewEventArgs e )
+		private void tvwFile_AfterExpand( object sender, TreeViewEventArgs e )
 		{
 			if( e.Node.Level != 0 )
 				e.Node.ImageIndex = (int)ImageIndex.FOLDER_OPEN;
 		}
 
-		private void tvwMain_AfterCollapse( object sender, TreeViewEventArgs e )
+		private void tvwFile_AfterCollapse( object sender, TreeViewEventArgs e )
 		{
 			if( e.Node.Level != 0 )
 				e.Node.ImageIndex = (int)ImageIndex.FOLDER;
 		}
 
-		private void tvwMain_DoubleClick( object sender, EventArgs e )
+		private void tvwFile_NodeMouseDoubleClick( object sender, TreeNodeMouseClickEventArgs e )
 		{
-			this.TreeViewDoubleClick.Invoke( sender, e );
+			this.FileNodeMouseDoubleClick.Invoke( sender, e );
+		}
+
+		private void tvwProduct_NodeMouseDoubleClick( object sender, TreeNodeMouseClickEventArgs e )
+		{
+			this.ProductNodeMouseDoubleClick.Invoke( sender, e );
 		}
 
 
