@@ -63,6 +63,7 @@ namespace Syntec_Developer.Forms
 
 		private void GenerateList()
 		{
+			this.chklstFenuList.Items.Clear();
 			foreach( Fenubars.Handler handler in this.m_fpFocusedFenubar.Fenubars ) {
 				foreach( Fenubars.XML.FenuState fs in handler.LoadedFenus ) {
 					this.chklstFenuList.Items.Add( fs.Name );

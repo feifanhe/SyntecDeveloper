@@ -64,7 +64,13 @@ namespace Syntec_Developer.Controls
 			catch( FileLoadException ) {
 				MessageBox.Show( "Cannot load file." );
 			}
-			catch( InvalidOperationException ) {
+			catch( InvalidOperationException e ) {
+				MessageBox.Show( sXMLPath + ": " + e.Message );
+				File.WriteAllText(
+					sXMLPath,
+					File.ReadAllText( sXMLPath ).Replace( ">True<", ">true<" ).Replace( ">False<", ">false<" )
+				);
+				LoadFenubar( sXMLPath );
 			}
 		}
 
@@ -84,17 +90,7 @@ namespace Syntec_Developer.Controls
 			if( di.Exists ) {
 				foreach( FileInfo fi in di.GetFiles() ) {
 					if( fi.Extension == ".xml" ) {
-						try {
-							Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( fi.FullName );
-							hdlNewFenubar.Canvas = this.Controls;
-							hdlNewFenubar.PropertyViewer = this.PropertiesWindow.PropertyDisplay;
-							this.m_lstFenubarHandler.Add( hdlNewFenubar );
-						}
-						catch( FileLoadException ) {
-							//MessageBox.Show( "Cannot load file." );
-						}
-						catch( InvalidOperationException ) {
-						}
+						LoadFenubar( fi.FullName );
 					}
 				}
 			}
