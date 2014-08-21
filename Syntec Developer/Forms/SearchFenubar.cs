@@ -13,7 +13,7 @@ namespace Syntec_Developer.Forms
 	public partial class SearchFenubar : Form
 	{
 		DCDocument m_dcFenubarDocument;
-		DCFenuList m_dcFenuList;
+		DCFenuList FenuListWindow;
 		List<string> lstIDs;
 
 		public SearchFenubar()
@@ -25,7 +25,7 @@ namespace Syntec_Developer.Forms
 		{
 			SearchFenubar searchFenuBar = new SearchFenubar();
 			searchFenuBar.m_dcFenubarDocument = dcFenubarDocument;
-			searchFenuBar.m_dcFenuList = dcFenuList;
+			searchFenuBar.FenuListWindow = dcFenuList;
 			searchFenuBar.Show();
 		}
 
@@ -42,7 +42,7 @@ namespace Syntec_Developer.Forms
 			}
 
 			this.lstIDs =
-				this.m_dcFenubarDocument.m_rtResmapTable.GetIDsByKeyWord( "CHT", this.txtFenuButtonName.Text );
+				FormMain.ResmapTable.GetIDsByKeyWord( "CHT", this.txtFenuButtonName.Text );
 
 			//ArrayList arlFenus = new ArrayList( this.m_dcFenubarDocument.Fenubar.Fenus.Values );
 			//for( int i = 0; i < arlFenus.Count; i++ ) {
@@ -51,7 +51,7 @@ namespace Syntec_Developer.Forms
 			//        string sButtonTitleID = afbButtons[ j ].Properties.Title.ID;
 			//        if( sButtonTitleID != null && sButtonTitleID.ToUpper().Contains( "STR::" ) ) {
 			//            if( lstIDs.Contains( sButtonTitleID.Substring( 5 ) ) ) {
-			//                this.m_dcFenuList.FindFenu( ( (Fenu)arlFenus[ i ] ).Properties.Name );
+			//                this.FenuListWindow.FindFenu( ( (Fenu)arlFenus[ i ] ).Properties.Name );
 			//            }
 			//        }
 			//    }

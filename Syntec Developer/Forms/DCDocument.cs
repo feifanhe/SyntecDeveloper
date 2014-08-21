@@ -17,34 +17,9 @@ namespace Syntec_Developer.Forms
 		// Flags
 		private bool m_bIsNewFile;
 		private bool m_bIsModified;
-		// Tool Windows
-		private DCProperties m_dcpPropertiesWindow;
-		public DCProperties PropertiesWindow
-		{
-			get
-			{
-				return this.m_dcpPropertiesWindow;
-			}
-			set
-			{
-				this.m_dcpPropertiesWindow = value;
-			}
-		}
-		private DCFenuList m_dcflFenuListWindow;
-		public DCFenuList FenuListWindow
-		{
-			get
-			{
-				return this.m_dcflFenuListWindow;
-			}
-			set
-			{
-				this.m_dcflFenuListWindow = value;
-			}
-		}
+
 		// Resources
 		private ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
-		internal ResmapTable m_rtResmapTable;
 
 		private DocumentType m_dtType;
 		public DocumentType Type
@@ -89,29 +64,26 @@ namespace Syntec_Developer.Forms
 			InitializeComponent();
 		}
 
-		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile, ResmapTable rtResmapTable )
+		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile )
 		{
 			InitializeComponent();
 
 			this.m_dtType = dtType;
 			this.m_sFullName = sFullName;
 			this.m_bIsNewFile = bIsNewFile;
-			this.m_rtResmapTable = rtResmapTable;
 		}
 
-		public static DCDocument CreateProduct( string sProductPath, ResmapTable rtResmapTable){
+		public static DCDocument CreateProduct( string sProductPath )
+		{
 			DCDocument document = new DCDocument();
 			document.m_dtType = DocumentType.fenubar;
 			document.m_sFullName = sProductPath;
-			document.m_rtResmapTable = rtResmapTable;
 			return document;
 		}
 
 		public void LoadProduct()
 		{
 			this.m_fpFenubar = new FenubarPanel();
-			this.m_fpFenubar.PropertiesWindow = this.m_dcpPropertiesWindow;
-			this.m_fpFenubar.FenuListWindow = this.m_dcflFenuListWindow;
 			this.m_fpFenubar.LoadProduct( this.m_sFullName );
 			this.m_fpFenubar.Dock = DockStyle.Fill;
 
@@ -134,7 +106,7 @@ namespace Syntec_Developer.Forms
 
 		private void InitializeBrowser()
 		{
-			this.m_bpBrowser = new BrowserPanel( this.m_sFullName, this.m_bIsNewFile, this.m_rtResmapTable );
+			this.m_bpBrowser = new BrowserPanel( this.m_sFullName, this.m_bIsNewFile );
 			this.m_bpBrowser.Location = new Point( 3, 3 );
 
 			this.m_bpBrowser.MouseUp += new MouseEventHandler( Browser_MouseUp );
@@ -155,8 +127,6 @@ namespace Syntec_Developer.Forms
 		private void InitializeFenubar()
 		{
 			this.m_fpFenubar = new FenubarPanel();
-			this.m_fpFenubar.PropertiesWindow = this.m_dcpPropertiesWindow;
-			this.m_fpFenubar.FenuListWindow = this.m_dcflFenuListWindow;
 			this.m_fpFenubar.LoadFenubar( this.m_sFullName );
 			this.m_fpFenubar.Dock = DockStyle.Fill;
 
@@ -170,10 +140,10 @@ namespace Syntec_Developer.Forms
 		{
 			switch( this.m_dtType ) {
 				case DocumentType.browser:
-					this.m_dcpPropertiesWindow.BrowserActivated( this.Browser );
+					FormMain.PropertiesWindow.BrowserActivated( this.Browser );
 					break;
 				case DocumentType.fenubar:
-					this.m_dcflFenuListWindow.FenubarActivated( this.Fenubar );
+					FormMain.FenuListWindow.FenubarActivated( this.Fenubar );
 					break;
 			}
 		}
@@ -184,35 +154,35 @@ namespace Syntec_Developer.Forms
 
 		public void BrowserItem_MouseDown( object sender, EventArgs e )
 		{
-			this.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
+			FormMain.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
 		}
 
 		public void BrowserItem_PropertiesChanged( object sender, EventArgs e )
 		{
 			CheckModifiedState();
-			this.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
+			FormMain.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
 		}
 
 		public void BrowserItem_AddedDeleted( object sender, EventArgs e )
 		{
 			CheckModifiedState();
-			this.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
+			FormMain.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
 		}
 
 		private void Browser_MouseUp( object sender, MouseEventArgs e )
 		{
-			this.PropertiesWindow.MultiSelectMouseUp( this.Browser );
+			FormMain.PropertiesWindow.MultiSelectMouseUp( this.Browser );
 		}
 
 		private void Browser_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			this.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
+			FormMain.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
 		}
 
 		#endregion
 
 		#region Save
-		
+
 		private void CheckModifiedState()
 		{
 			if( !this.m_bIsModified ) {

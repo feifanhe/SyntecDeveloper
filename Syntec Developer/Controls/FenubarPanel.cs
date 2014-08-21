@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Syntec_Developer.Forms;
+using Fenubars;
 
 namespace Syntec_Developer.Controls
 {
@@ -21,57 +22,10 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
-		private DCProperties m_dcpPropertiesWindow;
-		public DCProperties PropertiesWindow
-		{
-			get
-			{
-				return this.m_dcpPropertiesWindow;
-			}
-			set
-			{
-				this.m_dcpPropertiesWindow = value;
-			}
-		}
-
-		private DCFenuList m_dcflFenuListWindow;
-		public DCFenuList FenuListWindow
-		{
-			get
-			{
-				return this.m_dcflFenuListWindow;
-			}
-			set
-			{
-				this.m_dcflFenuListWindow = value;
-			}
-		}
-
 		public FenubarPanel()
 		{
 			InitializeComponent();
 			this.m_lstFenubarHandler = new List<Fenubars.Handler>();
-		}
-
-		public void LoadFenubar( string sXMLPath )
-		{
-			try {
-				Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( sXMLPath );
-				hdlNewFenubar.Canvas = this.Controls;
-				hdlNewFenubar.PropertyViewer = this.PropertiesWindow.PropertyDisplay;
-				this.m_lstFenubarHandler.Add( hdlNewFenubar );
-			}
-			catch( FileLoadException ) {
-				MessageBox.Show( "Cannot load file." );
-			}
-			catch( InvalidOperationException e ) {
-				MessageBox.Show( sXMLPath + ": " + e.Message );
-				File.WriteAllText(
-					sXMLPath,
-					File.ReadAllText( sXMLPath ).Replace( ">True<", ">true<" ).Replace( ">False<", ">false<" )
-				);
-				LoadFenubar( sXMLPath );
-			}
 		}
 
 		public void LoadProduct( string sProductPath )
@@ -94,6 +48,34 @@ namespace Syntec_Developer.Controls
 					}
 				}
 			}
+		}
+
+		public void LoadFenubar( string sXMLPath )
+		{
+			try {
+				Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( sXMLPath );
+				hdlNewFenubar.Canvas = this.Controls;
+				hdlNewFenubar.PropertyViewer = FormMain.PropertiesWindow.PropertyDisplay;
+				this.m_lstFenubarHandler.Add( hdlNewFenubar );
+			}
+			catch( FileLoadException ) {
+				MessageBox.Show( "Cannot load file." );
+			}
+			catch( InvalidOperationException e ) {
+				MessageBox.Show( sXMLPath + ": " + e.Message );
+				ReplaceInvalidValueInXML( sXMLPath );
+				LoadFenubar( sXMLPath );
+			}
+		}
+
+		private void ReplaceInvalidValueInXML( string sXMLPath )
+		{
+			File.WriteAllText(
+				sXMLPath,
+				File.ReadAllText( sXMLPath )
+					.Replace( ">True<", ">true<" )
+					.Replace( ">False<", ">false<" )
+			);
 		}
 	}
 }

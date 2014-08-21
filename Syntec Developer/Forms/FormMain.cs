@@ -13,21 +13,24 @@ namespace Syntec_Developer.Forms
 {
 	public partial class FormMain : Form
 	{
-		const bool IS_NEW_FILE = true;
-		const bool IS_NOT_NEW_FILE = false;
-		const string SYNTEC_DEVELOPER_INI_PATH = "Syntec_Developer.ini";
+		// Resmap Table
+		public static ResmapTable ResmapTable;
+		// Tool Windows
+		public static DCWorkDirectory WorkDirectoryWindow;
+		public static DCToolBox ToolBoxWindow;
+		public static DCProperties PropertiesWindow;
+		public static DCFenuList FenuListWindow;
+		
+		public const bool IS_NEW_FILE = true;
+		public const bool IS_NOT_NEW_FILE = false;
+		public const string SYNTEC_DEVELOPER_INI_PATH = "Syntec_Developer.ini";
 
 		private string m_sWorkDirectory;
 		private IniFile m_ifIniFile;
-		private ResmapTable m_rtResmapTable;
 
 		private DCDocument m_dcdLastFocusedDocument;
 		private List<DCDocument> m_lstOpenedDocuments;
-
-		private DCWorkDirectory m_dcWorkDirectory;
-		private DCToolBox m_dcToolBox;
-		private DCProperties m_dcProperties;
-		private DCFenuList m_dcFenuList;
+		
 
 		#region Constructor & Initialize
 
@@ -37,10 +40,11 @@ namespace Syntec_Developer.Forms
 
 			this.m_sWorkDirectory = string.Empty;
 			this.m_ifIniFile = new IniFile( SYNTEC_DEVELOPER_INI_PATH );
-			this.m_rtResmapTable = new ResmapTable();
 
 			this.m_dcdLastFocusedDocument = null;
 			this.m_lstOpenedDocuments = new List<DCDocument>();
+
+			FormMain.ResmapTable = new ResmapTable();
 
 			CheckRDUser();
 
@@ -64,42 +68,42 @@ namespace Syntec_Developer.Forms
 
 		private void InitializeTreeViewWindow()
 		{
-			this.m_dcWorkDirectory = new DCWorkDirectory();
-			this.m_dcWorkDirectory.FormClosing += new FormClosingEventHandler( m_dcWorkDirectory_FormClosing );
-			this.m_dcWorkDirectory.FileNodeMouseDoubleClick +=
+			FormMain.WorkDirectoryWindow = new DCWorkDirectory();
+			FormMain.WorkDirectoryWindow.FormClosing += new FormClosingEventHandler( WorkDirectoryWindow_FormClosing );
+			FormMain.WorkDirectoryWindow.FileNodeMouseDoubleClick +=
 				new TreeNodeMouseClickEventHandler( WorkDirectoryFileNodeMouseDoubleClick );
-			this.m_dcWorkDirectory.ProductNodeMouseDoubleClick +=
+			FormMain.WorkDirectoryWindow.ProductNodeMouseDoubleClick +=
 				new TreeNodeMouseClickEventHandler( WorkDirectoryProductNodeMouseDoubleClick );
-			this.m_dcWorkDirectory.LoadDirectory( m_sWorkDirectory );
-			this.m_dcWorkDirectory.Show( this.dplMainPanel, DockState.DockLeft );
+			FormMain.WorkDirectoryWindow.LoadDirectory( m_sWorkDirectory );
+			FormMain.WorkDirectoryWindow.Show( this.dplMainPanel, DockState.DockLeft );
 
 			this.tsmiTreeView.Checked = true;
 		}
 
 		private void InitializePropertiesWindow()
 		{
-			this.m_dcProperties = new DCProperties();
-			this.m_dcProperties.FormClosing += new FormClosingEventHandler( m_dcProperties_FormClosing );
-			this.m_dcProperties.Show( this.dplMainPanel, DockState.DockRight );
+			FormMain.PropertiesWindow = new DCProperties();
+			FormMain.PropertiesWindow.FormClosing += new FormClosingEventHandler( PropertiesWindow_FormClosing );
+			FormMain.PropertiesWindow.Show( this.dplMainPanel, DockState.DockRight );
 
 			this.tsmiProperties.Checked = true;
 		}
 
 		private void InitializeToolBoxWindow()
 		{
-			this.m_dcToolBox = new DCToolBox();
-			this.m_dcToolBox.FormClosing += new FormClosingEventHandler( m_dcToolBox_FormClosing );
-			this.m_dcToolBox.Show( this.m_dcProperties.Pane, DockAlignment.Top, 0.5 );
+			FormMain.ToolBoxWindow = new DCToolBox();
+			FormMain.ToolBoxWindow.FormClosing += new FormClosingEventHandler( ToolBoxWindow_FormClosing );
+			FormMain.ToolBoxWindow.Show( FormMain.PropertiesWindow.Pane, DockAlignment.Top, 0.5 );
 
 			this.tsmiToolBox.Checked = true;
 		}
 
 		private void InitializeFenuListWindow()
 		{
-			this.m_dcFenuList = new DCFenuList();
-			this.m_dcFenuList.FormClosing += new FormClosingEventHandler( m_dcFenuList_FormClosing );
-			this.m_dcFenuList.Show( this.m_dcProperties.Pane, DockAlignment.Top, 0.5 );
-			this.m_dcFenuList.Hide();
+			FormMain.FenuListWindow = new DCFenuList();
+			FormMain.FenuListWindow.FormClosing += new FormClosingEventHandler( FenuListWindow_FormClosing );
+			FormMain.FenuListWindow.Show( FormMain.PropertiesWindow.Pane, DockAlignment.Top, 0.5 );
+			FormMain.FenuListWindow.Hide();
 		}
 
 		private void SetWorkDirectory()
@@ -109,12 +113,12 @@ namespace Syntec_Developer.Forms
 
 		private void LoadWorkDirectory()
 		{
-			this.m_dcWorkDirectory.LoadDirectory( this.m_sWorkDirectory );
+			FormMain.WorkDirectoryWindow.LoadDirectory( this.m_sWorkDirectory );
 		}
 
 		private void LoadResmapTable()
 		{
-			this.m_rtResmapTable.Load( this.m_sWorkDirectory );
+			FormMain.ResmapTable.Load( this.m_sWorkDirectory );
 		}
 
 		#endregion
@@ -142,7 +146,7 @@ namespace Syntec_Developer.Forms
 		{
 			if( this.fbdlgWorkDirectory.ShowDialog() == DialogResult.OK ) {
 				this.m_sWorkDirectory = fbdlgWorkDirectory.SelectedPath;
-				this.m_dcWorkDirectory.LoadDirectory( this.m_sWorkDirectory );
+				FormMain.WorkDirectoryWindow.LoadDirectory( this.m_sWorkDirectory );
 				LoadResmapTable();
 				this.m_ifIniFile.Write( "Path", "LastWorkDirectory", this.m_sWorkDirectory );
 			}
@@ -157,7 +161,7 @@ namespace Syntec_Developer.Forms
 				MessageBox.Show( "Fail to save the document." );
 			}
 
-			m_rtResmapTable.SaveResmap();
+			ResmapTable.SaveResmap();
 		}
 
 		private void SaveAll_Click( object sender, EventArgs e )
@@ -208,7 +212,7 @@ namespace Syntec_Developer.Forms
 		{
 			if( this.m_dcdLastFocusedDocument != null ) {
 				if( this.m_dcdLastFocusedDocument.Type == DocumentType.fenubar ) {
-					SearchFenubar.Show( this.m_dcdLastFocusedDocument, this.m_dcFenuList );
+					SearchFenubar.Show( this.m_dcdLastFocusedDocument, FormMain.FenuListWindow );
 					return;
 				}
 			}
@@ -223,10 +227,10 @@ namespace Syntec_Developer.Forms
 		{
 			this.tsmiTreeView.Checked = !this.tsmiTreeView.Checked;
 			if( this.tsmiTreeView.Checked ) {
-				this.m_dcWorkDirectory.Show( this.dplMainPanel );
+				FormMain.WorkDirectoryWindow.Show( this.dplMainPanel );
 			}
 			else {
-				this.m_dcWorkDirectory.Hide();
+				FormMain.WorkDirectoryWindow.Hide();
 			}
 		}
 
@@ -234,10 +238,10 @@ namespace Syntec_Developer.Forms
 		{
 			this.tsmiToolBox.Checked = !this.tsmiToolBox.Checked;
 			if( this.tsmiToolBox.Checked ) {
-				this.m_dcToolBox.Show( this.dplMainPanel );
+				FormMain.ToolBoxWindow.Show( this.dplMainPanel );
 			}
 			else {
-				this.m_dcToolBox.Hide();
+				FormMain.ToolBoxWindow.Hide();
 			}
 		}
 
@@ -245,10 +249,10 @@ namespace Syntec_Developer.Forms
 		{
 			this.tsmiProperties.Checked = !this.tsmiProperties.Checked;
 			if( this.tsmiProperties.Checked ) {
-				this.m_dcProperties.Show( this.dplMainPanel );
+				FormMain.PropertiesWindow.Show( this.dplMainPanel );
 			}
 			else {
-				this.m_dcProperties.Hide();
+				FormMain.PropertiesWindow.Hide();
 			}
 		}
 
@@ -256,10 +260,10 @@ namespace Syntec_Developer.Forms
 		{
 			this.tsmiFenuList.Checked = !this.tsmiFenuList.Checked;
 			if( this.tsmiFenuList.Checked ) {
-				this.m_dcFenuList.Show( this.dplMainPanel );
+				FormMain.FenuListWindow.Show( this.dplMainPanel );
 			}
 			else {
-				this.m_dcFenuList.Hide();
+				FormMain.FenuListWindow.Hide();
 			}
 		}
 
@@ -267,32 +271,32 @@ namespace Syntec_Developer.Forms
 
 		#region Tool Windows Control Event
 
-		private void m_dcWorkDirectory_FormClosing( object sender, FormClosingEventArgs e )
+		private void WorkDirectoryWindow_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			e.Cancel = true;
 			this.tsmiTreeView.Checked = false;
-			this.m_dcWorkDirectory.Hide();
+			FormMain.WorkDirectoryWindow.Hide();
 		}
 
-		private void m_dcProperties_FormClosing( object sender, FormClosingEventArgs e )
+		private void PropertiesWindow_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			e.Cancel = true;
 			this.tsmiProperties.Checked = false;
-			this.m_dcProperties.Hide();
+			FormMain.PropertiesWindow.Hide();
 		}
 
-		private void m_dcToolBox_FormClosing( object sender, FormClosingEventArgs e )
+		private void ToolBoxWindow_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			e.Cancel = true;
 			this.tsmiToolBox.Checked = false;
-			this.m_dcToolBox.Hide();
+			FormMain.ToolBoxWindow.Hide();
 		}
 
-		private void m_dcFenuList_FormClosing( object sender, FormClosingEventArgs e )
+		private void FenuListWindow_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			e.Cancel = true;
 			this.tsmiFenuList.Checked = false;
-			this.m_dcFenuList.Hide();
+			FormMain.FenuListWindow.Hide();
 		}
 
 		#endregion
@@ -320,9 +324,7 @@ namespace Syntec_Developer.Forms
 
 		private void OpenProduct( string sPath )
 		{
-			DCDocument dc = DCDocument.CreateProduct( sPath, m_rtResmapTable );
-			dc.PropertiesWindow = this.m_dcProperties;
-			dc.FenuListWindow = this.m_dcFenuList;
+			DCDocument dc = DCDocument.CreateProduct( sPath );
 			dc.LoadProduct();
 			this.m_lstOpenedDocuments.Add( dc );
 			SetDocumentEvents( dc );
@@ -360,9 +362,7 @@ namespace Syntec_Developer.Forms
 
 		private void OpenDocument( DocumentType dtType, string sFileName, bool bIsNewFile )
 		{
-			DCDocument dcdDocumentToShow = new DCDocument( dtType, sFileName, bIsNewFile, m_rtResmapTable );
-			dcdDocumentToShow.PropertiesWindow = this.m_dcProperties;
-			dcdDocumentToShow.FenuListWindow = this.m_dcFenuList;
+			DCDocument dcdDocumentToShow = new DCDocument( dtType, sFileName, bIsNewFile );
 			dcdDocumentToShow.LoadFile();
 			this.m_lstOpenedDocuments.Add( dcdDocumentToShow );
 			SetDocumentEvents( dcdDocumentToShow );
@@ -373,7 +373,7 @@ namespace Syntec_Developer.Forms
 		{
 			// TODO: send message to Document:Browser when user ckick ToolBox
 			if( dcdDocumentToShow.Type == DocumentType.browser ) {
-				this.m_dcToolBox.SelectItemToDraw +=
+				FormMain.ToolBoxWindow.SelectItemToDraw +=
 					new DCToolBox.SelectItemToDrawHandler( dcdDocumentToShow.Browser.SelectedItemToDraw );
 			}
 
@@ -454,12 +454,12 @@ namespace Syntec_Developer.Forms
 		private void ShowBrowserUI()
 		{
 			if( !tsmiToolBox.Checked ) {
-				m_dcToolBox.Show();
+				ToolBoxWindow.Show();
 				tsmiToolBox.Checked = true;
 				tsmiToolBox.Enabled = true;
 			}
 			if( tsmiFenuList.Checked ) {
-				m_dcFenuList.Hide();
+				FenuListWindow.Hide();
 				tsmiFenuList.Checked = false;
 				tsmiFenuList.Enabled = false;
 			}
@@ -467,12 +467,12 @@ namespace Syntec_Developer.Forms
 		private void ShowFenubarUI()
 		{
 			if( tsmiToolBox.Checked ) {
-				m_dcToolBox.Hide();
+				ToolBoxWindow.Hide();
 				tsmiToolBox.Checked = false;
 				tsmiToolBox.Enabled = false;
 			}
 			if( !tsmiFenuList.Checked ) {
-				m_dcFenuList.Show();
+				FenuListWindow.Show();
 				tsmiFenuList.Checked = true;
 				tsmiFenuList.Enabled = true;
 			}

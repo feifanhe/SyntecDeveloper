@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Threading;
 using System.Xml;
+using Syntec_Developer.Forms;
 using Syntec_Developer.Controls.PropertyClasses;
 
 namespace Syntec_Developer.Controls
@@ -27,7 +28,6 @@ namespace Syntec_Developer.Controls
 		private List<BrowserItem> m_lstSelectItems;
 		private BrowserProperties m_bpProperties;
 		private Graphics m_grpMouseDragDropRegion;
-		private ResmapTable m_rtResmapTable;
 
 		internal XmlDocument m_xdDocument;
 		internal XmlNode m_xnScreenNode;
@@ -98,12 +98,11 @@ namespace Syntec_Developer.Controls
 
 		#region Constructor
 
-		public BrowserPanel( string sFileName, bool bIsNewFile, ResmapTable rtResmapTable )
+		public BrowserPanel( string sFileName, bool bIsNewFile )
 		{
 			InitializeComponent();
 			this.m_sFileName = sFileName;
 			this.m_bIsNewFile = bIsNewFile;
-			this.m_rtResmapTable = rtResmapTable;
 			InitializeMembers();
 		}
 
