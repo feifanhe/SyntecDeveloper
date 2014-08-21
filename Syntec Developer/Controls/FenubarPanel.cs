@@ -53,10 +53,10 @@ namespace Syntec_Developer.Controls
 			this.m_lstFenubarHandler = new List<Fenubars.Handler>();
 		}
 
-		public void LoadFenubar( string XMLPath )
+		public void LoadFenubar( string sXMLPath )
 		{
 			try {
-				Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( XMLPath );
+				Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( sXMLPath );
 				hdlNewFenubar.Canvas = this.Controls;
 				hdlNewFenubar.PropertyViewer = this.PropertiesWindow.PropertyDisplay;
 				this.m_lstFenubarHandler.Add( hdlNewFenubar );
@@ -68,5 +68,36 @@ namespace Syntec_Developer.Controls
 			}
 		}
 
+		public void LoadProduct( string sProductPath )
+		{
+			DirectoryInfo di = new DirectoryInfo( sProductPath );
+			while( di != null ) {
+				LoadFiles( di.FullName );
+				di = di.Parent;
+			}
+		}
+
+		private void LoadFiles( string sPath )
+		{
+			string sCommon = sPath + "\\Common";
+			DirectoryInfo di = new DirectoryInfo( sCommon );
+			if( di.Exists ) {
+				foreach( FileInfo fi in di.GetFiles() ) {
+					if( fi.Extension == ".xml" ) {
+						try {
+							Fenubars.Handler hdlNewFenubar = new Fenubars.Handler( fi.FullName );
+							hdlNewFenubar.Canvas = this.Controls;
+							hdlNewFenubar.PropertyViewer = this.PropertiesWindow.PropertyDisplay;
+							this.m_lstFenubarHandler.Add( hdlNewFenubar );
+						}
+						catch( FileLoadException ) {
+							//MessageBox.Show( "Cannot load file." );
+						}
+						catch( InvalidOperationException ) {
+						}
+					}
+				}
+			}
+		}
 	}
 }

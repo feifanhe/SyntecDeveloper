@@ -58,6 +58,7 @@ namespace Syntec_Developer.Forms
 		{
 			if( Environment.GetEnvironmentVariable( "OCSDK" ) != null ) {
 				this.Text = string.Concat( this.Text, " - R&D Mode" );
+				// TODO: RD MODE CONTROL
 			}
 		}
 
@@ -65,7 +66,10 @@ namespace Syntec_Developer.Forms
 		{
 			this.m_dcWorkDirectory = new DCWorkDirectory();
 			this.m_dcWorkDirectory.FormClosing += new FormClosingEventHandler( m_dcWorkDirectory_FormClosing );
-			this.m_dcWorkDirectory.TreeViewDoubleClick += new EventHandler( WorkDirectoryTreeView_DoubleClick );
+			this.m_dcWorkDirectory.FileNodeMouseDoubleClick +=
+				new TreeNodeMouseClickEventHandler( WorkDirectoryFileNodeMouseDoubleClick );
+			this.m_dcWorkDirectory.ProductNodeMouseDoubleClick +=
+				new TreeNodeMouseClickEventHandler( WorkDirectoryProductNodeMouseDoubleClick );
 			this.m_dcWorkDirectory.LoadDirectory( m_sWorkDirectory );
 			this.m_dcWorkDirectory.Show( this.dplMainPanel, DockState.DockLeft );
 
@@ -302,15 +306,27 @@ namespace Syntec_Developer.Forms
 			}
 		}
 
-		private void WorkDirectoryTreeView_DoubleClick( object sender, EventArgs e )
+		private void WorkDirectoryFileNodeMouseDoubleClick( object sender, TreeNodeMouseClickEventArgs e )
 		{
-			TreeView tvwWorkDirectoryTreeView = sender as TreeView;
-			if( tvwWorkDirectoryTreeView.SelectedNode != null ) {
-				string sFileName = tvwWorkDirectoryTreeView.SelectedNode.FullPath;
-				if( IsXmlFile( sFileName ) ) {
-					OpenFile( sFileName );
-				}
+			if( IsXmlFile( e.Node.FullPath ) ) {
+				OpenFile( e.Node.FullPath );
 			}
+		}
+
+		private void WorkDirectoryProductNodeMouseDoubleClick( object sender, TreeNodeMouseClickEventArgs e )
+		{
+			OpenProduct( e.Node.FullPath );
+		}
+
+		private void OpenProduct( string sPath )
+		{
+			DCDocument dc = DCDocument.CreateProduct( sPath, m_rtResmapTable );
+			dc.PropertiesWindow = this.m_dcProperties;
+			dc.FenuListWindow = this.m_dcFenuList;
+			dc.LoadProduct();
+			this.m_lstOpenedDocuments.Add( dc );
+			SetDocumentEvents( dc );
+			dc.Show( this.dplMainPanel, DockState.Document );
 		}
 
 		private void OpenFile( string sFileName )

@@ -32,13 +32,13 @@ namespace Syntec_Developer.Forms
 		public void LoadDirectory( string sDirectory )
 		{
 			if( Directory.Exists( sDirectory ) ) {
-				LoadFileTreeView();
-				LoadProductTreeView();
+				LoadFileTreeView( sDirectory );
+				LoadProductTreeView( sDirectory );
 			}
 
 		}
 
-		private void LoadFileTreeView()
+		private void LoadFileTreeView( string sDirectory )
 		{
 			this.tvwFile.Nodes.Clear();
 			DirectoryInfo difRootDirectory = new DirectoryInfo( sDirectory );
@@ -52,7 +52,7 @@ namespace Syntec_Developer.Forms
 			this.tvwFile.Nodes.Add( tnFile );
 		}
 
-		private void LoadProductTreeView()
+		private void LoadProductTreeView( string sDirectory )
 		{
 			this.tvwProduct.Nodes.Clear();
 			DirectoryInfo difRootDirectory = new DirectoryInfo( sDirectory );

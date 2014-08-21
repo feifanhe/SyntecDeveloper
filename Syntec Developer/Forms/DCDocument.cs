@@ -84,6 +84,11 @@ namespace Syntec_Developer.Forms
 
 		#region Initialize
 
+		public DCDocument()
+		{
+			InitializeComponent();
+		}
+
 		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile, ResmapTable rtResmapTable )
 		{
 			InitializeComponent();
@@ -92,8 +97,27 @@ namespace Syntec_Developer.Forms
 			this.m_sFullName = sFullName;
 			this.m_bIsNewFile = bIsNewFile;
 			this.m_rtResmapTable = rtResmapTable;
+		}
 
-			
+		public static DCDocument CreateProduct( string sProductPath, ResmapTable rtResmapTable){
+			DCDocument document = new DCDocument();
+			document.m_dtType = DocumentType.fenubar;
+			document.m_sFullName = sProductPath;
+			document.m_rtResmapTable = rtResmapTable;
+			return document;
+		}
+
+		public void LoadProduct()
+		{
+			this.m_fpFenubar = new FenubarPanel();
+			this.m_fpFenubar.PropertiesWindow = this.m_dcpPropertiesWindow;
+			this.m_fpFenubar.FenuListWindow = this.m_dcflFenuListWindow;
+			this.m_fpFenubar.LoadProduct( this.m_sFullName );
+			this.m_fpFenubar.Dock = DockStyle.Fill;
+
+			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Fenubar" ) ) );
+			this.Text = this.m_sFullName;
+			this.Controls.Add( this.m_fpFenubar );
 		}
 
 		public void LoadFile()

@@ -51,7 +51,7 @@ namespace Syntec_Developer.Forms
 			this.tvwFile.SelectedImageIndex = 0;
 			this.tvwFile.Size = new System.Drawing.Size( 317, 230 );
 			this.tvwFile.TabIndex = 0;
-			this.tvwFile.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler( this.tvwFile_DoubleClick );
+			this.tvwFile.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler( this.tvwFile_NodeMouseDoubleClick );
 			this.tvwFile.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler( this.tvwFile_AfterCollapse );
 			this.tvwFile.AfterExpand += new System.Windows.Forms.TreeViewEventHandler( this.tvwFile_AfterExpand );
 			// 
