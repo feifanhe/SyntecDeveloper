@@ -10,28 +10,7 @@ using Syntec_Developer.Controls.PropertyClasses;
 
 namespace Syntec_Developer.Controls
 {
-	public enum ItemType
-	{
-		Button,
-		CheckBox,
-		CoordBox,
-		Display,
-		FileList,
-		Input,
-		Inputline,
-		Label,
-		Lamp,
-		ListInput,
-		Meter,
-		OCSimu,
-		OCText,
-		Panel,
-		Picture,
-		Radio,
-		Vision,
-		NoType
-	}
-
+	
 	public partial class BrowserItem : Label
 	{
 		public const int MIN_ITEM_SIZE = 15;

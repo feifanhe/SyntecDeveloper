@@ -75,6 +75,8 @@ namespace Syntec_Developer.Controls
 				File.ReadAllText( sXMLPath )
 					.Replace( ">True<", ">true<" )
 					.Replace( ">False<", ">false<" )
+					.Replace( "<state>", "<State>")
+					.Replace( "</state>", "</State>" )
 			);
 		}
 	}

@@ -64,6 +64,7 @@ namespace Syntec_Developer.Forms
 			this.imgTreeView.Images.SetKeyName( 2, "VSFolder_open.bmp" );
 			this.imgTreeView.Images.SetKeyName( 3, "VSProject_xml.bmp" );
 			this.imgTreeView.Images.SetKeyName( 4, "DocumentHS.png" );
+			this.imgTreeView.Images.SetKeyName( 5, "MYCOMP.BMP" );
 			// 
 			// tbcWorkDirectory
 			// 

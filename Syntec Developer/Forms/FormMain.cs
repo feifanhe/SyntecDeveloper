@@ -20,7 +20,7 @@ namespace Syntec_Developer.Forms
 		public static DCToolBox ToolBoxWindow;
 		public static DCProperties PropertiesWindow;
 		public static DCFenuList FenuListWindow;
-		
+
 		public const bool IS_NEW_FILE = true;
 		public const bool IS_NOT_NEW_FILE = false;
 		public const string SYNTEC_DEVELOPER_INI_PATH = "Syntec_Developer.ini";
@@ -30,7 +30,7 @@ namespace Syntec_Developer.Forms
 
 		private DCDocument m_dcdLastFocusedDocument;
 		private List<DCDocument> m_lstOpenedDocuments;
-		
+
 
 		#region Constructor & Initialize
 
@@ -127,12 +127,12 @@ namespace Syntec_Developer.Forms
 
 		private void NewBrowser_Click( object sender, EventArgs e )
 		{
-			OpenDocument( DocumentType.browser, GenerateNewNameWithIndex( "NewBrowser" ), IS_NEW_FILE );
+			NewBrowser( GenerateNewNameWithIndex( "NewBrowser" ) );
 		}
 
 		private void NewFenubar_Click( object sender, EventArgs e )
 		{
-			OpenDocument( DocumentType.fenubar, GenerateNewNameWithIndex( "NewFenubar" ), IS_NEW_FILE );
+			NewFenubar( GenerateNewNameWithIndex( "NewFenubar" ) );
 		}
 
 		private void OpenFile_Click( object sender, EventArgs e )
@@ -161,7 +161,7 @@ namespace Syntec_Developer.Forms
 				MessageBox.Show( "Fail to save the document." );
 			}
 
-			ResmapTable.SaveResmap();
+			FormMain.ResmapTable.SaveResmap();
 		}
 
 		private void SaveAll_Click( object sender, EventArgs e )
@@ -322,23 +322,12 @@ namespace Syntec_Developer.Forms
 			OpenProduct( e.Node.FullPath );
 		}
 
-		private void OpenProduct( string sPath )
-		{
-			DCDocument dc = DCDocument.CreateProduct( sPath );
-			dc.LoadProduct();
-			this.m_lstOpenedDocuments.Add( dc );
-			SetDocumentEvents( dc );
-			dc.Show( this.dplMainPanel, DockState.Document );
-		}
-
 		private void OpenFile( string sFileName )
 		{
-			foreach( DCDocument dcDocument in this.m_lstOpenedDocuments ) {
-				if( string.Compare( dcDocument.FullName, sFileName ) == 0 ) {
-					dcDocument.Focus();
-					return;
-				}
+			if( HasBeenOpened( sFileName ) ) {
+				return;
 			}
+			
 			XmlDocument xdDocument = new XmlDocument();
 			try {
 				xdDocument.Load( sFileName );
@@ -349,35 +338,80 @@ namespace Syntec_Developer.Forms
 			}
 
 			if( IsBrowserXmlDocument( xdDocument ) ) {
-				OpenDocument( DocumentType.browser, sFileName, IS_NOT_NEW_FILE );
+				OpenBrowser( sFileName );
 			}
 			else if( IsFenubarXmlDocument( xdDocument ) ) {
-				OpenDocument( DocumentType.fenubar, sFileName, IS_NOT_NEW_FILE );
+				OpenFenubar( sFileName );
 			}
 			else {
 				MessageBox.Show( "NOT Browser nor Fenubar: " + sFileName );
-				return;
 			}
 		}
 
-		private void OpenDocument( DocumentType dtType, string sFileName, bool bIsNewFile )
+		private void OpenProduct( string sPath )
 		{
-			DCDocument dcdDocumentToShow = new DCDocument( dtType, sFileName, bIsNewFile );
-			dcdDocumentToShow.LoadFile();
-			this.m_lstOpenedDocuments.Add( dcdDocumentToShow );
-			SetDocumentEvents( dcdDocumentToShow );
-			dcdDocumentToShow.Show( this.dplMainPanel, DockState.Document );
+			if( HasBeenOpened( sPath ) ) {
+				return;
+			}
+
+			DCDocument dcdProduct = DCDocument.CreateProduct( sPath );
+			dcdProduct.LoadProduct();
+			this.m_lstOpenedDocuments.Add( dcdProduct );
+			SetDocumentEvents( dcdProduct );
+			dcdProduct.Show( this.dplMainPanel, DockState.Document );
+		}
+
+		private void OpenBrowser( string sPath )
+		{
+			DCDocument dcdBrowser = DCDocument.CreateBrowser( sPath );
+			dcdBrowser.LoadBrowser();
+			this.m_lstOpenedDocuments.Add( dcdBrowser );
+			SetDocumentEvents( dcdBrowser );
+			dcdBrowser.Show( this.dplMainPanel, DockState.Document );
+		}
+
+		private void OpenFenubar( string sPath )
+		{
+			DCDocument dcdFenubar = DCDocument.CreateFenubar( sPath );
+			dcdFenubar.LoadFenubar();
+			this.m_lstOpenedDocuments.Add( dcdFenubar );
+			SetDocumentEvents( dcdFenubar );
+			dcdFenubar.Show( this.dplMainPanel, DockState.Document );
+		}
+
+		private void NewBrowser( string sName )
+		{
+			DCDocument dcdBrowser = DCDocument.CreateBrowser( sName );
+			dcdBrowser.IsNewFile = true;
+			dcdBrowser.LoadBrowser();
+			this.m_lstOpenedDocuments.Add( dcdBrowser );
+			SetDocumentEvents( dcdBrowser );
+			dcdBrowser.Show( this.dplMainPanel, DockState.Document );
+		}
+
+		private void NewFenubar( string sName )
+		{
+			DCDocument dcdFenubar = DCDocument.CreateFenubar( sName );
+			dcdFenubar.IsNewFile = true;
+			dcdFenubar.LoadFenubar();
+			this.m_lstOpenedDocuments.Add( dcdFenubar );
+			SetDocumentEvents( dcdFenubar );
+			dcdFenubar.Show( this.dplMainPanel, DockState.Document );
+		}
+
+		private bool HasBeenOpened( string sFullName )
+		{
+			foreach( DCDocument dcDocument in this.m_lstOpenedDocuments ) {
+				if( string.Compare( dcDocument.FullName, sFullName ) == 0 ) {
+					dcDocument.Focus();
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private void SetDocumentEvents( DCDocument dcdDocumentToShow )
 		{
-			// TODO: send message to Document:Browser when user ckick ToolBox
-			if( dcdDocumentToShow.Type == DocumentType.browser ) {
-				FormMain.ToolBoxWindow.SelectItemToDraw +=
-					new DCToolBox.SelectItemToDrawHandler( dcdDocumentToShow.Browser.SelectedItemToDraw );
-			}
-
-			// TODO: classify the functions...
 			dcdDocumentToShow.FormClosing += new FormClosingEventHandler( Document_FormClosing );
 			dcdDocumentToShow.Activated += new EventHandler( Document_Activated );
 		}
@@ -410,6 +444,7 @@ namespace Syntec_Developer.Forms
 			}
 			this.m_lstOpenedDocuments.Remove( dcDocumentToClose );
 			this.Controls.Remove( dcDocumentToClose );
+			dcDocumentToClose.Dispose();
 		}
 
 		#endregion
@@ -464,6 +499,7 @@ namespace Syntec_Developer.Forms
 				tsmiFenuList.Enabled = false;
 			}
 		}
+
 		private void ShowFenubarUI()
 		{
 			if( tsmiToolBox.Checked ) {

@@ -21,7 +21,8 @@ namespace Syntec_Developer.Forms
 			FOLDER,
 			FOLDER_OPEN,
 			XML_FILE,
-			FILE
+			FILE,
+			PRODUCT
 		};
 
 		public DCWorkDirectory()
@@ -122,8 +123,8 @@ namespace Syntec_Developer.Forms
 					lstProductNodes.Add(
 						new TreeNode(
 							difaDirectories[ i ].Name,
-							(int)ImageIndex.FOLDER,
-							(int)ImageIndex.FOLDER,
+							(int)ImageIndex.PRODUCT,
+							(int)ImageIndex.PRODUCT,
 							GetProductNodes( difaDirectories[ i ].GetDirectories() )
 						)
 					);

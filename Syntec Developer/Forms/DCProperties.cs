@@ -44,6 +44,8 @@ namespace Syntec_Developer.Forms
 				string sItemName = this.cboItems.SelectedItem.ToString();
 				switch( this.m_dcdRecentFocusedDocument.Type ) {
 					case DocumentType.browser:
+						prgItemProperties.HiddenAttributes = null;
+						prgItemProperties.BrowsableAttributes = null;
 						prgItemProperties.SelectedObject = 
 							( this.m_dcdRecentFocusedDocument.Browser.Items[ sItemName ] as BrowserItem ).Properties;
 						break;
@@ -58,6 +60,8 @@ namespace Syntec_Developer.Forms
 			this.m_dcdRecentFocusedDocument = sender as DCDocument;
 			switch( this.m_dcdRecentFocusedDocument.Type ) {
 				case DocumentType.browser:
+					prgItemProperties.HiddenAttributes = null;
+					prgItemProperties.BrowsableAttributes = null;
 					prgItemProperties.SelectedObject = this.m_dcdRecentFocusedDocument.Browser.Properties;
 					UpdateComboBoxWithBrowserItem( this.m_dcdRecentFocusedDocument.Browser );
 					break;
@@ -70,6 +74,8 @@ namespace Syntec_Developer.Forms
 
 		public void BrowserActivated( BrowserPanel bpBrowser )
 		{
+			prgItemProperties.HiddenAttributes = null;
+			prgItemProperties.BrowsableAttributes = null;
 			prgItemProperties.SelectedObject = bpBrowser.Properties;
 			UpdateComboBoxWithBrowserItem( bpBrowser );
 		}

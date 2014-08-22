@@ -83,16 +83,11 @@ namespace Syntec_Developer.Controls
 
 		#region Custom Define Event
 
-		public delegate void ItemMouseDownHandler( object sender, EventArgs e );
-		public event ItemMouseDownHandler ItemMouseDown;
-		public delegate void ItemPropertiesChangedHandler( object sender, EventArgs e );
-		public event ItemPropertiesChangedHandler ItemPropertiesChanged;
-		public delegate void ItemAddedDeletedHandler( object sender, EventArgs e );
-		public event ItemAddedDeletedHandler ItemAddedDeleted;
+		public event EventHandler ItemMouseDown;
+		public event EventHandler ItemPropertiesChanged;
+		public event EventHandler ItemAddedDeleted;
 		public delegate void BrowserSizeLoadHandler( int nWidth, int nHeight );
 		public delegate void ItemLoadHandler( BrowserItem biItem );
-		public delegate void XmlLoadCompletedHandler( object sender, RunWorkerCompletedEventArgs e );
-		public event XmlLoadCompletedHandler XmlLoadCompleted;
 
 		#endregion
 
@@ -103,6 +98,7 @@ namespace Syntec_Developer.Controls
 			InitializeComponent();
 			this.m_sFileName = sFileName;
 			this.m_bIsNewFile = bIsNewFile;
+			FormMain.ToolBoxWindow.SelectItemToDraw += new DCToolBox.SelectItemToDrawHandler( SelectedItemToDraw );
 			InitializeMembers();
 		}
 
@@ -160,7 +156,7 @@ namespace Syntec_Developer.Controls
 
 		private void bgwLoadXml_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			this.XmlLoadCompleted.Invoke( this, e );
+			FormMain.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
 		}
 
 		private void LoadXml()
@@ -310,7 +306,7 @@ namespace Syntec_Developer.Controls
 
 		private void AddItemIntoBrowser( BrowserItem biItemToAdd )
 		{
-			this.ItemMouseDown += new ItemMouseDownHandler( biItemToAdd.Item_MouseDown );
+			this.ItemMouseDown += new EventHandler( biItemToAdd.Item_MouseDown );
 			this.Controls.Add( biItemToAdd );
 			biItemToAdd.BringToFront();
 			if( this.m_htbItems.ContainsKey( biItemToAdd.Properties.Name ) ) {

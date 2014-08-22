@@ -15,8 +15,8 @@ namespace Syntec_Developer.Forms
 	public partial class DCDocument : DockContent
 	{
 		// Flags
-		private bool m_bIsNewFile;
-		private bool m_bIsModified;
+		public bool IsNewFile = false;
+		public bool IsModified = false;
 
 		// Resources
 		private ComponentResourceManager resources = new ComponentResourceManager( typeof( DCDocument ) );
@@ -59,26 +59,33 @@ namespace Syntec_Developer.Forms
 
 		#region Initialize
 
-		public DCDocument()
+		private DCDocument()
 		{
 			InitializeComponent();
 		}
 
-		public DCDocument( DocumentType dtType, string sFullName, bool bIsNewFile )
+		public static DCDocument CreateBrowser( string sBrowserPath )
 		{
-			InitializeComponent();
+			DCDocument dcdBrowser = new DCDocument();
+			dcdBrowser.m_dtType = DocumentType.browser;
+			dcdBrowser.m_sFullName = sBrowserPath;
+			return dcdBrowser;
+		}
 
-			this.m_dtType = dtType;
-			this.m_sFullName = sFullName;
-			this.m_bIsNewFile = bIsNewFile;
+		public static DCDocument CreateFenubar( string sFenubarPath )
+		{
+			DCDocument dcdFenubar = new DCDocument();
+			dcdFenubar.m_dtType = DocumentType.fenubar;
+			dcdFenubar.m_sFullName = sFenubarPath;
+			return dcdFenubar;
 		}
 
 		public static DCDocument CreateProduct( string sProductPath )
 		{
-			DCDocument document = new DCDocument();
-			document.m_dtType = DocumentType.fenubar;
-			document.m_sFullName = sProductPath;
-			return document;
+			DCDocument dcdProduct = new DCDocument();
+			dcdProduct.m_dtType = DocumentType.fenubar;
+			dcdProduct.m_sFullName = sProductPath;
+			return dcdProduct;
 		}
 
 		public void LoadProduct()
@@ -92,39 +99,22 @@ namespace Syntec_Developer.Forms
 			this.Controls.Add( this.m_fpFenubar );
 		}
 
-		public void LoadFile()
+		public void LoadBrowser()
 		{
-			switch( this.m_dtType ) {
-				case DocumentType.browser:
-					InitializeBrowser();
-					break;
-				case DocumentType.fenubar:
-					InitializeFenubar();
-					break;
-			}
-		}
-
-		private void InitializeBrowser()
-		{
-			this.m_bpBrowser = new BrowserPanel( this.m_sFullName, this.m_bIsNewFile );
+			this.m_bpBrowser = new BrowserPanel( this.m_sFullName, this.IsNewFile );
 			this.m_bpBrowser.Location = new Point( 3, 3 );
 
 			this.m_bpBrowser.MouseUp += new MouseEventHandler( Browser_MouseUp );
-			this.m_bpBrowser.XmlLoadCompleted +=
-				new BrowserPanel.XmlLoadCompletedHandler( Browser_XmlLoadCompleted );
-			this.m_bpBrowser.ItemMouseDown +=
-				new BrowserPanel.ItemMouseDownHandler( BrowserItem_MouseDown );
-			this.m_bpBrowser.ItemPropertiesChanged +=
-				new BrowserPanel.ItemPropertiesChangedHandler( BrowserItem_PropertiesChanged );
-			this.m_bpBrowser.ItemAddedDeleted +=
-				new BrowserPanel.ItemAddedDeletedHandler( BrowserItem_AddedDeleted );
+			this.m_bpBrowser.ItemMouseDown += new EventHandler( BrowserItem_MouseDown );
+			this.m_bpBrowser.ItemPropertiesChanged += new EventHandler( BrowserItem_PropertiesChanged );
+			this.m_bpBrowser.ItemAddedDeleted += new EventHandler( BrowserItem_AddedDeleted );
 
 			this.Icon = ( (System.Drawing.Icon)( resources.GetObject( "Browser" ) ) );
 			this.Text = this.m_bpBrowser.FileName;
 			this.Controls.Add( this.m_bpBrowser );
 		}
 
-		private void InitializeFenubar()
+		public void LoadFenubar()
 		{
 			this.m_fpFenubar = new FenubarPanel();
 			this.m_fpFenubar.LoadFenubar( this.m_sFullName );
@@ -159,13 +149,13 @@ namespace Syntec_Developer.Forms
 
 		public void BrowserItem_PropertiesChanged( object sender, EventArgs e )
 		{
-			CheckModifiedState();
+			SetMidified();
 			FormMain.PropertiesWindow.ShowSelectedItemsProperties( this.Browser.SelectedItems );
 		}
 
 		public void BrowserItem_AddedDeleted( object sender, EventArgs e )
 		{
-			CheckModifiedState();
+			SetMidified();
 			FormMain.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
 		}
 
@@ -174,19 +164,14 @@ namespace Syntec_Developer.Forms
 			FormMain.PropertiesWindow.MultiSelectMouseUp( this.Browser );
 		}
 
-		private void Browser_XmlLoadCompleted( object sender, RunWorkerCompletedEventArgs e )
-		{
-			FormMain.PropertiesWindow.UpdateComboBoxWithBrowserItem( this.Browser );
-		}
-
 		#endregion
 
 		#region Save
 
-		private void CheckModifiedState()
+		private void SetMidified()
 		{
-			if( !this.m_bIsModified ) {
-				this.m_bIsModified = true;
+			if( !this.IsModified ) {
+				this.IsModified = true;
 				this.Text = string.Concat( this.Text, "*" );
 			}
 		}
@@ -203,7 +188,7 @@ namespace Syntec_Developer.Forms
 				case DocumentType.fenubar:
 					break;
 			}
-			this.m_bIsModified = false;
+			this.IsModified = false;
 			//}
 		}
 
